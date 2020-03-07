@@ -1,0 +1,29 @@
+{
+  "description": "ContainerPort represents a network port in a single container.",
+  "type": "object",
+  "properties": {
+    "containerPort": {
+      "description": "Number of port to expose on the pod's IP address.\nThis must be a valid port number, 0 < x < 65536.",
+      "type": "integer",
+      "format": "int32"
+    },
+    "hostIP": {
+      "type": "string",
+      "title": "What host IP to bind the external port to.\n+optional"
+    },
+    "hostPort": {
+      "type": "integer",
+      "format": "int32",
+      "title": "Number of port to expose on the host.\nIf specified, this must be a valid port number, 0 < x < 65536.\nIf HostNetwork is specified, this must match ContainerPort.\nMost containers do not need this.\n+optional"
+    },
+    "name": {
+      "type": "string",
+      "title": "If specified, this must be an IANA_SVC_NAME and unique within the pod. Each\nnamed port in a pod must have a unique name. Name for the port that can be\nreferred to by services.\n+optional"
+    },
+    "protocol": {
+      "type": "string",
+      "title": "Protocol for port. Must be UDP, TCP, or SCTP.\nDefaults to \"TCP\".\n+optional"
+    }
+  },
+  "$schema": "http://json-schema.org/schema#"
+}

@@ -1,0 +1,55 @@
+{
+  "description": "HTTPGetAction describes an action based on HTTP Get requests.",
+  "type": "object",
+  "properties": {
+    "host": {
+      "type": "string",
+      "title": "Host name to connect to, defaults to the pod IP. You probably want to set\n\"Host\" in httpHeaders instead.\n+optional"
+    },
+    "httpHeaders": {
+      "type": "array",
+      "title": "Custom headers to set in the request. HTTP allows repeated headers.\n+optional",
+      "items": {
+        "type": "object",
+        "title": "HTTPHeader describes a custom header to be used in HTTP probes",
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "The header field name"
+          },
+          "value": {
+            "type": "string",
+            "title": "The header field value"
+          }
+        }
+      }
+    },
+    "path": {
+      "type": "string",
+      "title": "Path to access on the HTTP server.\n+optional"
+    },
+    "port": {
+      "description": "+protobuf=true\n+protobuf.options.(gogoproto.goproto_stringer)=false\n+k8s:openapi-gen=true",
+      "type": "object",
+      "title": "IntOrString is a type that can hold an int32 or a string.  When used in\nJSON or YAML marshalling and unmarshalling, it produces or consumes the\ninner type.  This allows you to have, for example, a JSON field that can\naccept a name or number.\nTODO: Rename to Int32OrString",
+      "properties": {
+        "intVal": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "strVal": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "scheme": {
+      "type": "string",
+      "title": "Scheme to use for connecting to the host.\nDefaults to HTTP.\n+optional"
+    }
+  },
+  "$schema": "http://json-schema.org/schema#"
+}

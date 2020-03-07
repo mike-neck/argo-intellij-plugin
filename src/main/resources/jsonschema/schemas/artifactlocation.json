@@ -1,0 +1,416 @@
+{
+  "description": "ArtifactLocation describes a location for a single or multiple artifacts.\nIt is used as single artifact in the context of inputs/outputs (e.g. outputs.artifacts.artname).\nIt is also used to describe the location of multiple artifacts such as the archive location\nof a single workflow step, which the executor will use as a default location to store its files.",
+  "type": "object",
+  "properties": {
+    "archiveLogs": {
+      "type": "boolean",
+      "format": "boolean",
+      "title": "ArchiveLogs indicates if the container logs should be archived"
+    },
+    "artifactory": {
+      "type": "object",
+      "title": "ArtifactoryArtifact is the location of an artifactory artifact",
+      "properties": {
+        "artifactoryAuth": {
+          "type": "object",
+          "title": "ArtifactoryAuth describes the secret selectors required for authenticating to artifactory",
+          "properties": {
+            "passwordSecret": {
+              "description": "SecretKeySelector selects a key of a Secret.",
+              "type": "object",
+              "properties": {
+                "key": {
+                  "description": "The key of the secret to select from.  Must be a valid secret key.",
+                  "type": "string"
+                },
+                "localObjectReference": {
+                  "description": "LocalObjectReference contains enough information to let you locate the\nreferenced object inside the same namespace.",
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "title": "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?\n+optional"
+                    }
+                  }
+                },
+                "optional": {
+                  "type": "boolean",
+                  "format": "boolean",
+                  "title": "Specify whether the Secret or its key must be defined\n+optional"
+                }
+              }
+            },
+            "usernameSecret": {
+              "description": "SecretKeySelector selects a key of a Secret.",
+              "type": "object",
+              "properties": {
+                "key": {
+                  "description": "The key of the secret to select from.  Must be a valid secret key.",
+                  "type": "string"
+                },
+                "localObjectReference": {
+                  "description": "LocalObjectReference contains enough information to let you locate the\nreferenced object inside the same namespace.",
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "title": "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?\n+optional"
+                    }
+                  }
+                },
+                "optional": {
+                  "type": "boolean",
+                  "format": "boolean",
+                  "title": "Specify whether the Secret or its key must be defined\n+optional"
+                }
+              }
+            }
+          }
+        },
+        "url": {
+          "type": "string",
+          "title": "URL of the artifact"
+        }
+      }
+    },
+    "git": {
+      "type": "object",
+      "title": "GitArtifact is the location of an git artifact",
+      "properties": {
+        "depth": {
+          "type": "string",
+          "format": "uint64",
+          "title": "Depth specifies clones/fetches should be shallow and include the given\nnumber of commits from the branch tip"
+        },
+        "fetch": {
+          "type": "array",
+          "title": "Fetch specifies a number of refs that should be fetched before checkout",
+          "items": {
+            "type": "string"
+          }
+        },
+        "insecureIgnoreHostKey": {
+          "type": "boolean",
+          "format": "boolean",
+          "title": "InsecureIgnoreHostKey disables SSH strict host key checking during git clone"
+        },
+        "passwordSecret": {
+          "description": "SecretKeySelector selects a key of a Secret.",
+          "type": "object",
+          "properties": {
+            "key": {
+              "description": "The key of the secret to select from.  Must be a valid secret key.",
+              "type": "string"
+            },
+            "localObjectReference": {
+              "description": "LocalObjectReference contains enough information to let you locate the\nreferenced object inside the same namespace.",
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "title": "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?\n+optional"
+                }
+              }
+            },
+            "optional": {
+              "type": "boolean",
+              "format": "boolean",
+              "title": "Specify whether the Secret or its key must be defined\n+optional"
+            }
+          }
+        },
+        "repo": {
+          "type": "string",
+          "title": "Repo is the git repository"
+        },
+        "revision": {
+          "type": "string",
+          "title": "Revision is the git commit, tag, branch to checkout"
+        },
+        "sshPrivateKeySecret": {
+          "description": "SecretKeySelector selects a key of a Secret.",
+          "type": "object",
+          "properties": {
+            "key": {
+              "description": "The key of the secret to select from.  Must be a valid secret key.",
+              "type": "string"
+            },
+            "localObjectReference": {
+              "description": "LocalObjectReference contains enough information to let you locate the\nreferenced object inside the same namespace.",
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "title": "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?\n+optional"
+                }
+              }
+            },
+            "optional": {
+              "type": "boolean",
+              "format": "boolean",
+              "title": "Specify whether the Secret or its key must be defined\n+optional"
+            }
+          }
+        },
+        "usernameSecret": {
+          "description": "SecretKeySelector selects a key of a Secret.",
+          "type": "object",
+          "properties": {
+            "key": {
+              "description": "The key of the secret to select from.  Must be a valid secret key.",
+              "type": "string"
+            },
+            "localObjectReference": {
+              "description": "LocalObjectReference contains enough information to let you locate the\nreferenced object inside the same namespace.",
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "title": "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?\n+optional"
+                }
+              }
+            },
+            "optional": {
+              "type": "boolean",
+              "format": "boolean",
+              "title": "Specify whether the Secret or its key must be defined\n+optional"
+            }
+          }
+        }
+      }
+    },
+    "hdfs": {
+      "type": "object",
+      "title": "HDFSArtifact is the location of an HDFS artifact",
+      "properties": {
+        "force": {
+          "type": "boolean",
+          "format": "boolean",
+          "title": "Force copies a file forcibly even if it exists (default: false)"
+        },
+        "hDFSConfig": {
+          "type": "object",
+          "title": "HDFSConfig is configurations for HDFS",
+          "properties": {
+            "addresses": {
+              "type": "array",
+              "title": "Addresses is accessible addresses of HDFS name nodes",
+              "items": {
+                "type": "string"
+              }
+            },
+            "hDFSKrbConfig": {
+              "type": "object",
+              "title": "HDFSKrbConfig is auth configurations for Kerberos",
+              "properties": {
+                "krbCCacheSecret": {
+                  "description": "SecretKeySelector selects a key of a Secret.",
+                  "type": "object",
+                  "properties": {
+                    "key": {
+                      "description": "The key of the secret to select from.  Must be a valid secret key.",
+                      "type": "string"
+                    },
+                    "localObjectReference": {
+                      "description": "LocalObjectReference contains enough information to let you locate the\nreferenced object inside the same namespace.",
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "title": "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?\n+optional"
+                        }
+                      }
+                    },
+                    "optional": {
+                      "type": "boolean",
+                      "format": "boolean",
+                      "title": "Specify whether the Secret or its key must be defined\n+optional"
+                    }
+                  }
+                },
+                "krbConfigConfigMap": {
+                  "description": "Selects a key from a ConfigMap.",
+                  "type": "object",
+                  "properties": {
+                    "key": {
+                      "description": "The key to select.",
+                      "type": "string"
+                    },
+                    "localObjectReference": {
+                      "description": "LocalObjectReference contains enough information to let you locate the\nreferenced object inside the same namespace.",
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "title": "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?\n+optional"
+                        }
+                      }
+                    },
+                    "optional": {
+                      "type": "boolean",
+                      "format": "boolean",
+                      "title": "Specify whether the ConfigMap or its key must be defined\n+optional"
+                    }
+                  }
+                },
+                "krbKeytabSecret": {
+                  "description": "SecretKeySelector selects a key of a Secret.",
+                  "type": "object",
+                  "properties": {
+                    "key": {
+                      "description": "The key of the secret to select from.  Must be a valid secret key.",
+                      "type": "string"
+                    },
+                    "localObjectReference": {
+                      "description": "LocalObjectReference contains enough information to let you locate the\nreferenced object inside the same namespace.",
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "title": "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?\n+optional"
+                        }
+                      }
+                    },
+                    "optional": {
+                      "type": "boolean",
+                      "format": "boolean",
+                      "title": "Specify whether the Secret or its key must be defined\n+optional"
+                    }
+                  }
+                },
+                "krbRealm": {
+                  "description": "KrbRealm is the Kerberos realm used with Kerberos keytab\nIt must be set if keytab is used.",
+                  "type": "string"
+                },
+                "krbServicePrincipalName": {
+                  "description": "KrbServicePrincipalName is the principal name of Kerberos service\nIt must be set if either ccache or keytab is used.",
+                  "type": "string"
+                },
+                "krbUsername": {
+                  "description": "KrbUsername is the Kerberos username used with Kerberos keytab\nIt must be set if keytab is used.",
+                  "type": "string"
+                }
+              }
+            },
+            "hdfsUser": {
+              "description": "HDFSUser is the user to access HDFS file system.\nIt is ignored if either ccache or keytab is used.",
+              "type": "string"
+            }
+          }
+        },
+        "path": {
+          "type": "string",
+          "title": "Path is a file path in HDFS"
+        }
+      }
+    },
+    "http": {
+      "type": "object",
+      "title": "HTTPArtifact allows an file served on HTTP to be placed as an input artifact in a container",
+      "properties": {
+        "url": {
+          "type": "string",
+          "title": "URL of the artifact"
+        }
+      }
+    },
+    "raw": {
+      "type": "object",
+      "title": "RawArtifact allows raw string content to be placed as an artifact in a container",
+      "properties": {
+        "data": {
+          "type": "string",
+          "title": "Data is the string contents of the artifact"
+        }
+      }
+    },
+    "s3": {
+      "type": "object",
+      "title": "S3Artifact is the location of an S3 artifact",
+      "properties": {
+        "key": {
+          "type": "string",
+          "title": "Key is the key in the bucket where the artifact resides"
+        },
+        "s3Bucket": {
+          "type": "object",
+          "title": "S3Bucket contains the access information required for interfacing with an S3 bucket",
+          "properties": {
+            "accessKeySecret": {
+              "description": "SecretKeySelector selects a key of a Secret.",
+              "type": "object",
+              "properties": {
+                "key": {
+                  "description": "The key of the secret to select from.  Must be a valid secret key.",
+                  "type": "string"
+                },
+                "localObjectReference": {
+                  "description": "LocalObjectReference contains enough information to let you locate the\nreferenced object inside the same namespace.",
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "title": "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?\n+optional"
+                    }
+                  }
+                },
+                "optional": {
+                  "type": "boolean",
+                  "format": "boolean",
+                  "title": "Specify whether the Secret or its key must be defined\n+optional"
+                }
+              }
+            },
+            "bucket": {
+              "type": "string",
+              "title": "Bucket is the name of the bucket"
+            },
+            "endpoint": {
+              "type": "string",
+              "title": "Endpoint is the hostname of the bucket endpoint"
+            },
+            "insecure": {
+              "type": "boolean",
+              "format": "boolean",
+              "title": "Insecure will connect to the service with TLS"
+            },
+            "region": {
+              "type": "string",
+              "title": "Region contains the optional bucket region"
+            },
+            "roleARN": {
+              "description": "RoleARN is the Amazon Resource Name (ARN) of the role to assume.",
+              "type": "string"
+            },
+            "secretKeySecret": {
+              "description": "SecretKeySelector selects a key of a Secret.",
+              "type": "object",
+              "properties": {
+                "key": {
+                  "description": "The key of the secret to select from.  Must be a valid secret key.",
+                  "type": "string"
+                },
+                "localObjectReference": {
+                  "description": "LocalObjectReference contains enough information to let you locate the\nreferenced object inside the same namespace.",
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "title": "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?\n+optional"
+                    }
+                  }
+                },
+                "optional": {
+                  "type": "boolean",
+                  "format": "boolean",
+                  "title": "Specify whether the Secret or its key must be defined\n+optional"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "$schema": "http://json-schema.org/schema#"
+}

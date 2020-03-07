@@ -1,0 +1,23 @@
+<idea-plugin>
+    <id>me.vnagy.intellijplugins.argo</id>
+    <name>Argo Workflow Editor</name>
+    <vendor email="vilmos.nagy@outlook.com">Vilmos Nagy</vendor>
+
+    <description><![CDATA[Argo Workflow Editor
+    A simple plugin which helps editing the <a href="https://github.com/argoproj/argo">Argo</a> workflow yamls.
+    ]]></description>
+
+    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+         on how to target different products -->
+    <depends>com.intellij.modules.platform</depends>
+    <depends>org.jetbrains.plugins.yaml</depends>
+
+    <extensions defaultExtensionNs="JavaScript">
+        <JsonSchema.ProviderFactory
+                implementation="me.vnagy.intellijplugins.argo.providers.ArgoJsonSchemaProviderFactory"/>
+    </extensions>
+
+    <actions>
+        <!-- Add your actions here -->
+    </actions>
+</idea-plugin>

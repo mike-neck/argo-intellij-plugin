@@ -1,0 +1,22 @@
+{
+  "description": "ConfigMapEnvSource selects a ConfigMap to populate the environment\nvariables with.\n\nThe contents of the target ConfigMap's Data field will represent the\nkey-value pairs as environment variables.",
+  "type": "object",
+  "properties": {
+    "localObjectReference": {
+      "description": "LocalObjectReference contains enough information to let you locate the\nreferenced object inside the same namespace.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?\n+optional"
+        }
+      }
+    },
+    "optional": {
+      "type": "boolean",
+      "format": "boolean",
+      "title": "Specify whether the ConfigMap must be defined\n+optional"
+    }
+  },
+  "$schema": "http://json-schema.org/schema#"
+}

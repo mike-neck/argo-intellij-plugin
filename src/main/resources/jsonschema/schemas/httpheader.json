@@ -1,0 +1,15 @@
+{
+  "type": "object",
+  "title": "HTTPHeader describes a custom header to be used in HTTP probes",
+  "properties": {
+    "name": {
+      "type": "string",
+      "title": "The header field name"
+    },
+    "value": {
+      "type": "string",
+      "title": "The header field value"
+    }
+  },
+  "$schema": "http://json-schema.org/schema#"
+}

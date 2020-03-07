@@ -1,0 +1,39 @@
+{
+  "description": "PodDNSConfig defines the DNS parameters of a pod in addition to\nthose generated from DNSPolicy.",
+  "type": "object",
+  "properties": {
+    "nameservers": {
+      "type": "array",
+      "title": "A list of DNS name server IP addresses.\nThis will be appended to the base nameservers generated from DNSPolicy.\nDuplicated nameservers will be removed.\n+optional",
+      "items": {
+        "type": "string"
+      }
+    },
+    "options": {
+      "type": "array",
+      "title": "A list of DNS resolver options.\nThis will be merged with the base options generated from DNSPolicy.\nDuplicated entries will be removed. Resolution options given in Options\nwill override those that appear in the base DNSPolicy.\n+optional",
+      "items": {
+        "description": "PodDNSConfigOption defines DNS resolver options of a pod.",
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Required.",
+            "type": "string"
+          },
+          "value": {
+            "type": "string",
+            "title": "+optional"
+          }
+        }
+      }
+    },
+    "searches": {
+      "type": "array",
+      "title": "A list of DNS search domains for host-name lookup.\nThis will be appended to the base search paths generated from DNSPolicy.\nDuplicated search paths will be removed.\n+optional",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "$schema": "http://json-schema.org/schema#"
+}

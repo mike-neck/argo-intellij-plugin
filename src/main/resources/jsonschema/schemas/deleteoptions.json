@@ -1,0 +1,42 @@
+{
+  "description": "DeleteOptions may be provided when deleting an API object.",
+  "type": "object",
+  "properties": {
+    "dryRun": {
+      "type": "array",
+      "title": "When present, indicates that modifications should not be\npersisted. An invalid or unrecognized dryRun directive will\nresult in an error response and no further processing of the\nrequest. Valid values are:\n- All: all dry run stages will be processed\n+optional",
+      "items": {
+        "type": "string"
+      }
+    },
+    "gracePeriodSeconds": {
+      "type": "string",
+      "format": "int64",
+      "title": "The duration in seconds before the object should be deleted. Value must be non-negative integer.\nThe value zero indicates delete immediately. If this value is nil, the default grace period for the\nspecified type will be used.\nDefaults to a per object value if not specified. zero means delete immediately.\n+optional"
+    },
+    "orphanDependents": {
+      "type": "boolean",
+      "format": "boolean",
+      "title": "Deprecated: please use the PropagationPolicy, this field will be deprecated in 1.7.\nShould the dependent objects be orphaned. If true/false, the \"orphan\"\nfinalizer will be added to/removed from the object's finalizers list.\nEither this field or PropagationPolicy may be set, but not both.\n+optional"
+    },
+    "preconditions": {
+      "description": "Preconditions must be fulfilled before an operation (update, delete, etc.) is carried out.",
+      "type": "object",
+      "properties": {
+        "resourceVersion": {
+          "type": "string",
+          "title": "Specifies the target ResourceVersion\n+optional"
+        },
+        "uid": {
+          "type": "string",
+          "title": "Specifies the target UID.\n+optional"
+        }
+      }
+    },
+    "propagationPolicy": {
+      "type": "string",
+      "title": "Whether and how garbage collection will be performed.\nEither this field or OrphanDependents may be set, but not both.\nThe default policy is decided by the existing finalizer set in the\nmetadata.finalizers and the resource-specific default policy.\nAcceptable values are: 'Orphan' - orphan the dependents; 'Background' -\nallow the garbage collector to delete the dependents in the background;\n'Foreground' - a cascading policy that deletes all dependents in the\nforeground.\n+optional"
+    }
+  },
+  "$schema": "http://json-schema.org/schema#"
+}

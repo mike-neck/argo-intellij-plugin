@@ -1,0 +1,16 @@
+{
+  "description": "PersistentVolumeClaimVolumeSource references the user's PVC in the same namespace.\nThis volume finds the bound PV and mounts that volume for the pod. A\nPersistentVolumeClaimVolumeSource is, essentially, a wrapper around another\ntype of volume that is owned by someone else (the system).",
+  "type": "object",
+  "properties": {
+    "claimName": {
+      "type": "string",
+      "title": "ClaimName is the name of a PersistentVolumeClaim in the same namespace as the pod using this volume.\nMore info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#persistentvolumeclaims"
+    },
+    "readOnly": {
+      "type": "boolean",
+      "format": "boolean",
+      "title": "Will force the ReadOnly setting in VolumeMounts.\nDefault false.\n+optional"
+    }
+  },
+  "$schema": "http://json-schema.org/schema#"
+}

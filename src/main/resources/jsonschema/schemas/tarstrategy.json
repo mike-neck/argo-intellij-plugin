@@ -1,0 +1,5 @@
+{
+  "type": "object",
+  "title": "TarStrategy will tar and gzip the file or directory when saving",
+  "$schema": "http://json-schema.org/schema#"
+}

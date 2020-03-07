@@ -1,0 +1,32 @@
+{
+  "type": "object",
+  "title": "ResourceTemplate is a template subtype to manipulate kubernetes resources",
+  "properties": {
+    "action": {
+      "type": "string",
+      "title": "Action is the action to perform to the resource.\nMust be one of: get, create, apply, delete, replace, patch"
+    },
+    "failureCondition": {
+      "type": "string",
+      "title": "FailureCondition is a label selector expression which describes the conditions\nof the k8s resource in which the step was considered failed"
+    },
+    "manifest": {
+      "type": "string",
+      "title": "Manifest contains the kubernetes manifest"
+    },
+    "mergeStrategy": {
+      "type": "string",
+      "title": "MergeStrategy is the strategy used to merge a patch. It defaults to \"strategic\"\nMust be one of: strategic, merge, json"
+    },
+    "setOwnerReference": {
+      "description": "SetOwnerReference sets the reference to the workflow on the OwnerReference of generated resource.",
+      "type": "boolean",
+      "format": "boolean"
+    },
+    "successCondition": {
+      "type": "string",
+      "title": "SuccessCondition is a label selector expression which describes the conditions\nof the k8s resource in which it is acceptable to proceed to the following step"
+    }
+  },
+  "$schema": "http://json-schema.org/schema#"
+}

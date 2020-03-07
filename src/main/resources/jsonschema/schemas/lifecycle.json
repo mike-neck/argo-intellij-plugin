@@ -1,0 +1,209 @@
+{
+  "description": "Lifecycle describes actions that the management system should take in response to container lifecycle\nevents. For the PostStart and PreStop lifecycle handlers, management of the container blocks\nuntil the action is complete, unless the container process fails, in which case the handler is aborted.",
+  "type": "object",
+  "properties": {
+    "postStart": {
+      "description": "Handler defines a specific action that should be taken\nTODO: pass structured data to these actions, and document that data here.",
+      "type": "object",
+      "properties": {
+        "exec": {
+          "description": "ExecAction describes a \"run in container\" action.",
+          "type": "object",
+          "properties": {
+            "command": {
+              "type": "array",
+              "title": "Command is the command line to execute inside the container, the working directory for the\ncommand  is root ('/') in the container's filesystem. The command is simply exec'd, it is\nnot run inside a shell, so traditional shell instructions ('|', etc) won't work. To use\na shell, you need to explicitly call out to that shell.\nExit status of 0 is treated as live/healthy and non-zero is unhealthy.\n+optional",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "httpGet": {
+          "description": "HTTPGetAction describes an action based on HTTP Get requests.",
+          "type": "object",
+          "properties": {
+            "host": {
+              "type": "string",
+              "title": "Host name to connect to, defaults to the pod IP. You probably want to set\n\"Host\" in httpHeaders instead.\n+optional"
+            },
+            "httpHeaders": {
+              "type": "array",
+              "title": "Custom headers to set in the request. HTTP allows repeated headers.\n+optional",
+              "items": {
+                "type": "object",
+                "title": "HTTPHeader describes a custom header to be used in HTTP probes",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "title": "The header field name"
+                  },
+                  "value": {
+                    "type": "string",
+                    "title": "The header field value"
+                  }
+                }
+              }
+            },
+            "path": {
+              "type": "string",
+              "title": "Path to access on the HTTP server.\n+optional"
+            },
+            "port": {
+              "description": "+protobuf=true\n+protobuf.options.(gogoproto.goproto_stringer)=false\n+k8s:openapi-gen=true",
+              "type": "object",
+              "title": "IntOrString is a type that can hold an int32 or a string.  When used in\nJSON or YAML marshalling and unmarshalling, it produces or consumes the\ninner type.  This allows you to have, for example, a JSON field that can\naccept a name or number.\nTODO: Rename to Int32OrString",
+              "properties": {
+                "intVal": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "strVal": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string",
+                  "format": "int64"
+                }
+              }
+            },
+            "scheme": {
+              "type": "string",
+              "title": "Scheme to use for connecting to the host.\nDefaults to HTTP.\n+optional"
+            }
+          }
+        },
+        "tcpSocket": {
+          "type": "object",
+          "title": "TCPSocketAction describes an action based on opening a socket",
+          "properties": {
+            "host": {
+              "type": "string",
+              "title": "Optional: Host name to connect to, defaults to the pod IP.\n+optional"
+            },
+            "port": {
+              "description": "+protobuf=true\n+protobuf.options.(gogoproto.goproto_stringer)=false\n+k8s:openapi-gen=true",
+              "type": "object",
+              "title": "IntOrString is a type that can hold an int32 or a string.  When used in\nJSON or YAML marshalling and unmarshalling, it produces or consumes the\ninner type.  This allows you to have, for example, a JSON field that can\naccept a name or number.\nTODO: Rename to Int32OrString",
+              "properties": {
+                "intVal": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "strVal": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string",
+                  "format": "int64"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "preStop": {
+      "description": "Handler defines a specific action that should be taken\nTODO: pass structured data to these actions, and document that data here.",
+      "type": "object",
+      "properties": {
+        "exec": {
+          "description": "ExecAction describes a \"run in container\" action.",
+          "type": "object",
+          "properties": {
+            "command": {
+              "type": "array",
+              "title": "Command is the command line to execute inside the container, the working directory for the\ncommand  is root ('/') in the container's filesystem. The command is simply exec'd, it is\nnot run inside a shell, so traditional shell instructions ('|', etc) won't work. To use\na shell, you need to explicitly call out to that shell.\nExit status of 0 is treated as live/healthy and non-zero is unhealthy.\n+optional",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "httpGet": {
+          "description": "HTTPGetAction describes an action based on HTTP Get requests.",
+          "type": "object",
+          "properties": {
+            "host": {
+              "type": "string",
+              "title": "Host name to connect to, defaults to the pod IP. You probably want to set\n\"Host\" in httpHeaders instead.\n+optional"
+            },
+            "httpHeaders": {
+              "type": "array",
+              "title": "Custom headers to set in the request. HTTP allows repeated headers.\n+optional",
+              "items": {
+                "type": "object",
+                "title": "HTTPHeader describes a custom header to be used in HTTP probes",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "title": "The header field name"
+                  },
+                  "value": {
+                    "type": "string",
+                    "title": "The header field value"
+                  }
+                }
+              }
+            },
+            "path": {
+              "type": "string",
+              "title": "Path to access on the HTTP server.\n+optional"
+            },
+            "port": {
+              "description": "+protobuf=true\n+protobuf.options.(gogoproto.goproto_stringer)=false\n+k8s:openapi-gen=true",
+              "type": "object",
+              "title": "IntOrString is a type that can hold an int32 or a string.  When used in\nJSON or YAML marshalling and unmarshalling, it produces or consumes the\ninner type.  This allows you to have, for example, a JSON field that can\naccept a name or number.\nTODO: Rename to Int32OrString",
+              "properties": {
+                "intVal": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "strVal": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string",
+                  "format": "int64"
+                }
+              }
+            },
+            "scheme": {
+              "type": "string",
+              "title": "Scheme to use for connecting to the host.\nDefaults to HTTP.\n+optional"
+            }
+          }
+        },
+        "tcpSocket": {
+          "type": "object",
+          "title": "TCPSocketAction describes an action based on opening a socket",
+          "properties": {
+            "host": {
+              "type": "string",
+              "title": "Optional: Host name to connect to, defaults to the pod IP.\n+optional"
+            },
+            "port": {
+              "description": "+protobuf=true\n+protobuf.options.(gogoproto.goproto_stringer)=false\n+k8s:openapi-gen=true",
+              "type": "object",
+              "title": "IntOrString is a type that can hold an int32 or a string.  When used in\nJSON or YAML marshalling and unmarshalling, it produces or consumes the\ninner type.  This allows you to have, for example, a JSON field that can\naccept a name or number.\nTODO: Rename to Int32OrString",
+              "properties": {
+                "intVal": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "strVal": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string",
+                  "format": "int64"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "$schema": "http://json-schema.org/schema#"
+}

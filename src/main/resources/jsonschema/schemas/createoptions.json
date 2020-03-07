@@ -1,0 +1,18 @@
+{
+  "description": "CreateOptions may be provided when creating an API object.",
+  "type": "object",
+  "properties": {
+    "dryRun": {
+      "type": "array",
+      "title": "When present, indicates that modifications should not be\npersisted. An invalid or unrecognized dryRun directive will\nresult in an error response and no further processing of the\nrequest. Valid values are:\n- All: all dry run stages will be processed\n+optional",
+      "items": {
+        "type": "string"
+      }
+    },
+    "fieldManager": {
+      "type": "string",
+      "title": "fieldManager is a name associated with the actor or entity\nthat is making these changes. The value must be less than or\n128 characters long, and only contain printable characters,\nas defined by https://golang.org/pkg/unicode/#IsPrint.\n+optional"
+    }
+  },
+  "$schema": "http://json-schema.org/schema#"
+}

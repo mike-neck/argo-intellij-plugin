@@ -1,0 +1,94 @@
+{
+  "description": "+protobuf=true\n+protobuf.options.(gogoproto.goproto_stringer)=false\n+k8s:openapi-gen=true",
+  "type": "object",
+  "title": "Item expands a single workflow step into multiple parallel steps\nThe value of Item can be a map, string, bool, or number",
+  "properties": {
+    "boolVal": {
+      "type": "boolean",
+      "format": "boolean"
+    },
+    "listVal": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "title": "+protobuf=true\n+protobuf.options.(gogoproto.goproto_stringer)=false\n+k8s:openapi-gen=true",
+        "properties": {
+          "boolVal": {
+            "type": "boolean",
+            "format": "boolean"
+          },
+          "listVal": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "byte"
+            }
+          },
+          "mapVal": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "numVal": {
+            "type": "string"
+          },
+          "strVal": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "format": "int64"
+          }
+        }
+      }
+    },
+    "mapVal": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "title": "+protobuf=true\n+protobuf.options.(gogoproto.goproto_stringer)=false\n+k8s:openapi-gen=true",
+        "properties": {
+          "boolVal": {
+            "type": "boolean",
+            "format": "boolean"
+          },
+          "listVal": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "byte"
+            }
+          },
+          "mapVal": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "numVal": {
+            "type": "string"
+          },
+          "strVal": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "format": "int64"
+          }
+        }
+      }
+    },
+    "numVal": {
+      "type": "string"
+    },
+    "strVal": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string",
+      "format": "int64"
+    }
+  },
+  "$schema": "http://json-schema.org/schema#"
+}

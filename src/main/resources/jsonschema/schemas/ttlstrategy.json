@@ -1,0 +1,19 @@
+{
+  "type": "object",
+  "title": "TTLStrategy is the strategy for the time to live depending on if the workflow succeded or failed",
+  "properties": {
+    "secondsAfterCompletion": {
+      "type": "integer",
+      "format": "int32"
+    },
+    "secondsAfterFailure": {
+      "type": "integer",
+      "format": "int32"
+    },
+    "secondsAfterSuccess": {
+      "type": "integer",
+      "format": "int32"
+    }
+  },
+  "$schema": "http://json-schema.org/schema#"
+}

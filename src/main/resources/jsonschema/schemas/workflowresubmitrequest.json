@@ -1,0 +1,16 @@
+{
+  "type": "object",
+  "properties": {
+    "memoized": {
+      "type": "boolean",
+      "format": "boolean"
+    },
+    "name": {
+      "type": "string"
+    },
+    "namespace": {
+      "type": "string"
+    }
+  },
+  "$schema": "http://json-schema.org/schema#"
+}

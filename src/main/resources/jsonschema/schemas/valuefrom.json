@@ -1,0 +1,23 @@
+{
+  "type": "object",
+  "title": "ValueFrom describes a location in which to obtain the value to a parameter",
+  "properties": {
+    "jqFilter": {
+      "type": "string",
+      "title": "JQFilter expression against the resource object in resource templates"
+    },
+    "jsonPath": {
+      "type": "string",
+      "title": "JSONPath of a resource to retrieve an output parameter value from in resource templates"
+    },
+    "parameter": {
+      "type": "string",
+      "title": "Parameter reference to a step or dag task in which to retrieve an output parameter value from\n(e.g. '{{steps.mystep.outputs.myparam}}')"
+    },
+    "path": {
+      "type": "string",
+      "title": "Path in the container to retrieve an output parameter value from in container templates"
+    }
+  },
+  "$schema": "http://json-schema.org/schema#"
+}

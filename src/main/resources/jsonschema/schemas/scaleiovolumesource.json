@@ -1,0 +1,55 @@
+{
+  "type": "object",
+  "title": "ScaleIOVolumeSource represents a persistent ScaleIO volume",
+  "properties": {
+    "fsType": {
+      "type": "string",
+      "title": "Filesystem type to mount.\nMust be a filesystem type supported by the host operating system.\nEx. \"ext4\", \"xfs\", \"ntfs\".\nDefault is \"xfs\".\n+optional"
+    },
+    "gateway": {
+      "description": "The host address of the ScaleIO API Gateway.",
+      "type": "string"
+    },
+    "protectionDomain": {
+      "type": "string",
+      "title": "The name of the ScaleIO Protection Domain for the configured storage.\n+optional"
+    },
+    "readOnly": {
+      "type": "boolean",
+      "format": "boolean",
+      "title": "Defaults to false (read/write). ReadOnly here will force\nthe ReadOnly setting in VolumeMounts.\n+optional"
+    },
+    "secretRef": {
+      "description": "LocalObjectReference contains enough information to let you locate the\nreferenced object inside the same namespace.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?\n+optional"
+        }
+      }
+    },
+    "sslEnabled": {
+      "type": "boolean",
+      "format": "boolean",
+      "title": "Flag to enable/disable SSL communication with Gateway, default false\n+optional"
+    },
+    "storageMode": {
+      "type": "string",
+      "title": "Indicates whether the storage for a volume should be ThickProvisioned or ThinProvisioned.\nDefault is ThinProvisioned.\n+optional"
+    },
+    "storagePool": {
+      "type": "string",
+      "title": "The ScaleIO Storage Pool associated with the protection domain.\n+optional"
+    },
+    "system": {
+      "description": "The name of the storage system as configured in ScaleIO.",
+      "type": "string"
+    },
+    "volumeName": {
+      "description": "The name of a volume already created in the ScaleIO system\nthat is associated with this volume source.",
+      "type": "string"
+    }
+  },
+  "$schema": "http://json-schema.org/schema#"
+}

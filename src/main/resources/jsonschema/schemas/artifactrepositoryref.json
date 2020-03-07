@@ -1,0 +1,12 @@
+{
+  "type": "object",
+  "properties": {
+    "configMap": {
+      "type": "string"
+    },
+    "key": {
+      "type": "string"
+    }
+  },
+  "$schema": "http://json-schema.org/schema#"
+}

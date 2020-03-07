@@ -1,0 +1,15 @@
+{
+  "description": "ObjectFieldSelector selects an APIVersioned field of an object.",
+  "type": "object",
+  "properties": {
+    "apiVersion": {
+      "type": "string",
+      "title": "Version of the schema the FieldPath is written in terms of, defaults to \"v1\".\n+optional"
+    },
+    "fieldPath": {
+      "description": "Path of the field to select in the specified API version.",
+      "type": "string"
+    }
+  },
+  "$schema": "http://json-schema.org/schema#"
+}

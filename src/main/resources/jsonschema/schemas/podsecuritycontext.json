@@ -1,0 +1,94 @@
+{
+  "description": "PodSecurityContext holds pod-level security attributes and common container settings.\nSome fields are also present in container.securityContext.  Field values of\ncontainer.securityContext take precedence over field values of PodSecurityContext.",
+  "type": "object",
+  "properties": {
+    "fsGroup": {
+      "description": "1. The owning GID will be the FSGroup\n2. The setgid bit is set (new files created in the volume will be owned by FSGroup)\n3. The permission bits are OR'd with rw-rw----\n\nIf unset, the Kubelet will not modify the ownership and permissions of any volume.\n+optional",
+      "type": "string",
+      "format": "int64",
+      "title": "A special supplemental group that applies to all containers in a pod.\nSome volume types allow the Kubelet to change the ownership of that volume\nto be owned by the pod:"
+    },
+    "runAsGroup": {
+      "type": "string",
+      "format": "int64",
+      "title": "The GID to run the entrypoint of the container process.\nUses runtime default if unset.\nMay also be set in SecurityContext.  If set in both SecurityContext and\nPodSecurityContext, the value specified in SecurityContext takes precedence\nfor that container.\n+optional"
+    },
+    "runAsNonRoot": {
+      "type": "boolean",
+      "format": "boolean",
+      "title": "Indicates that the container must run as a non-root user.\nIf true, the Kubelet will validate the image at runtime to ensure that it\ndoes not run as UID 0 (root) and fail to start the container if it does.\nIf unset or false, no such validation will be performed.\nMay also be set in SecurityContext.  If set in both SecurityContext and\nPodSecurityContext, the value specified in SecurityContext takes precedence.\n+optional"
+    },
+    "runAsUser": {
+      "type": "string",
+      "format": "int64",
+      "title": "The UID to run the entrypoint of the container process.\nDefaults to user specified in image metadata if unspecified.\nMay also be set in SecurityContext.  If set in both SecurityContext and\nPodSecurityContext, the value specified in SecurityContext takes precedence\nfor that container.\n+optional"
+    },
+    "seLinuxOptions": {
+      "type": "object",
+      "title": "SELinuxOptions are the labels to be applied to the container",
+      "properties": {
+        "level": {
+          "type": "string",
+          "title": "Level is SELinux level label that applies to the container.\n+optional"
+        },
+        "role": {
+          "type": "string",
+          "title": "Role is a SELinux role label that applies to the container.\n+optional"
+        },
+        "type": {
+          "type": "string",
+          "title": "Type is a SELinux type label that applies to the container.\n+optional"
+        },
+        "user": {
+          "type": "string",
+          "title": "User is a SELinux user label that applies to the container.\n+optional"
+        }
+      }
+    },
+    "supplementalGroups": {
+      "type": "array",
+      "title": "A list of groups applied to the first process run in each container, in addition\nto the container's primary GID.  If unspecified, no groups will be added to\nany container.\n+optional",
+      "items": {
+        "type": "string",
+        "format": "int64"
+      }
+    },
+    "sysctls": {
+      "type": "array",
+      "title": "Sysctls hold a list of namespaced sysctls used for the pod. Pods with unsupported\nsysctls (by the container runtime) might fail to launch.\n+optional",
+      "items": {
+        "type": "object",
+        "title": "Sysctl defines a kernel parameter to be set",
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name of a property to set"
+          },
+          "value": {
+            "type": "string",
+            "title": "Value of a property to set"
+          }
+        }
+      }
+    },
+    "windowsOptions": {
+      "description": "WindowsSecurityContextOptions contain Windows-specific options and credentials.",
+      "type": "object",
+      "properties": {
+        "gmsaCredentialSpec": {
+          "type": "string",
+          "title": "GMSACredentialSpec is where the GMSA admission webhook\n(https://github.com/kubernetes-sigs/windows-gmsa) inlines the contents of the\nGMSA credential spec named by the GMSACredentialSpecName field.\nThis field is alpha-level and is only honored by servers that enable the WindowsGMSA feature flag.\n+optional"
+        },
+        "gmsaCredentialSpecName": {
+          "type": "string",
+          "title": "GMSACredentialSpecName is the name of the GMSA credential spec to use.\nThis field is alpha-level and is only honored by servers that enable the WindowsGMSA feature flag.\n+optional"
+        },
+        "runAsUserName": {
+          "type": "string",
+          "title": "The UserName in Windows to run the entrypoint of the container process.\nDefaults to the user specified in image metadata if unspecified.\nMay also be set in PodSecurityContext. If set in both SecurityContext and\nPodSecurityContext, the value specified in SecurityContext takes precedence.\nThis field is alpha-level and it is only honored by servers that enable the WindowsRunAsUserName feature flag.\n+optional"
+        }
+      }
+    }
+  },
+  "$schema": "http://json-schema.org/schema#"
+}

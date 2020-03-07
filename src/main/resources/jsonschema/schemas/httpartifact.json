@@ -1,0 +1,11 @@
+{
+  "type": "object",
+  "title": "HTTPArtifact allows an file served on HTTP to be placed as an input artifact in a container",
+  "properties": {
+    "url": {
+      "type": "string",
+      "title": "URL of the artifact"
+    }
+  },
+  "$schema": "http://json-schema.org/schema#"
+}

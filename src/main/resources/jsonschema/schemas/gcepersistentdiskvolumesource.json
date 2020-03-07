@@ -1,0 +1,25 @@
+{
+  "description": "Represents a Persistent Disk resource in Google Compute Engine.\n\nA GCE PD must exist before mounting to a container. The disk must\nalso be in the same GCE project and zone as the kubelet. A GCE PD\ncan only be mounted as read/write once or read-only many times. GCE\nPDs support ownership management and SELinux relabeling.",
+  "type": "object",
+  "properties": {
+    "fsType": {
+      "type": "string",
+      "title": "Filesystem type of the volume that you want to mount.\nTip: Ensure that the filesystem type is supported by the host operating system.\nExamples: \"ext4\", \"xfs\", \"ntfs\". Implicitly inferred to be \"ext4\" if unspecified.\nMore info: https://kubernetes.io/docs/concepts/storage/volumes#gcepersistentdisk\nTODO: how do we prevent errors in the filesystem from compromising the machine\n+optional"
+    },
+    "partition": {
+      "type": "integer",
+      "format": "int32",
+      "title": "The partition in the volume that you want to mount.\nIf omitted, the default is to mount by volume name.\nExamples: For volume /dev/sda1, you specify the partition as \"1\".\nSimilarly, the volume partition for /dev/sda is \"0\" (or you can leave the property empty).\nMore info: https://kubernetes.io/docs/concepts/storage/volumes#gcepersistentdisk\n+optional"
+    },
+    "pdName": {
+      "type": "string",
+      "title": "Unique name of the PD resource in GCE. Used to identify the disk in GCE.\nMore info: https://kubernetes.io/docs/concepts/storage/volumes#gcepersistentdisk"
+    },
+    "readOnly": {
+      "type": "boolean",
+      "format": "boolean",
+      "title": "ReadOnly here will force the ReadOnly setting in VolumeMounts.\nDefaults to false.\nMore info: https://kubernetes.io/docs/concepts/storage/volumes#gcepersistentdisk\n+optional"
+    }
+  },
+  "$schema": "http://json-schema.org/schema#"
+}

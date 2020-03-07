@@ -1,0 +1,31 @@
+{
+  "type": "object",
+  "title": "RetryStrategy provides controls on how to retry a workflow step",
+  "properties": {
+    "backoff": {
+      "type": "object",
+      "properties": {
+        "duration": {
+          "type": "string"
+        },
+        "factor": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "maxDuration": {
+          "type": "string"
+        }
+      }
+    },
+    "limit": {
+      "type": "integer",
+      "format": "int32",
+      "title": "Limit is the maximum number of attempts when retrying a container"
+    },
+    "retryPolicy": {
+      "type": "string",
+      "title": "RetryPolicy is a policy of NodePhase statuses that will be retried"
+    }
+  },
+  "$schema": "http://json-schema.org/schema#"
+}

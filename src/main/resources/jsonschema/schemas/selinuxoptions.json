@@ -1,0 +1,23 @@
+{
+  "type": "object",
+  "title": "SELinuxOptions are the labels to be applied to the container",
+  "properties": {
+    "level": {
+      "type": "string",
+      "title": "Level is SELinux level label that applies to the container.\n+optional"
+    },
+    "role": {
+      "type": "string",
+      "title": "Role is a SELinux role label that applies to the container.\n+optional"
+    },
+    "type": {
+      "type": "string",
+      "title": "Type is a SELinux type label that applies to the container.\n+optional"
+    },
+    "user": {
+      "type": "string",
+      "title": "User is a SELinux user label that applies to the container.\n+optional"
+    }
+  },
+  "$schema": "http://json-schema.org/schema#"
+}

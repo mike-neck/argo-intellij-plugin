@@ -1,0 +1,20 @@
+{
+  "description": "Maps a string key to a path within a volume.",
+  "type": "object",
+  "properties": {
+    "key": {
+      "description": "The key to project.",
+      "type": "string"
+    },
+    "mode": {
+      "type": "integer",
+      "format": "int32",
+      "title": "Optional: mode bits to use on this file, must be a value between 0\nand 0777. If not specified, the volume defaultMode will be used.\nThis might be in conflict with other options that affect the file\nmode, like fsGroup, and the result can be other mode bits set.\n+optional"
+    },
+    "path": {
+      "description": "The relative path of the file to map the key to.\nMay not be an absolute path.\nMay not contain the path element '..'.\nMay not start with the string '..'.",
+      "type": "string"
+    }
+  },
+  "$schema": "http://json-schema.org/schema#"
+}

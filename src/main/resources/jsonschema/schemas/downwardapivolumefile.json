@@ -1,0 +1,53 @@
+{
+  "type": "object",
+  "title": "DownwardAPIVolumeFile represents information to create the file containing the pod field",
+  "properties": {
+    "fieldRef": {
+      "description": "ObjectFieldSelector selects an APIVersioned field of an object.",
+      "type": "object",
+      "properties": {
+        "apiVersion": {
+          "type": "string",
+          "title": "Version of the schema the FieldPath is written in terms of, defaults to \"v1\".\n+optional"
+        },
+        "fieldPath": {
+          "description": "Path of the field to select in the specified API version.",
+          "type": "string"
+        }
+      }
+    },
+    "mode": {
+      "type": "integer",
+      "format": "int32",
+      "title": "Optional: mode bits to use on this file, must be a value between 0\nand 0777. If not specified, the volume defaultMode will be used.\nThis might be in conflict with other options that affect the file\nmode, like fsGroup, and the result can be other mode bits set.\n+optional"
+    },
+    "path": {
+      "type": "string",
+      "title": "Required: Path is  the relative path name of the file to be created. Must not be absolute or contain the '..' path. Must be utf-8 encoded. The first item of the relative path must not start with '..'"
+    },
+    "resourceFieldRef": {
+      "type": "object",
+      "title": "ResourceFieldSelector represents container resources (cpu, memory) and their output format",
+      "properties": {
+        "containerName": {
+          "type": "string",
+          "title": "Container name: required for volumes, optional for env vars\n+optional"
+        },
+        "divisor": {
+          "description": "Quantity is a fixed-point representation of a number.\nIt provides convenient marshaling/unmarshaling in JSON and YAML,\nin addition to String() and AsInt64() accessors.\n\nThe serialization format is:\n\n<quantity>        ::= <signedNumber><suffix>\n  (Note that <suffix> may be empty, from the \"\" case in <decimalSI>.)\n<digit>           ::= 0 | 1 | ... | 9\n<digits>          ::= <digit> | <digit><digits>\n<number>          ::= <digits> | <digits>.<digits> | <digits>. | .<digits>\n<sign>            ::= \"+\" | \"-\"\n<signedNumber>    ::= <number> | <sign><number>\n<suffix>          ::= <binarySI> | <decimalExponent> | <decimalSI>\n<binarySI>        ::= Ki | Mi | Gi | Ti | Pi | Ei\n  (International System of units; See: http://physics.nist.gov/cuu/Units/binary.html)\n<decimalSI>       ::= m | \"\" | k | M | G | T | P | E\n  (Note that 1024 = 1Ki but 1000 = 1k; I didn't choose the capitalization.)\n<decimalExponent> ::= \"e\" <signedNumber> | \"E\" <signedNumber>\n\nNo matter which of the three exponent forms is used, no quantity may represent\na number greater than 2^63-1 in magnitude, nor may it have more than 3 decimal\nplaces. Numbers larger or more precise will be capped or rounded up.\n(E.g.: 0.1m will rounded up to 1m.)\nThis may be extended in the future if we require larger or smaller quantities.\n\nWhen a Quantity is parsed from a string, it will remember the type of suffix\nit had, and will use the same type again when it is serialized.\n\nBefore serializing, Quantity will be put in \"canonical form\".\nThis means that Exponent/suffix will be adjusted up or down (with a\ncorresponding increase or decrease in Mantissa) such that:\n  a. No precision is lost\n  b. No fractional digits will be emitted\n  c. The exponent (or suffix) is as large as possible.\nThe sign will be omitted unless the number is negative.\n\nExamples:\n  1.5 will be serialized as \"1500m\"\n  1.5Gi will be serialized as \"1536Mi\"\n\nNote that the quantity will NEVER be internally represented by a\nfloating point number. That is the whole point of this exercise.\n\nNon-canonical values will still parse as long as they are well formed,\nbut will be re-emitted in their canonical form. (So always use canonical\nform, or don't diff.)\n\nThis format is intended to make it difficult to use these numbers without\nwriting some sort of special handling code in the hopes that that will\ncause implementors to also use a fixed point implementation.\n\n+protobuf=true\n+protobuf.embed=string\n+protobuf.options.marshal=false\n+protobuf.options.(gogoproto.goproto_stringer)=false\n+k8s:deepcopy-gen=true\n+k8s:openapi-gen=true",
+          "type": "object",
+          "properties": {
+            "string": {
+              "type": "string"
+            }
+          }
+        },
+        "resource": {
+          "type": "string",
+          "title": "Required: resource to select"
+        }
+      }
+    }
+  },
+  "$schema": "http://json-schema.org/schema#"
+}

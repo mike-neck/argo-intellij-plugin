@@ -1,0 +1,5 @@
+{
+  "description": "NoneStrategy indicates to skip tar process and upload the files or directory tree as independent\nfiles. Note that if the artifact is a directory, the artifact driver must support the ability to\nsave/load the directory appropriately.",
+  "type": "object",
+  "$schema": "http://json-schema.org/schema#"
+}

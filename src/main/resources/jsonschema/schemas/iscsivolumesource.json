@@ -1,0 +1,64 @@
+{
+  "description": "Represents an ISCSI disk.\nISCSI volumes can only be mounted as read/write once.\nISCSI volumes support ownership management and SELinux relabeling.",
+  "type": "object",
+  "properties": {
+    "chapAuthDiscovery": {
+      "type": "boolean",
+      "format": "boolean",
+      "title": "whether support iSCSI Discovery CHAP authentication\n+optional"
+    },
+    "chapAuthSession": {
+      "type": "boolean",
+      "format": "boolean",
+      "title": "whether support iSCSI Session CHAP authentication\n+optional"
+    },
+    "fsType": {
+      "type": "string",
+      "title": "Filesystem type of the volume that you want to mount.\nTip: Ensure that the filesystem type is supported by the host operating system.\nExamples: \"ext4\", \"xfs\", \"ntfs\". Implicitly inferred to be \"ext4\" if unspecified.\nMore info: https://kubernetes.io/docs/concepts/storage/volumes#iscsi\nTODO: how do we prevent errors in the filesystem from compromising the machine\n+optional"
+    },
+    "initiatorName": {
+      "type": "string",
+      "title": "Custom iSCSI Initiator Name.\nIf initiatorName is specified with iscsiInterface simultaneously, new iSCSI interface\n<target portal>:<volume name> will be created for the connection.\n+optional"
+    },
+    "iqn": {
+      "description": "Target iSCSI Qualified Name.",
+      "type": "string"
+    },
+    "iscsiInterface": {
+      "type": "string",
+      "title": "iSCSI Interface Name that uses an iSCSI transport.\nDefaults to 'default' (tcp).\n+optional"
+    },
+    "lun": {
+      "description": "iSCSI Target Lun number.",
+      "type": "integer",
+      "format": "int32"
+    },
+    "portals": {
+      "type": "array",
+      "title": "iSCSI Target Portal List. The portal is either an IP or ip_addr:port if the port\nis other than default (typically TCP ports 860 and 3260).\n+optional",
+      "items": {
+        "type": "string"
+      }
+    },
+    "readOnly": {
+      "type": "boolean",
+      "format": "boolean",
+      "title": "ReadOnly here will force the ReadOnly setting in VolumeMounts.\nDefaults to false.\n+optional"
+    },
+    "secretRef": {
+      "description": "LocalObjectReference contains enough information to let you locate the\nreferenced object inside the same namespace.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?\n+optional"
+        }
+      }
+    },
+    "targetPortal": {
+      "description": "iSCSI Target Portal. The Portal is either an IP or ip_addr:port if the port\nis other than default (typically TCP ports 860 and 3260).",
+      "type": "string"
+    }
+  },
+  "$schema": "http://json-schema.org/schema#"
+}

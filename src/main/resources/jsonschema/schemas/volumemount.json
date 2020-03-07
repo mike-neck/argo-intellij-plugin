@@ -1,0 +1,32 @@
+{
+  "description": "VolumeMount describes a mounting of a Volume within a container.",
+  "type": "object",
+  "properties": {
+    "mountPath": {
+      "description": "Path within the container at which the volume should be mounted.  Must\nnot contain ':'.",
+      "type": "string"
+    },
+    "mountPropagation": {
+      "type": "string",
+      "title": "mountPropagation determines how mounts are propagated from the host\nto container and the other way around.\nWhen not set, MountPropagationNone is used.\nThis field is beta in 1.10.\n+optional"
+    },
+    "name": {
+      "description": "This must match the Name of a Volume.",
+      "type": "string"
+    },
+    "readOnly": {
+      "type": "boolean",
+      "format": "boolean",
+      "title": "Mounted read-only if true, read-write otherwise (false or unspecified).\nDefaults to false.\n+optional"
+    },
+    "subPath": {
+      "type": "string",
+      "title": "Path within the volume from which the container's volume should be mounted.\nDefaults to \"\" (volume's root).\n+optional"
+    },
+    "subPathExpr": {
+      "type": "string",
+      "title": "Expanded path within the volume from which the container's volume should be mounted.\nBehaves similarly to SubPath but environment variable references $(VAR_NAME) are expanded using the container's environment.\nDefaults to \"\" (volume's root).\nSubPathExpr and SubPath are mutually exclusive.\nThis field is beta in 1.15.\n+optional"
+    }
+  },
+  "$schema": "http://json-schema.org/schema#"
+}

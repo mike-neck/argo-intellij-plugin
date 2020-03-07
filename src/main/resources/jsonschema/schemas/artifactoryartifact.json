@@ -1,0 +1,67 @@
+{
+  "type": "object",
+  "title": "ArtifactoryArtifact is the location of an artifactory artifact",
+  "properties": {
+    "artifactoryAuth": {
+      "type": "object",
+      "title": "ArtifactoryAuth describes the secret selectors required for authenticating to artifactory",
+      "properties": {
+        "passwordSecret": {
+          "description": "SecretKeySelector selects a key of a Secret.",
+          "type": "object",
+          "properties": {
+            "key": {
+              "description": "The key of the secret to select from.  Must be a valid secret key.",
+              "type": "string"
+            },
+            "localObjectReference": {
+              "description": "LocalObjectReference contains enough information to let you locate the\nreferenced object inside the same namespace.",
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "title": "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?\n+optional"
+                }
+              }
+            },
+            "optional": {
+              "type": "boolean",
+              "format": "boolean",
+              "title": "Specify whether the Secret or its key must be defined\n+optional"
+            }
+          }
+        },
+        "usernameSecret": {
+          "description": "SecretKeySelector selects a key of a Secret.",
+          "type": "object",
+          "properties": {
+            "key": {
+              "description": "The key of the secret to select from.  Must be a valid secret key.",
+              "type": "string"
+            },
+            "localObjectReference": {
+              "description": "LocalObjectReference contains enough information to let you locate the\nreferenced object inside the same namespace.",
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "title": "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?\n+optional"
+                }
+              }
+            },
+            "optional": {
+              "type": "boolean",
+              "format": "boolean",
+              "title": "Specify whether the Secret or its key must be defined\n+optional"
+            }
+          }
+        }
+      }
+    },
+    "url": {
+      "type": "string",
+      "title": "URL of the artifact"
+    }
+  },
+  "$schema": "http://json-schema.org/schema#"
+}

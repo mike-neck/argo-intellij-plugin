@@ -1,0 +1,37 @@
+{
+  "type": "object",
+  "title": "Represents a source location of a volume to mount, managed by an external CSI driver",
+  "properties": {
+    "driver": {
+      "description": "Driver is the name of the CSI driver that handles this volume.\nConsult with your admin for the correct name as registered in the cluster.",
+      "type": "string"
+    },
+    "fsType": {
+      "type": "string",
+      "title": "Filesystem type to mount. Ex. \"ext4\", \"xfs\", \"ntfs\".\nIf not provided, the empty value is passed to the associated CSI driver\nwhich will determine the default filesystem to apply.\n+optional"
+    },
+    "nodePublishSecretRef": {
+      "description": "LocalObjectReference contains enough information to let you locate the\nreferenced object inside the same namespace.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?\n+optional"
+        }
+      }
+    },
+    "readOnly": {
+      "type": "boolean",
+      "format": "boolean",
+      "title": "Specifies a read-only configuration for the volume.\nDefaults to false (read/write).\n+optional"
+    },
+    "volumeAttributes": {
+      "type": "object",
+      "title": "VolumeAttributes stores driver-specific properties that are passed to the CSI\ndriver. Consult your driver's documentation for supported values.\n+optional",
+      "additionalProperties": {
+        "type": "string"
+      }
+    }
+  },
+  "$schema": "http://json-schema.org/schema#"
+}

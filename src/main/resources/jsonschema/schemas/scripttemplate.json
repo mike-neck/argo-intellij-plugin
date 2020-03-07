@@ -1,0 +1,1058 @@
+{
+  "type": "object",
+  "title": "ScriptTemplate is a template subtype to enable scripting through code steps",
+  "properties": {
+    "container": {
+      "description": "A single application container that you want to run within a pod.",
+      "type": "object",
+      "properties": {
+        "args": {
+          "type": "array",
+          "title": "Arguments to the entrypoint.\nThe docker image's CMD is used if this is not provided.\nVariable references $(VAR_NAME) are expanded using the container's environment. If a variable\ncannot be resolved, the reference in the input string will be unchanged. The $(VAR_NAME) syntax\ncan be escaped with a double $$, ie: $$(VAR_NAME). Escaped references will never be expanded,\nregardless of whether the variable exists or not.\nCannot be updated.\nMore info: https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#running-a-command-in-a-shell\n+optional",
+          "items": {
+            "type": "string"
+          }
+        },
+        "command": {
+          "type": "array",
+          "title": "Entrypoint array. Not executed within a shell.\nThe docker image's ENTRYPOINT is used if this is not provided.\nVariable references $(VAR_NAME) are expanded using the container's environment. If a variable\ncannot be resolved, the reference in the input string will be unchanged. The $(VAR_NAME) syntax\ncan be escaped with a double $$, ie: $$(VAR_NAME). Escaped references will never be expanded,\nregardless of whether the variable exists or not.\nCannot be updated.\nMore info: https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#running-a-command-in-a-shell\n+optional",
+          "items": {
+            "type": "string"
+          }
+        },
+        "env": {
+          "type": "array",
+          "title": "List of environment variables to set in the container.\nCannot be updated.\n+optional\n+patchMergeKey=name\n+patchStrategy=merge",
+          "items": {
+            "description": "EnvVar represents an environment variable present in a Container.",
+            "type": "object",
+            "properties": {
+              "name": {
+                "description": "Name of the environment variable. Must be a C_IDENTIFIER.",
+                "type": "string"
+              },
+              "value": {
+                "type": "string",
+                "title": "Variable references $(VAR_NAME) are expanded\nusing the previous defined environment variables in the container and\nany service environment variables. If a variable cannot be resolved,\nthe reference in the input string will be unchanged. The $(VAR_NAME)\nsyntax can be escaped with a double $$, ie: $$(VAR_NAME). Escaped\nreferences will never be expanded, regardless of whether the variable\nexists or not.\nDefaults to \"\".\n+optional"
+              },
+              "valueFrom": {
+                "description": "EnvVarSource represents a source for the value of an EnvVar.",
+                "type": "object",
+                "properties": {
+                  "configMapKeyRef": {
+                    "description": "Selects a key from a ConfigMap.",
+                    "type": "object",
+                    "properties": {
+                      "key": {
+                        "description": "The key to select.",
+                        "type": "string"
+                      },
+                      "localObjectReference": {
+                        "description": "LocalObjectReference contains enough information to let you locate the\nreferenced object inside the same namespace.",
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string",
+                            "title": "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?\n+optional"
+                          }
+                        }
+                      },
+                      "optional": {
+                        "type": "boolean",
+                        "format": "boolean",
+                        "title": "Specify whether the ConfigMap or its key must be defined\n+optional"
+                      }
+                    }
+                  },
+                  "fieldRef": {
+                    "description": "ObjectFieldSelector selects an APIVersioned field of an object.",
+                    "type": "object",
+                    "properties": {
+                      "apiVersion": {
+                        "type": "string",
+                        "title": "Version of the schema the FieldPath is written in terms of, defaults to \"v1\".\n+optional"
+                      },
+                      "fieldPath": {
+                        "description": "Path of the field to select in the specified API version.",
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "resourceFieldRef": {
+                    "type": "object",
+                    "title": "ResourceFieldSelector represents container resources (cpu, memory) and their output format",
+                    "properties": {
+                      "containerName": {
+                        "type": "string",
+                        "title": "Container name: required for volumes, optional for env vars\n+optional"
+                      },
+                      "divisor": {
+                        "description": "Quantity is a fixed-point representation of a number.\nIt provides convenient marshaling/unmarshaling in JSON and YAML,\nin addition to String() and AsInt64() accessors.\n\nThe serialization format is:\n\n<quantity>        ::= <signedNumber><suffix>\n  (Note that <suffix> may be empty, from the \"\" case in <decimalSI>.)\n<digit>           ::= 0 | 1 | ... | 9\n<digits>          ::= <digit> | <digit><digits>\n<number>          ::= <digits> | <digits>.<digits> | <digits>. | .<digits>\n<sign>            ::= \"+\" | \"-\"\n<signedNumber>    ::= <number> | <sign><number>\n<suffix>          ::= <binarySI> | <decimalExponent> | <decimalSI>\n<binarySI>        ::= Ki | Mi | Gi | Ti | Pi | Ei\n  (International System of units; See: http://physics.nist.gov/cuu/Units/binary.html)\n<decimalSI>       ::= m | \"\" | k | M | G | T | P | E\n  (Note that 1024 = 1Ki but 1000 = 1k; I didn't choose the capitalization.)\n<decimalExponent> ::= \"e\" <signedNumber> | \"E\" <signedNumber>\n\nNo matter which of the three exponent forms is used, no quantity may represent\na number greater than 2^63-1 in magnitude, nor may it have more than 3 decimal\nplaces. Numbers larger or more precise will be capped or rounded up.\n(E.g.: 0.1m will rounded up to 1m.)\nThis may be extended in the future if we require larger or smaller quantities.\n\nWhen a Quantity is parsed from a string, it will remember the type of suffix\nit had, and will use the same type again when it is serialized.\n\nBefore serializing, Quantity will be put in \"canonical form\".\nThis means that Exponent/suffix will be adjusted up or down (with a\ncorresponding increase or decrease in Mantissa) such that:\n  a. No precision is lost\n  b. No fractional digits will be emitted\n  c. The exponent (or suffix) is as large as possible.\nThe sign will be omitted unless the number is negative.\n\nExamples:\n  1.5 will be serialized as \"1500m\"\n  1.5Gi will be serialized as \"1536Mi\"\n\nNote that the quantity will NEVER be internally represented by a\nfloating point number. That is the whole point of this exercise.\n\nNon-canonical values will still parse as long as they are well formed,\nbut will be re-emitted in their canonical form. (So always use canonical\nform, or don't diff.)\n\nThis format is intended to make it difficult to use these numbers without\nwriting some sort of special handling code in the hopes that that will\ncause implementors to also use a fixed point implementation.\n\n+protobuf=true\n+protobuf.embed=string\n+protobuf.options.marshal=false\n+protobuf.options.(gogoproto.goproto_stringer)=false\n+k8s:deepcopy-gen=true\n+k8s:openapi-gen=true",
+                        "type": "object",
+                        "properties": {
+                          "string": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "resource": {
+                        "type": "string",
+                        "title": "Required: resource to select"
+                      }
+                    }
+                  },
+                  "secretKeyRef": {
+                    "description": "SecretKeySelector selects a key of a Secret.",
+                    "type": "object",
+                    "properties": {
+                      "key": {
+                        "description": "The key of the secret to select from.  Must be a valid secret key.",
+                        "type": "string"
+                      },
+                      "localObjectReference": {
+                        "description": "LocalObjectReference contains enough information to let you locate the\nreferenced object inside the same namespace.",
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string",
+                            "title": "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?\n+optional"
+                          }
+                        }
+                      },
+                      "optional": {
+                        "type": "boolean",
+                        "format": "boolean",
+                        "title": "Specify whether the Secret or its key must be defined\n+optional"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "envFrom": {
+          "type": "array",
+          "title": "List of sources to populate environment variables in the container.\nThe keys defined within a source must be a C_IDENTIFIER. All invalid keys\nwill be reported as an event when the container is starting. When a key exists in multiple\nsources, the value associated with the last source will take precedence.\nValues defined by an Env with a duplicate key will take precedence.\nCannot be updated.\n+optional",
+          "items": {
+            "type": "object",
+            "title": "EnvFromSource represents the source of a set of ConfigMaps",
+            "properties": {
+              "configMapRef": {
+                "description": "ConfigMapEnvSource selects a ConfigMap to populate the environment\nvariables with.\n\nThe contents of the target ConfigMap's Data field will represent the\nkey-value pairs as environment variables.",
+                "type": "object",
+                "properties": {
+                  "localObjectReference": {
+                    "description": "LocalObjectReference contains enough information to let you locate the\nreferenced object inside the same namespace.",
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "title": "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?\n+optional"
+                      }
+                    }
+                  },
+                  "optional": {
+                    "type": "boolean",
+                    "format": "boolean",
+                    "title": "Specify whether the ConfigMap must be defined\n+optional"
+                  }
+                }
+              },
+              "prefix": {
+                "type": "string",
+                "title": "An optional identifier to prepend to each key in the ConfigMap. Must be a C_IDENTIFIER.\n+optional"
+              },
+              "secretRef": {
+                "description": "SecretEnvSource selects a Secret to populate the environment\nvariables with.\n\nThe contents of the target Secret's Data field will represent the\nkey-value pairs as environment variables.",
+                "type": "object",
+                "properties": {
+                  "localObjectReference": {
+                    "description": "LocalObjectReference contains enough information to let you locate the\nreferenced object inside the same namespace.",
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "title": "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?\n+optional"
+                      }
+                    }
+                  },
+                  "optional": {
+                    "type": "boolean",
+                    "format": "boolean",
+                    "title": "Specify whether the Secret must be defined\n+optional"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "image": {
+          "type": "string",
+          "title": "Docker image name.\nMore info: https://kubernetes.io/docs/concepts/containers/images\nThis field is optional to allow higher level config management to default or override\ncontainer images in workload controllers like Deployments and StatefulSets.\n+optional"
+        },
+        "imagePullPolicy": {
+          "type": "string",
+          "title": "Image pull policy.\nOne of Always, Never, IfNotPresent.\nDefaults to Always if :latest tag is specified, or IfNotPresent otherwise.\nCannot be updated.\nMore info: https://kubernetes.io/docs/concepts/containers/images#updating-images\n+optional"
+        },
+        "lifecycle": {
+          "description": "Lifecycle describes actions that the management system should take in response to container lifecycle\nevents. For the PostStart and PreStop lifecycle handlers, management of the container blocks\nuntil the action is complete, unless the container process fails, in which case the handler is aborted.",
+          "type": "object",
+          "properties": {
+            "postStart": {
+              "description": "Handler defines a specific action that should be taken\nTODO: pass structured data to these actions, and document that data here.",
+              "type": "object",
+              "properties": {
+                "exec": {
+                  "description": "ExecAction describes a \"run in container\" action.",
+                  "type": "object",
+                  "properties": {
+                    "command": {
+                      "type": "array",
+                      "title": "Command is the command line to execute inside the container, the working directory for the\ncommand  is root ('/') in the container's filesystem. The command is simply exec'd, it is\nnot run inside a shell, so traditional shell instructions ('|', etc) won't work. To use\na shell, you need to explicitly call out to that shell.\nExit status of 0 is treated as live/healthy and non-zero is unhealthy.\n+optional",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "httpGet": {
+                  "description": "HTTPGetAction describes an action based on HTTP Get requests.",
+                  "type": "object",
+                  "properties": {
+                    "host": {
+                      "type": "string",
+                      "title": "Host name to connect to, defaults to the pod IP. You probably want to set\n\"Host\" in httpHeaders instead.\n+optional"
+                    },
+                    "httpHeaders": {
+                      "type": "array",
+                      "title": "Custom headers to set in the request. HTTP allows repeated headers.\n+optional",
+                      "items": {
+                        "type": "object",
+                        "title": "HTTPHeader describes a custom header to be used in HTTP probes",
+                        "properties": {
+                          "name": {
+                            "type": "string",
+                            "title": "The header field name"
+                          },
+                          "value": {
+                            "type": "string",
+                            "title": "The header field value"
+                          }
+                        }
+                      }
+                    },
+                    "path": {
+                      "type": "string",
+                      "title": "Path to access on the HTTP server.\n+optional"
+                    },
+                    "port": {
+                      "description": "+protobuf=true\n+protobuf.options.(gogoproto.goproto_stringer)=false\n+k8s:openapi-gen=true",
+                      "type": "object",
+                      "title": "IntOrString is a type that can hold an int32 or a string.  When used in\nJSON or YAML marshalling and unmarshalling, it produces or consumes the\ninner type.  This allows you to have, for example, a JSON field that can\naccept a name or number.\nTODO: Rename to Int32OrString",
+                      "properties": {
+                        "intVal": {
+                          "type": "integer",
+                          "format": "int32"
+                        },
+                        "strVal": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string",
+                          "format": "int64"
+                        }
+                      }
+                    },
+                    "scheme": {
+                      "type": "string",
+                      "title": "Scheme to use for connecting to the host.\nDefaults to HTTP.\n+optional"
+                    }
+                  }
+                },
+                "tcpSocket": {
+                  "type": "object",
+                  "title": "TCPSocketAction describes an action based on opening a socket",
+                  "properties": {
+                    "host": {
+                      "type": "string",
+                      "title": "Optional: Host name to connect to, defaults to the pod IP.\n+optional"
+                    },
+                    "port": {
+                      "description": "+protobuf=true\n+protobuf.options.(gogoproto.goproto_stringer)=false\n+k8s:openapi-gen=true",
+                      "type": "object",
+                      "title": "IntOrString is a type that can hold an int32 or a string.  When used in\nJSON or YAML marshalling and unmarshalling, it produces or consumes the\ninner type.  This allows you to have, for example, a JSON field that can\naccept a name or number.\nTODO: Rename to Int32OrString",
+                      "properties": {
+                        "intVal": {
+                          "type": "integer",
+                          "format": "int32"
+                        },
+                        "strVal": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string",
+                          "format": "int64"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "preStop": {
+              "description": "Handler defines a specific action that should be taken\nTODO: pass structured data to these actions, and document that data here.",
+              "type": "object",
+              "properties": {
+                "exec": {
+                  "description": "ExecAction describes a \"run in container\" action.",
+                  "type": "object",
+                  "properties": {
+                    "command": {
+                      "type": "array",
+                      "title": "Command is the command line to execute inside the container, the working directory for the\ncommand  is root ('/') in the container's filesystem. The command is simply exec'd, it is\nnot run inside a shell, so traditional shell instructions ('|', etc) won't work. To use\na shell, you need to explicitly call out to that shell.\nExit status of 0 is treated as live/healthy and non-zero is unhealthy.\n+optional",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "httpGet": {
+                  "description": "HTTPGetAction describes an action based on HTTP Get requests.",
+                  "type": "object",
+                  "properties": {
+                    "host": {
+                      "type": "string",
+                      "title": "Host name to connect to, defaults to the pod IP. You probably want to set\n\"Host\" in httpHeaders instead.\n+optional"
+                    },
+                    "httpHeaders": {
+                      "type": "array",
+                      "title": "Custom headers to set in the request. HTTP allows repeated headers.\n+optional",
+                      "items": {
+                        "type": "object",
+                        "title": "HTTPHeader describes a custom header to be used in HTTP probes",
+                        "properties": {
+                          "name": {
+                            "type": "string",
+                            "title": "The header field name"
+                          },
+                          "value": {
+                            "type": "string",
+                            "title": "The header field value"
+                          }
+                        }
+                      }
+                    },
+                    "path": {
+                      "type": "string",
+                      "title": "Path to access on the HTTP server.\n+optional"
+                    },
+                    "port": {
+                      "description": "+protobuf=true\n+protobuf.options.(gogoproto.goproto_stringer)=false\n+k8s:openapi-gen=true",
+                      "type": "object",
+                      "title": "IntOrString is a type that can hold an int32 or a string.  When used in\nJSON or YAML marshalling and unmarshalling, it produces or consumes the\ninner type.  This allows you to have, for example, a JSON field that can\naccept a name or number.\nTODO: Rename to Int32OrString",
+                      "properties": {
+                        "intVal": {
+                          "type": "integer",
+                          "format": "int32"
+                        },
+                        "strVal": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string",
+                          "format": "int64"
+                        }
+                      }
+                    },
+                    "scheme": {
+                      "type": "string",
+                      "title": "Scheme to use for connecting to the host.\nDefaults to HTTP.\n+optional"
+                    }
+                  }
+                },
+                "tcpSocket": {
+                  "type": "object",
+                  "title": "TCPSocketAction describes an action based on opening a socket",
+                  "properties": {
+                    "host": {
+                      "type": "string",
+                      "title": "Optional: Host name to connect to, defaults to the pod IP.\n+optional"
+                    },
+                    "port": {
+                      "description": "+protobuf=true\n+protobuf.options.(gogoproto.goproto_stringer)=false\n+k8s:openapi-gen=true",
+                      "type": "object",
+                      "title": "IntOrString is a type that can hold an int32 or a string.  When used in\nJSON or YAML marshalling and unmarshalling, it produces or consumes the\ninner type.  This allows you to have, for example, a JSON field that can\naccept a name or number.\nTODO: Rename to Int32OrString",
+                      "properties": {
+                        "intVal": {
+                          "type": "integer",
+                          "format": "int32"
+                        },
+                        "strVal": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string",
+                          "format": "int64"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "livenessProbe": {
+          "description": "Probe describes a health check to be performed against a container to determine whether it is\nalive or ready to receive traffic.",
+          "type": "object",
+          "properties": {
+            "failureThreshold": {
+              "type": "integer",
+              "format": "int32",
+              "title": "Minimum consecutive failures for the probe to be considered failed after having succeeded.\nDefaults to 3. Minimum value is 1.\n+optional"
+            },
+            "handler": {
+              "description": "Handler defines a specific action that should be taken\nTODO: pass structured data to these actions, and document that data here.",
+              "type": "object",
+              "properties": {
+                "exec": {
+                  "description": "ExecAction describes a \"run in container\" action.",
+                  "type": "object",
+                  "properties": {
+                    "command": {
+                      "type": "array",
+                      "title": "Command is the command line to execute inside the container, the working directory for the\ncommand  is root ('/') in the container's filesystem. The command is simply exec'd, it is\nnot run inside a shell, so traditional shell instructions ('|', etc) won't work. To use\na shell, you need to explicitly call out to that shell.\nExit status of 0 is treated as live/healthy and non-zero is unhealthy.\n+optional",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "httpGet": {
+                  "description": "HTTPGetAction describes an action based on HTTP Get requests.",
+                  "type": "object",
+                  "properties": {
+                    "host": {
+                      "type": "string",
+                      "title": "Host name to connect to, defaults to the pod IP. You probably want to set\n\"Host\" in httpHeaders instead.\n+optional"
+                    },
+                    "httpHeaders": {
+                      "type": "array",
+                      "title": "Custom headers to set in the request. HTTP allows repeated headers.\n+optional",
+                      "items": {
+                        "type": "object",
+                        "title": "HTTPHeader describes a custom header to be used in HTTP probes",
+                        "properties": {
+                          "name": {
+                            "type": "string",
+                            "title": "The header field name"
+                          },
+                          "value": {
+                            "type": "string",
+                            "title": "The header field value"
+                          }
+                        }
+                      }
+                    },
+                    "path": {
+                      "type": "string",
+                      "title": "Path to access on the HTTP server.\n+optional"
+                    },
+                    "port": {
+                      "description": "+protobuf=true\n+protobuf.options.(gogoproto.goproto_stringer)=false\n+k8s:openapi-gen=true",
+                      "type": "object",
+                      "title": "IntOrString is a type that can hold an int32 or a string.  When used in\nJSON or YAML marshalling and unmarshalling, it produces or consumes the\ninner type.  This allows you to have, for example, a JSON field that can\naccept a name or number.\nTODO: Rename to Int32OrString",
+                      "properties": {
+                        "intVal": {
+                          "type": "integer",
+                          "format": "int32"
+                        },
+                        "strVal": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string",
+                          "format": "int64"
+                        }
+                      }
+                    },
+                    "scheme": {
+                      "type": "string",
+                      "title": "Scheme to use for connecting to the host.\nDefaults to HTTP.\n+optional"
+                    }
+                  }
+                },
+                "tcpSocket": {
+                  "type": "object",
+                  "title": "TCPSocketAction describes an action based on opening a socket",
+                  "properties": {
+                    "host": {
+                      "type": "string",
+                      "title": "Optional: Host name to connect to, defaults to the pod IP.\n+optional"
+                    },
+                    "port": {
+                      "description": "+protobuf=true\n+protobuf.options.(gogoproto.goproto_stringer)=false\n+k8s:openapi-gen=true",
+                      "type": "object",
+                      "title": "IntOrString is a type that can hold an int32 or a string.  When used in\nJSON or YAML marshalling and unmarshalling, it produces or consumes the\ninner type.  This allows you to have, for example, a JSON field that can\naccept a name or number.\nTODO: Rename to Int32OrString",
+                      "properties": {
+                        "intVal": {
+                          "type": "integer",
+                          "format": "int32"
+                        },
+                        "strVal": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string",
+                          "format": "int64"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "initialDelaySeconds": {
+              "type": "integer",
+              "format": "int32",
+              "title": "Number of seconds after the container has started before liveness probes are initiated.\nMore info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes\n+optional"
+            },
+            "periodSeconds": {
+              "type": "integer",
+              "format": "int32",
+              "title": "How often (in seconds) to perform the probe.\nDefault to 10 seconds. Minimum value is 1.\n+optional"
+            },
+            "successThreshold": {
+              "type": "integer",
+              "format": "int32",
+              "title": "Minimum consecutive successes for the probe to be considered successful after having failed.\nDefaults to 1. Must be 1 for liveness and startup. Minimum value is 1.\n+optional"
+            },
+            "timeoutSeconds": {
+              "type": "integer",
+              "format": "int32",
+              "title": "Number of seconds after which the probe times out.\nDefaults to 1 second. Minimum value is 1.\nMore info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes\n+optional"
+            }
+          }
+        },
+        "name": {
+          "description": "Name of the container specified as a DNS_LABEL.\nEach container in a pod must have a unique name (DNS_LABEL).\nCannot be updated.",
+          "type": "string"
+        },
+        "ports": {
+          "type": "array",
+          "title": "List of ports to expose from the container. Exposing a port here gives\nthe system additional information about the network connections a\ncontainer uses, but is primarily informational. Not specifying a port here\nDOES NOT prevent that port from being exposed. Any port which is\nlistening on the default \"0.0.0.0\" address inside a container will be\naccessible from the network.\nCannot be updated.\n+optional\n+patchMergeKey=containerPort\n+patchStrategy=merge\n+listType=map\n+listMapKey=containerPort\n+listMapKey=protocol",
+          "items": {
+            "description": "ContainerPort represents a network port in a single container.",
+            "type": "object",
+            "properties": {
+              "containerPort": {
+                "description": "Number of port to expose on the pod's IP address.\nThis must be a valid port number, 0 < x < 65536.",
+                "type": "integer",
+                "format": "int32"
+              },
+              "hostIP": {
+                "type": "string",
+                "title": "What host IP to bind the external port to.\n+optional"
+              },
+              "hostPort": {
+                "type": "integer",
+                "format": "int32",
+                "title": "Number of port to expose on the host.\nIf specified, this must be a valid port number, 0 < x < 65536.\nIf HostNetwork is specified, this must match ContainerPort.\nMost containers do not need this.\n+optional"
+              },
+              "name": {
+                "type": "string",
+                "title": "If specified, this must be an IANA_SVC_NAME and unique within the pod. Each\nnamed port in a pod must have a unique name. Name for the port that can be\nreferred to by services.\n+optional"
+              },
+              "protocol": {
+                "type": "string",
+                "title": "Protocol for port. Must be UDP, TCP, or SCTP.\nDefaults to \"TCP\".\n+optional"
+              }
+            }
+          }
+        },
+        "readinessProbe": {
+          "description": "Probe describes a health check to be performed against a container to determine whether it is\nalive or ready to receive traffic.",
+          "type": "object",
+          "properties": {
+            "failureThreshold": {
+              "type": "integer",
+              "format": "int32",
+              "title": "Minimum consecutive failures for the probe to be considered failed after having succeeded.\nDefaults to 3. Minimum value is 1.\n+optional"
+            },
+            "handler": {
+              "description": "Handler defines a specific action that should be taken\nTODO: pass structured data to these actions, and document that data here.",
+              "type": "object",
+              "properties": {
+                "exec": {
+                  "description": "ExecAction describes a \"run in container\" action.",
+                  "type": "object",
+                  "properties": {
+                    "command": {
+                      "type": "array",
+                      "title": "Command is the command line to execute inside the container, the working directory for the\ncommand  is root ('/') in the container's filesystem. The command is simply exec'd, it is\nnot run inside a shell, so traditional shell instructions ('|', etc) won't work. To use\na shell, you need to explicitly call out to that shell.\nExit status of 0 is treated as live/healthy and non-zero is unhealthy.\n+optional",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "httpGet": {
+                  "description": "HTTPGetAction describes an action based on HTTP Get requests.",
+                  "type": "object",
+                  "properties": {
+                    "host": {
+                      "type": "string",
+                      "title": "Host name to connect to, defaults to the pod IP. You probably want to set\n\"Host\" in httpHeaders instead.\n+optional"
+                    },
+                    "httpHeaders": {
+                      "type": "array",
+                      "title": "Custom headers to set in the request. HTTP allows repeated headers.\n+optional",
+                      "items": {
+                        "type": "object",
+                        "title": "HTTPHeader describes a custom header to be used in HTTP probes",
+                        "properties": {
+                          "name": {
+                            "type": "string",
+                            "title": "The header field name"
+                          },
+                          "value": {
+                            "type": "string",
+                            "title": "The header field value"
+                          }
+                        }
+                      }
+                    },
+                    "path": {
+                      "type": "string",
+                      "title": "Path to access on the HTTP server.\n+optional"
+                    },
+                    "port": {
+                      "description": "+protobuf=true\n+protobuf.options.(gogoproto.goproto_stringer)=false\n+k8s:openapi-gen=true",
+                      "type": "object",
+                      "title": "IntOrString is a type that can hold an int32 or a string.  When used in\nJSON or YAML marshalling and unmarshalling, it produces or consumes the\ninner type.  This allows you to have, for example, a JSON field that can\naccept a name or number.\nTODO: Rename to Int32OrString",
+                      "properties": {
+                        "intVal": {
+                          "type": "integer",
+                          "format": "int32"
+                        },
+                        "strVal": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string",
+                          "format": "int64"
+                        }
+                      }
+                    },
+                    "scheme": {
+                      "type": "string",
+                      "title": "Scheme to use for connecting to the host.\nDefaults to HTTP.\n+optional"
+                    }
+                  }
+                },
+                "tcpSocket": {
+                  "type": "object",
+                  "title": "TCPSocketAction describes an action based on opening a socket",
+                  "properties": {
+                    "host": {
+                      "type": "string",
+                      "title": "Optional: Host name to connect to, defaults to the pod IP.\n+optional"
+                    },
+                    "port": {
+                      "description": "+protobuf=true\n+protobuf.options.(gogoproto.goproto_stringer)=false\n+k8s:openapi-gen=true",
+                      "type": "object",
+                      "title": "IntOrString is a type that can hold an int32 or a string.  When used in\nJSON or YAML marshalling and unmarshalling, it produces or consumes the\ninner type.  This allows you to have, for example, a JSON field that can\naccept a name or number.\nTODO: Rename to Int32OrString",
+                      "properties": {
+                        "intVal": {
+                          "type": "integer",
+                          "format": "int32"
+                        },
+                        "strVal": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string",
+                          "format": "int64"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "initialDelaySeconds": {
+              "type": "integer",
+              "format": "int32",
+              "title": "Number of seconds after the container has started before liveness probes are initiated.\nMore info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes\n+optional"
+            },
+            "periodSeconds": {
+              "type": "integer",
+              "format": "int32",
+              "title": "How often (in seconds) to perform the probe.\nDefault to 10 seconds. Minimum value is 1.\n+optional"
+            },
+            "successThreshold": {
+              "type": "integer",
+              "format": "int32",
+              "title": "Minimum consecutive successes for the probe to be considered successful after having failed.\nDefaults to 1. Must be 1 for liveness and startup. Minimum value is 1.\n+optional"
+            },
+            "timeoutSeconds": {
+              "type": "integer",
+              "format": "int32",
+              "title": "Number of seconds after which the probe times out.\nDefaults to 1 second. Minimum value is 1.\nMore info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes\n+optional"
+            }
+          }
+        },
+        "resources": {
+          "description": "ResourceRequirements describes the compute resource requirements.",
+          "type": "object",
+          "properties": {
+            "limits": {
+              "type": "object",
+              "title": "Limits describes the maximum amount of compute resources allowed.\nMore info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/\n+optional",
+              "additionalProperties": {
+                "description": "Quantity is a fixed-point representation of a number.\nIt provides convenient marshaling/unmarshaling in JSON and YAML,\nin addition to String() and AsInt64() accessors.\n\nThe serialization format is:\n\n<quantity>        ::= <signedNumber><suffix>\n  (Note that <suffix> may be empty, from the \"\" case in <decimalSI>.)\n<digit>           ::= 0 | 1 | ... | 9\n<digits>          ::= <digit> | <digit><digits>\n<number>          ::= <digits> | <digits>.<digits> | <digits>. | .<digits>\n<sign>            ::= \"+\" | \"-\"\n<signedNumber>    ::= <number> | <sign><number>\n<suffix>          ::= <binarySI> | <decimalExponent> | <decimalSI>\n<binarySI>        ::= Ki | Mi | Gi | Ti | Pi | Ei\n  (International System of units; See: http://physics.nist.gov/cuu/Units/binary.html)\n<decimalSI>       ::= m | \"\" | k | M | G | T | P | E\n  (Note that 1024 = 1Ki but 1000 = 1k; I didn't choose the capitalization.)\n<decimalExponent> ::= \"e\" <signedNumber> | \"E\" <signedNumber>\n\nNo matter which of the three exponent forms is used, no quantity may represent\na number greater than 2^63-1 in magnitude, nor may it have more than 3 decimal\nplaces. Numbers larger or more precise will be capped or rounded up.\n(E.g.: 0.1m will rounded up to 1m.)\nThis may be extended in the future if we require larger or smaller quantities.\n\nWhen a Quantity is parsed from a string, it will remember the type of suffix\nit had, and will use the same type again when it is serialized.\n\nBefore serializing, Quantity will be put in \"canonical form\".\nThis means that Exponent/suffix will be adjusted up or down (with a\ncorresponding increase or decrease in Mantissa) such that:\n  a. No precision is lost\n  b. No fractional digits will be emitted\n  c. The exponent (or suffix) is as large as possible.\nThe sign will be omitted unless the number is negative.\n\nExamples:\n  1.5 will be serialized as \"1500m\"\n  1.5Gi will be serialized as \"1536Mi\"\n\nNote that the quantity will NEVER be internally represented by a\nfloating point number. That is the whole point of this exercise.\n\nNon-canonical values will still parse as long as they are well formed,\nbut will be re-emitted in their canonical form. (So always use canonical\nform, or don't diff.)\n\nThis format is intended to make it difficult to use these numbers without\nwriting some sort of special handling code in the hopes that that will\ncause implementors to also use a fixed point implementation.\n\n+protobuf=true\n+protobuf.embed=string\n+protobuf.options.marshal=false\n+protobuf.options.(gogoproto.goproto_stringer)=false\n+k8s:deepcopy-gen=true\n+k8s:openapi-gen=true",
+                "type": "object",
+                "properties": {
+                  "string": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "requests": {
+              "type": "object",
+              "title": "Requests describes the minimum amount of compute resources required.\nIf Requests is omitted for a container, it defaults to Limits if that is explicitly specified,\notherwise to an implementation-defined value.\nMore info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/\n+optional",
+              "additionalProperties": {
+                "description": "Quantity is a fixed-point representation of a number.\nIt provides convenient marshaling/unmarshaling in JSON and YAML,\nin addition to String() and AsInt64() accessors.\n\nThe serialization format is:\n\n<quantity>        ::= <signedNumber><suffix>\n  (Note that <suffix> may be empty, from the \"\" case in <decimalSI>.)\n<digit>           ::= 0 | 1 | ... | 9\n<digits>          ::= <digit> | <digit><digits>\n<number>          ::= <digits> | <digits>.<digits> | <digits>. | .<digits>\n<sign>            ::= \"+\" | \"-\"\n<signedNumber>    ::= <number> | <sign><number>\n<suffix>          ::= <binarySI> | <decimalExponent> | <decimalSI>\n<binarySI>        ::= Ki | Mi | Gi | Ti | Pi | Ei\n  (International System of units; See: http://physics.nist.gov/cuu/Units/binary.html)\n<decimalSI>       ::= m | \"\" | k | M | G | T | P | E\n  (Note that 1024 = 1Ki but 1000 = 1k; I didn't choose the capitalization.)\n<decimalExponent> ::= \"e\" <signedNumber> | \"E\" <signedNumber>\n\nNo matter which of the three exponent forms is used, no quantity may represent\na number greater than 2^63-1 in magnitude, nor may it have more than 3 decimal\nplaces. Numbers larger or more precise will be capped or rounded up.\n(E.g.: 0.1m will rounded up to 1m.)\nThis may be extended in the future if we require larger or smaller quantities.\n\nWhen a Quantity is parsed from a string, it will remember the type of suffix\nit had, and will use the same type again when it is serialized.\n\nBefore serializing, Quantity will be put in \"canonical form\".\nThis means that Exponent/suffix will be adjusted up or down (with a\ncorresponding increase or decrease in Mantissa) such that:\n  a. No precision is lost\n  b. No fractional digits will be emitted\n  c. The exponent (or suffix) is as large as possible.\nThe sign will be omitted unless the number is negative.\n\nExamples:\n  1.5 will be serialized as \"1500m\"\n  1.5Gi will be serialized as \"1536Mi\"\n\nNote that the quantity will NEVER be internally represented by a\nfloating point number. That is the whole point of this exercise.\n\nNon-canonical values will still parse as long as they are well formed,\nbut will be re-emitted in their canonical form. (So always use canonical\nform, or don't diff.)\n\nThis format is intended to make it difficult to use these numbers without\nwriting some sort of special handling code in the hopes that that will\ncause implementors to also use a fixed point implementation.\n\n+protobuf=true\n+protobuf.embed=string\n+protobuf.options.marshal=false\n+protobuf.options.(gogoproto.goproto_stringer)=false\n+k8s:deepcopy-gen=true\n+k8s:openapi-gen=true",
+                "type": "object",
+                "properties": {
+                  "string": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "securityContext": {
+          "description": "SecurityContext holds security configuration that will be applied to a container.\nSome fields are present in both SecurityContext and PodSecurityContext.  When both\nare set, the values in SecurityContext take precedence.",
+          "type": "object",
+          "properties": {
+            "allowPrivilegeEscalation": {
+              "type": "boolean",
+              "format": "boolean",
+              "title": "AllowPrivilegeEscalation controls whether a process can gain more\nprivileges than its parent process. This bool directly controls if\nthe no_new_privs flag will be set on the container process.\nAllowPrivilegeEscalation is true always when the container is:\n1) run as Privileged\n2) has CAP_SYS_ADMIN\n+optional"
+            },
+            "capabilities": {
+              "description": "Adds and removes POSIX capabilities from running containers.",
+              "type": "object",
+              "properties": {
+                "add": {
+                  "type": "array",
+                  "title": "Added capabilities\n+optional",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "drop": {
+                  "type": "array",
+                  "title": "Removed capabilities\n+optional",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "privileged": {
+              "type": "boolean",
+              "format": "boolean",
+              "title": "Run container in privileged mode.\nProcesses in privileged containers are essentially equivalent to root on the host.\nDefaults to false.\n+optional"
+            },
+            "procMount": {
+              "type": "string",
+              "title": "procMount denotes the type of proc mount to use for the containers.\nThe default is DefaultProcMount which uses the container runtime defaults for\nreadonly paths and masked paths.\nThis requires the ProcMountType feature flag to be enabled.\n+optional"
+            },
+            "readOnlyRootFilesystem": {
+              "type": "boolean",
+              "format": "boolean",
+              "title": "Whether this container has a read-only root filesystem.\nDefault is false.\n+optional"
+            },
+            "runAsGroup": {
+              "type": "string",
+              "format": "int64",
+              "title": "The GID to run the entrypoint of the container process.\nUses runtime default if unset.\nMay also be set in PodSecurityContext.  If set in both SecurityContext and\nPodSecurityContext, the value specified in SecurityContext takes precedence.\n+optional"
+            },
+            "runAsNonRoot": {
+              "type": "boolean",
+              "format": "boolean",
+              "title": "Indicates that the container must run as a non-root user.\nIf true, the Kubelet will validate the image at runtime to ensure that it\ndoes not run as UID 0 (root) and fail to start the container if it does.\nIf unset or false, no such validation will be performed.\nMay also be set in PodSecurityContext.  If set in both SecurityContext and\nPodSecurityContext, the value specified in SecurityContext takes precedence.\n+optional"
+            },
+            "runAsUser": {
+              "type": "string",
+              "format": "int64",
+              "title": "The UID to run the entrypoint of the container process.\nDefaults to user specified in image metadata if unspecified.\nMay also be set in PodSecurityContext.  If set in both SecurityContext and\nPodSecurityContext, the value specified in SecurityContext takes precedence.\n+optional"
+            },
+            "seLinuxOptions": {
+              "type": "object",
+              "title": "SELinuxOptions are the labels to be applied to the container",
+              "properties": {
+                "level": {
+                  "type": "string",
+                  "title": "Level is SELinux level label that applies to the container.\n+optional"
+                },
+                "role": {
+                  "type": "string",
+                  "title": "Role is a SELinux role label that applies to the container.\n+optional"
+                },
+                "type": {
+                  "type": "string",
+                  "title": "Type is a SELinux type label that applies to the container.\n+optional"
+                },
+                "user": {
+                  "type": "string",
+                  "title": "User is a SELinux user label that applies to the container.\n+optional"
+                }
+              }
+            },
+            "windowsOptions": {
+              "description": "WindowsSecurityContextOptions contain Windows-specific options and credentials.",
+              "type": "object",
+              "properties": {
+                "gmsaCredentialSpec": {
+                  "type": "string",
+                  "title": "GMSACredentialSpec is where the GMSA admission webhook\n(https://github.com/kubernetes-sigs/windows-gmsa) inlines the contents of the\nGMSA credential spec named by the GMSACredentialSpecName field.\nThis field is alpha-level and is only honored by servers that enable the WindowsGMSA feature flag.\n+optional"
+                },
+                "gmsaCredentialSpecName": {
+                  "type": "string",
+                  "title": "GMSACredentialSpecName is the name of the GMSA credential spec to use.\nThis field is alpha-level and is only honored by servers that enable the WindowsGMSA feature flag.\n+optional"
+                },
+                "runAsUserName": {
+                  "type": "string",
+                  "title": "The UserName in Windows to run the entrypoint of the container process.\nDefaults to the user specified in image metadata if unspecified.\nMay also be set in PodSecurityContext. If set in both SecurityContext and\nPodSecurityContext, the value specified in SecurityContext takes precedence.\nThis field is alpha-level and it is only honored by servers that enable the WindowsRunAsUserName feature flag.\n+optional"
+                }
+              }
+            }
+          }
+        },
+        "startupProbe": {
+          "description": "Probe describes a health check to be performed against a container to determine whether it is\nalive or ready to receive traffic.",
+          "type": "object",
+          "properties": {
+            "failureThreshold": {
+              "type": "integer",
+              "format": "int32",
+              "title": "Minimum consecutive failures for the probe to be considered failed after having succeeded.\nDefaults to 3. Minimum value is 1.\n+optional"
+            },
+            "handler": {
+              "description": "Handler defines a specific action that should be taken\nTODO: pass structured data to these actions, and document that data here.",
+              "type": "object",
+              "properties": {
+                "exec": {
+                  "description": "ExecAction describes a \"run in container\" action.",
+                  "type": "object",
+                  "properties": {
+                    "command": {
+                      "type": "array",
+                      "title": "Command is the command line to execute inside the container, the working directory for the\ncommand  is root ('/') in the container's filesystem. The command is simply exec'd, it is\nnot run inside a shell, so traditional shell instructions ('|', etc) won't work. To use\na shell, you need to explicitly call out to that shell.\nExit status of 0 is treated as live/healthy and non-zero is unhealthy.\n+optional",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "httpGet": {
+                  "description": "HTTPGetAction describes an action based on HTTP Get requests.",
+                  "type": "object",
+                  "properties": {
+                    "host": {
+                      "type": "string",
+                      "title": "Host name to connect to, defaults to the pod IP. You probably want to set\n\"Host\" in httpHeaders instead.\n+optional"
+                    },
+                    "httpHeaders": {
+                      "type": "array",
+                      "title": "Custom headers to set in the request. HTTP allows repeated headers.\n+optional",
+                      "items": {
+                        "type": "object",
+                        "title": "HTTPHeader describes a custom header to be used in HTTP probes",
+                        "properties": {
+                          "name": {
+                            "type": "string",
+                            "title": "The header field name"
+                          },
+                          "value": {
+                            "type": "string",
+                            "title": "The header field value"
+                          }
+                        }
+                      }
+                    },
+                    "path": {
+                      "type": "string",
+                      "title": "Path to access on the HTTP server.\n+optional"
+                    },
+                    "port": {
+                      "description": "+protobuf=true\n+protobuf.options.(gogoproto.goproto_stringer)=false\n+k8s:openapi-gen=true",
+                      "type": "object",
+                      "title": "IntOrString is a type that can hold an int32 or a string.  When used in\nJSON or YAML marshalling and unmarshalling, it produces or consumes the\ninner type.  This allows you to have, for example, a JSON field that can\naccept a name or number.\nTODO: Rename to Int32OrString",
+                      "properties": {
+                        "intVal": {
+                          "type": "integer",
+                          "format": "int32"
+                        },
+                        "strVal": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string",
+                          "format": "int64"
+                        }
+                      }
+                    },
+                    "scheme": {
+                      "type": "string",
+                      "title": "Scheme to use for connecting to the host.\nDefaults to HTTP.\n+optional"
+                    }
+                  }
+                },
+                "tcpSocket": {
+                  "type": "object",
+                  "title": "TCPSocketAction describes an action based on opening a socket",
+                  "properties": {
+                    "host": {
+                      "type": "string",
+                      "title": "Optional: Host name to connect to, defaults to the pod IP.\n+optional"
+                    },
+                    "port": {
+                      "description": "+protobuf=true\n+protobuf.options.(gogoproto.goproto_stringer)=false\n+k8s:openapi-gen=true",
+                      "type": "object",
+                      "title": "IntOrString is a type that can hold an int32 or a string.  When used in\nJSON or YAML marshalling and unmarshalling, it produces or consumes the\ninner type.  This allows you to have, for example, a JSON field that can\naccept a name or number.\nTODO: Rename to Int32OrString",
+                      "properties": {
+                        "intVal": {
+                          "type": "integer",
+                          "format": "int32"
+                        },
+                        "strVal": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string",
+                          "format": "int64"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "initialDelaySeconds": {
+              "type": "integer",
+              "format": "int32",
+              "title": "Number of seconds after the container has started before liveness probes are initiated.\nMore info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes\n+optional"
+            },
+            "periodSeconds": {
+              "type": "integer",
+              "format": "int32",
+              "title": "How often (in seconds) to perform the probe.\nDefault to 10 seconds. Minimum value is 1.\n+optional"
+            },
+            "successThreshold": {
+              "type": "integer",
+              "format": "int32",
+              "title": "Minimum consecutive successes for the probe to be considered successful after having failed.\nDefaults to 1. Must be 1 for liveness and startup. Minimum value is 1.\n+optional"
+            },
+            "timeoutSeconds": {
+              "type": "integer",
+              "format": "int32",
+              "title": "Number of seconds after which the probe times out.\nDefaults to 1 second. Minimum value is 1.\nMore info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes\n+optional"
+            }
+          }
+        },
+        "stdin": {
+          "type": "boolean",
+          "format": "boolean",
+          "title": "Whether this container should allocate a buffer for stdin in the container runtime. If this\nis not set, reads from stdin in the container will always result in EOF.\nDefault is false.\n+optional"
+        },
+        "stdinOnce": {
+          "type": "boolean",
+          "format": "boolean",
+          "title": "Whether the container runtime should close the stdin channel after it has been opened by\na single attach. When stdin is true the stdin stream will remain open across multiple attach\nsessions. If stdinOnce is set to true, stdin is opened on container start, is empty until the\nfirst client attaches to stdin, and then remains open and accepts data until the client disconnects,\nat which time stdin is closed and remains closed until the container is restarted. If this\nflag is false, a container processes that reads from stdin will never receive an EOF.\nDefault is false\n+optional"
+        },
+        "terminationMessagePath": {
+          "type": "string",
+          "title": "Optional: Path at which the file to which the container's termination message\nwill be written is mounted into the container's filesystem.\nMessage written is intended to be brief final status, such as an assertion failure message.\nWill be truncated by the node if greater than 4096 bytes. The total message length across\nall containers will be limited to 12kb.\nDefaults to /dev/termination-log.\nCannot be updated.\n+optional"
+        },
+        "terminationMessagePolicy": {
+          "type": "string",
+          "title": "Indicate how the termination message should be populated. File will use the contents of\nterminationMessagePath to populate the container status message on both success and failure.\nFallbackToLogsOnError will use the last chunk of container log output if the termination\nmessage file is empty and the container exited with an error.\nThe log output is limited to 2048 bytes or 80 lines, whichever is smaller.\nDefaults to File.\nCannot be updated.\n+optional"
+        },
+        "tty": {
+          "type": "boolean",
+          "format": "boolean",
+          "title": "Whether this container should allocate a TTY for itself, also requires 'stdin' to be true.\nDefault is false.\n+optional"
+        },
+        "volumeDevices": {
+          "type": "array",
+          "title": "volumeDevices is the list of block devices to be used by the container.\nThis is a beta feature.\n+patchMergeKey=devicePath\n+patchStrategy=merge\n+optional",
+          "items": {
+            "description": "volumeDevice describes a mapping of a raw block device within a container.",
+            "type": "object",
+            "properties": {
+              "devicePath": {
+                "description": "devicePath is the path inside of the container that the device will be mapped to.",
+                "type": "string"
+              },
+              "name": {
+                "type": "string",
+                "title": "name must match the name of a persistentVolumeClaim in the pod"
+              }
+            }
+          }
+        },
+        "volumeMounts": {
+          "type": "array",
+          "title": "Pod volumes to mount into the container's filesystem.\nCannot be updated.\n+optional\n+patchMergeKey=mountPath\n+patchStrategy=merge",
+          "items": {
+            "description": "VolumeMount describes a mounting of a Volume within a container.",
+            "type": "object",
+            "properties": {
+              "mountPath": {
+                "description": "Path within the container at which the volume should be mounted.  Must\nnot contain ':'.",
+                "type": "string"
+              },
+              "mountPropagation": {
+                "type": "string",
+                "title": "mountPropagation determines how mounts are propagated from the host\nto container and the other way around.\nWhen not set, MountPropagationNone is used.\nThis field is beta in 1.10.\n+optional"
+              },
+              "name": {
+                "description": "This must match the Name of a Volume.",
+                "type": "string"
+              },
+              "readOnly": {
+                "type": "boolean",
+                "format": "boolean",
+                "title": "Mounted read-only if true, read-write otherwise (false or unspecified).\nDefaults to false.\n+optional"
+              },
+              "subPath": {
+                "type": "string",
+                "title": "Path within the volume from which the container's volume should be mounted.\nDefaults to \"\" (volume's root).\n+optional"
+              },
+              "subPathExpr": {
+                "type": "string",
+                "title": "Expanded path within the volume from which the container's volume should be mounted.\nBehaves similarly to SubPath but environment variable references $(VAR_NAME) are expanded using the container's environment.\nDefaults to \"\" (volume's root).\nSubPathExpr and SubPath are mutually exclusive.\nThis field is beta in 1.15.\n+optional"
+              }
+            }
+          }
+        },
+        "workingDir": {
+          "type": "string",
+          "title": "Container's working directory.\nIf not specified, the container runtime's default will be used, which\nmight be configured in the container image.\nCannot be updated.\n+optional"
+        }
+      }
+    },
+    "source": {
+      "type": "string",
+      "title": "Source contains the source code of the script to execute"
+    }
+  },
+  "$schema": "http://json-schema.org/schema#"
+}

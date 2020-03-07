@@ -1,0 +1,111 @@
+{
+  "type": "object",
+  "title": "HDFSConfig is configurations for HDFS",
+  "properties": {
+    "addresses": {
+      "type": "array",
+      "title": "Addresses is accessible addresses of HDFS name nodes",
+      "items": {
+        "type": "string"
+      }
+    },
+    "hDFSKrbConfig": {
+      "type": "object",
+      "title": "HDFSKrbConfig is auth configurations for Kerberos",
+      "properties": {
+        "krbCCacheSecret": {
+          "description": "SecretKeySelector selects a key of a Secret.",
+          "type": "object",
+          "properties": {
+            "key": {
+              "description": "The key of the secret to select from.  Must be a valid secret key.",
+              "type": "string"
+            },
+            "localObjectReference": {
+              "description": "LocalObjectReference contains enough information to let you locate the\nreferenced object inside the same namespace.",
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "title": "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?\n+optional"
+                }
+              }
+            },
+            "optional": {
+              "type": "boolean",
+              "format": "boolean",
+              "title": "Specify whether the Secret or its key must be defined\n+optional"
+            }
+          }
+        },
+        "krbConfigConfigMap": {
+          "description": "Selects a key from a ConfigMap.",
+          "type": "object",
+          "properties": {
+            "key": {
+              "description": "The key to select.",
+              "type": "string"
+            },
+            "localObjectReference": {
+              "description": "LocalObjectReference contains enough information to let you locate the\nreferenced object inside the same namespace.",
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "title": "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?\n+optional"
+                }
+              }
+            },
+            "optional": {
+              "type": "boolean",
+              "format": "boolean",
+              "title": "Specify whether the ConfigMap or its key must be defined\n+optional"
+            }
+          }
+        },
+        "krbKeytabSecret": {
+          "description": "SecretKeySelector selects a key of a Secret.",
+          "type": "object",
+          "properties": {
+            "key": {
+              "description": "The key of the secret to select from.  Must be a valid secret key.",
+              "type": "string"
+            },
+            "localObjectReference": {
+              "description": "LocalObjectReference contains enough information to let you locate the\nreferenced object inside the same namespace.",
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "title": "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?\n+optional"
+                }
+              }
+            },
+            "optional": {
+              "type": "boolean",
+              "format": "boolean",
+              "title": "Specify whether the Secret or its key must be defined\n+optional"
+            }
+          }
+        },
+        "krbRealm": {
+          "description": "KrbRealm is the Kerberos realm used with Kerberos keytab\nIt must be set if keytab is used.",
+          "type": "string"
+        },
+        "krbServicePrincipalName": {
+          "description": "KrbServicePrincipalName is the principal name of Kerberos service\nIt must be set if either ccache or keytab is used.",
+          "type": "string"
+        },
+        "krbUsername": {
+          "description": "KrbUsername is the Kerberos username used with Kerberos keytab\nIt must be set if keytab is used.",
+          "type": "string"
+        }
+      }
+    },
+    "hdfsUser": {
+      "description": "HDFSUser is the user to access HDFS file system.\nIt is ignored if either ccache or keytab is used.",
+      "type": "string"
+    }
+  },
+  "$schema": "http://json-schema.org/schema#"
+}

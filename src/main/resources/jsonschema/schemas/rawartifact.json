@@ -1,0 +1,11 @@
+{
+  "type": "object",
+  "title": "RawArtifact allows raw string content to be placed as an artifact in a container",
+  "properties": {
+    "data": {
+      "type": "string",
+      "title": "Data is the string contents of the artifact"
+    }
+  },
+  "$schema": "http://json-schema.org/schema#"
+}

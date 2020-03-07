@@ -1,0 +1,28 @@
+{
+  "description": "The pod this Toleration is attached to tolerates any taint that matches\nthe triple <key,value,effect> using the matching operator <operator>.",
+  "type": "object",
+  "properties": {
+    "effect": {
+      "type": "string",
+      "title": "Effect indicates the taint effect to match. Empty means match all taint effects.\nWhen specified, allowed values are NoSchedule, PreferNoSchedule and NoExecute.\n+optional"
+    },
+    "key": {
+      "type": "string",
+      "title": "Key is the taint key that the toleration applies to. Empty means match all taint keys.\nIf the key is empty, operator must be Exists; this combination means to match all values and all keys.\n+optional"
+    },
+    "operator": {
+      "type": "string",
+      "title": "Operator represents a key's relationship to the value.\nValid operators are Exists and Equal. Defaults to Equal.\nExists is equivalent to wildcard for value, so that a pod can\ntolerate all taints of a particular category.\n+optional"
+    },
+    "tolerationSeconds": {
+      "type": "string",
+      "format": "int64",
+      "title": "TolerationSeconds represents the period of time the toleration (which must be\nof effect NoExecute, otherwise this field is ignored) tolerates the taint. By default,\nit is not set, which means tolerate the taint forever (do not evict). Zero and\nnegative values will be treated as 0 (evict immediately) by the system.\n+optional"
+    },
+    "value": {
+      "type": "string",
+      "title": "Value is the taint value the toleration matches to.\nIf the operator is Exists, the value should be empty, otherwise just a regular string.\n+optional"
+    }
+  },
+  "$schema": "http://json-schema.org/schema#"
+}

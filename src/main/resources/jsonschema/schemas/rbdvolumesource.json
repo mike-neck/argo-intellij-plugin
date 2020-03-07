@@ -1,0 +1,49 @@
+{
+  "description": "Represents a Rados Block Device mount that lasts the lifetime of a pod.\nRBD volumes support ownership management and SELinux relabeling.",
+  "type": "object",
+  "properties": {
+    "fsType": {
+      "type": "string",
+      "title": "Filesystem type of the volume that you want to mount.\nTip: Ensure that the filesystem type is supported by the host operating system.\nExamples: \"ext4\", \"xfs\", \"ntfs\". Implicitly inferred to be \"ext4\" if unspecified.\nMore info: https://kubernetes.io/docs/concepts/storage/volumes#rbd\nTODO: how do we prevent errors in the filesystem from compromising the machine\n+optional"
+    },
+    "image": {
+      "type": "string",
+      "title": "The rados image name.\nMore info: https://examples.k8s.io/volumes/rbd/README.md#how-to-use-it"
+    },
+    "keyring": {
+      "type": "string",
+      "title": "Keyring is the path to key ring for RBDUser.\nDefault is /etc/ceph/keyring.\nMore info: https://examples.k8s.io/volumes/rbd/README.md#how-to-use-it\n+optional"
+    },
+    "monitors": {
+      "type": "array",
+      "title": "A collection of Ceph monitors.\nMore info: https://examples.k8s.io/volumes/rbd/README.md#how-to-use-it",
+      "items": {
+        "type": "string"
+      }
+    },
+    "pool": {
+      "type": "string",
+      "title": "The rados pool name.\nDefault is rbd.\nMore info: https://examples.k8s.io/volumes/rbd/README.md#how-to-use-it\n+optional"
+    },
+    "readOnly": {
+      "type": "boolean",
+      "format": "boolean",
+      "title": "ReadOnly here will force the ReadOnly setting in VolumeMounts.\nDefaults to false.\nMore info: https://examples.k8s.io/volumes/rbd/README.md#how-to-use-it\n+optional"
+    },
+    "secretRef": {
+      "description": "LocalObjectReference contains enough information to let you locate the\nreferenced object inside the same namespace.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?\n+optional"
+        }
+      }
+    },
+    "user": {
+      "type": "string",
+      "title": "The rados user name.\nDefault is admin.\nMore info: https://examples.k8s.io/volumes/rbd/README.md#how-to-use-it\n+optional"
+    }
+  },
+  "$schema": "http://json-schema.org/schema#"
+}

@@ -1,0 +1,20 @@
+{
+  "description": "PortworxVolumeSource represents a Portworx volume resource.",
+  "type": "object",
+  "properties": {
+    "fsType": {
+      "description": "FSType represents the filesystem type to mount\nMust be a filesystem type supported by the host operating system.\nEx. \"ext4\", \"xfs\". Implicitly inferred to be \"ext4\" if unspecified.",
+      "type": "string"
+    },
+    "readOnly": {
+      "type": "boolean",
+      "format": "boolean",
+      "title": "Defaults to false (read/write). ReadOnly here will force\nthe ReadOnly setting in VolumeMounts.\n+optional"
+    },
+    "volumeID": {
+      "type": "string",
+      "title": "VolumeID uniquely identifies a Portworx volume"
+    }
+  },
+  "$schema": "http://json-schema.org/schema#"
+}

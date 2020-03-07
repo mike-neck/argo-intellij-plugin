@@ -1,0 +1,1041 @@
+{
+  "description": "Volume represents a named volume in a pod that may be accessed by any container in the pod.",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "title": "Volume's name.\nMust be a DNS_LABEL and unique within the pod.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names"
+    },
+    "volumeSource": {
+      "description": "Represents the source of a volume to mount.\nOnly one of its members may be specified.",
+      "type": "object",
+      "properties": {
+        "awsElasticBlockStore": {
+          "description": "Represents a Persistent Disk resource in AWS.\n\nAn AWS EBS disk must exist before mounting to a container. The disk\nmust also be in the same AWS zone as the kubelet. An AWS EBS disk\ncan only be mounted as read/write once. AWS EBS volumes support\nownership management and SELinux relabeling.",
+          "type": "object",
+          "properties": {
+            "fsType": {
+              "type": "string",
+              "title": "Filesystem type of the volume that you want to mount.\nTip: Ensure that the filesystem type is supported by the host operating system.\nExamples: \"ext4\", \"xfs\", \"ntfs\". Implicitly inferred to be \"ext4\" if unspecified.\nMore info: https://kubernetes.io/docs/concepts/storage/volumes#awselasticblockstore\nTODO: how do we prevent errors in the filesystem from compromising the machine\n+optional"
+            },
+            "partition": {
+              "type": "integer",
+              "format": "int32",
+              "title": "The partition in the volume that you want to mount.\nIf omitted, the default is to mount by volume name.\nExamples: For volume /dev/sda1, you specify the partition as \"1\".\nSimilarly, the volume partition for /dev/sda is \"0\" (or you can leave the property empty).\n+optional"
+            },
+            "readOnly": {
+              "type": "boolean",
+              "format": "boolean",
+              "title": "Specify \"true\" to force and set the ReadOnly property in VolumeMounts to \"true\".\nIf omitted, the default is \"false\".\nMore info: https://kubernetes.io/docs/concepts/storage/volumes#awselasticblockstore\n+optional"
+            },
+            "volumeID": {
+              "type": "string",
+              "title": "Unique ID of the persistent disk resource in AWS (Amazon EBS volume).\nMore info: https://kubernetes.io/docs/concepts/storage/volumes#awselasticblockstore"
+            }
+          }
+        },
+        "azureDisk": {
+          "description": "AzureDisk represents an Azure Data Disk mount on the host and bind mount to the pod.",
+          "type": "object",
+          "properties": {
+            "cachingMode": {
+              "type": "string",
+              "title": "Host Caching mode: None, Read Only, Read Write.\n+optional"
+            },
+            "diskName": {
+              "type": "string",
+              "title": "The Name of the data disk in the blob storage"
+            },
+            "diskURI": {
+              "type": "string",
+              "title": "The URI the data disk in the blob storage"
+            },
+            "fsType": {
+              "type": "string",
+              "title": "Filesystem type to mount.\nMust be a filesystem type supported by the host operating system.\nEx. \"ext4\", \"xfs\", \"ntfs\". Implicitly inferred to be \"ext4\" if unspecified.\n+optional"
+            },
+            "kind": {
+              "type": "string",
+              "title": "Expected values Shared: multiple blob disks per storage account  Dedicated: single blob disk per storage account  Managed: azure managed data disk (only in managed availability set). defaults to shared"
+            },
+            "readOnly": {
+              "type": "boolean",
+              "format": "boolean",
+              "title": "Defaults to false (read/write). ReadOnly here will force\nthe ReadOnly setting in VolumeMounts.\n+optional"
+            }
+          }
+        },
+        "azureFile": {
+          "description": "AzureFile represents an Azure File Service mount on the host and bind mount to the pod.",
+          "type": "object",
+          "properties": {
+            "readOnly": {
+              "type": "boolean",
+              "format": "boolean",
+              "title": "Defaults to false (read/write). ReadOnly here will force\nthe ReadOnly setting in VolumeMounts.\n+optional"
+            },
+            "secretName": {
+              "type": "string",
+              "title": "the name of secret that contains Azure Storage Account Name and Key"
+            },
+            "shareName": {
+              "type": "string",
+              "title": "Share Name"
+            }
+          }
+        },
+        "cephfs": {
+          "description": "Represents a Ceph Filesystem mount that lasts the lifetime of a pod\nCephfs volumes do not support ownership management or SELinux relabeling.",
+          "type": "object",
+          "properties": {
+            "monitors": {
+              "type": "array",
+              "title": "Required: Monitors is a collection of Ceph monitors\nMore info: https://examples.k8s.io/volumes/cephfs/README.md#how-to-use-it",
+              "items": {
+                "type": "string"
+              }
+            },
+            "path": {
+              "type": "string",
+              "title": "Optional: Used as the mounted root, rather than the full Ceph tree, default is /\n+optional"
+            },
+            "readOnly": {
+              "type": "boolean",
+              "format": "boolean",
+              "title": "Optional: Defaults to false (read/write). ReadOnly here will force\nthe ReadOnly setting in VolumeMounts.\nMore info: https://examples.k8s.io/volumes/cephfs/README.md#how-to-use-it\n+optional"
+            },
+            "secretFile": {
+              "type": "string",
+              "title": "Optional: SecretFile is the path to key ring for User, default is /etc/ceph/user.secret\nMore info: https://examples.k8s.io/volumes/cephfs/README.md#how-to-use-it\n+optional"
+            },
+            "secretRef": {
+              "description": "LocalObjectReference contains enough information to let you locate the\nreferenced object inside the same namespace.",
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "title": "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?\n+optional"
+                }
+              }
+            },
+            "user": {
+              "type": "string",
+              "title": "Optional: User is the rados user name, default is admin\nMore info: https://examples.k8s.io/volumes/cephfs/README.md#how-to-use-it\n+optional"
+            }
+          }
+        },
+        "cinder": {
+          "description": "Represents a cinder volume resource in Openstack.\nA Cinder volume must exist before mounting to a container.\nThe volume must also be in the same region as the kubelet.\nCinder volumes support ownership management and SELinux relabeling.",
+          "type": "object",
+          "properties": {
+            "fsType": {
+              "type": "string",
+              "title": "Filesystem type to mount.\nMust be a filesystem type supported by the host operating system.\nExamples: \"ext4\", \"xfs\", \"ntfs\". Implicitly inferred to be \"ext4\" if unspecified.\nMore info: https://examples.k8s.io/mysql-cinder-pd/README.md\n+optional"
+            },
+            "readOnly": {
+              "type": "boolean",
+              "format": "boolean",
+              "title": "Optional: Defaults to false (read/write). ReadOnly here will force\nthe ReadOnly setting in VolumeMounts.\nMore info: https://examples.k8s.io/mysql-cinder-pd/README.md\n+optional"
+            },
+            "secretRef": {
+              "description": "LocalObjectReference contains enough information to let you locate the\nreferenced object inside the same namespace.",
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "title": "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?\n+optional"
+                }
+              }
+            },
+            "volumeID": {
+              "type": "string",
+              "title": "volume id used to identify the volume in cinder.\nMore info: https://examples.k8s.io/mysql-cinder-pd/README.md"
+            }
+          }
+        },
+        "configMap": {
+          "description": "Adapts a ConfigMap into a volume.\n\nThe contents of the target ConfigMap's Data field will be presented in a\nvolume as files using the keys in the Data field as the file names, unless\nthe items element is populated with specific mappings of keys to paths.\nConfigMap volumes support ownership management and SELinux relabeling.",
+          "type": "object",
+          "properties": {
+            "defaultMode": {
+              "type": "integer",
+              "format": "int32",
+              "title": "Optional: mode bits to use on created files by default. Must be a\nvalue between 0 and 0777. Defaults to 0644.\nDirectories within the path are not affected by this setting.\nThis might be in conflict with other options that affect the file\nmode, like fsGroup, and the result can be other mode bits set.\n+optional"
+            },
+            "items": {
+              "type": "array",
+              "title": "If unspecified, each key-value pair in the Data field of the referenced\nConfigMap will be projected into the volume as a file whose name is the\nkey and content is the value. If specified, the listed keys will be\nprojected into the specified paths, and unlisted keys will not be\npresent. If a key is specified which is not present in the ConfigMap,\nthe volume setup will error unless it is marked optional. Paths must be\nrelative and may not contain the '..' path or start with '..'.\n+optional",
+              "items": {
+                "description": "Maps a string key to a path within a volume.",
+                "type": "object",
+                "properties": {
+                  "key": {
+                    "description": "The key to project.",
+                    "type": "string"
+                  },
+                  "mode": {
+                    "type": "integer",
+                    "format": "int32",
+                    "title": "Optional: mode bits to use on this file, must be a value between 0\nand 0777. If not specified, the volume defaultMode will be used.\nThis might be in conflict with other options that affect the file\nmode, like fsGroup, and the result can be other mode bits set.\n+optional"
+                  },
+                  "path": {
+                    "description": "The relative path of the file to map the key to.\nMay not be an absolute path.\nMay not contain the path element '..'.\nMay not start with the string '..'.",
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "localObjectReference": {
+              "description": "LocalObjectReference contains enough information to let you locate the\nreferenced object inside the same namespace.",
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "title": "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?\n+optional"
+                }
+              }
+            },
+            "optional": {
+              "type": "boolean",
+              "format": "boolean",
+              "title": "Specify whether the ConfigMap or its keys must be defined\n+optional"
+            }
+          }
+        },
+        "csi": {
+          "type": "object",
+          "title": "Represents a source location of a volume to mount, managed by an external CSI driver",
+          "properties": {
+            "driver": {
+              "description": "Driver is the name of the CSI driver that handles this volume.\nConsult with your admin for the correct name as registered in the cluster.",
+              "type": "string"
+            },
+            "fsType": {
+              "type": "string",
+              "title": "Filesystem type to mount. Ex. \"ext4\", \"xfs\", \"ntfs\".\nIf not provided, the empty value is passed to the associated CSI driver\nwhich will determine the default filesystem to apply.\n+optional"
+            },
+            "nodePublishSecretRef": {
+              "description": "LocalObjectReference contains enough information to let you locate the\nreferenced object inside the same namespace.",
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "title": "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?\n+optional"
+                }
+              }
+            },
+            "readOnly": {
+              "type": "boolean",
+              "format": "boolean",
+              "title": "Specifies a read-only configuration for the volume.\nDefaults to false (read/write).\n+optional"
+            },
+            "volumeAttributes": {
+              "type": "object",
+              "title": "VolumeAttributes stores driver-specific properties that are passed to the CSI\ndriver. Consult your driver's documentation for supported values.\n+optional",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "downwardAPI": {
+          "description": "DownwardAPIVolumeSource represents a volume containing downward API io.argoproj.workflow.v1alpha1.\nDownward API volumes support ownership management and SELinux relabeling.",
+          "type": "object",
+          "properties": {
+            "defaultMode": {
+              "type": "integer",
+              "format": "int32",
+              "title": "Optional: mode bits to use on created files by default. Must be a\nvalue between 0 and 0777. Defaults to 0644.\nDirectories within the path are not affected by this setting.\nThis might be in conflict with other options that affect the file\nmode, like fsGroup, and the result can be other mode bits set.\n+optional"
+            },
+            "items": {
+              "type": "array",
+              "title": "Items is a list of downward API volume file\n+optional",
+              "items": {
+                "type": "object",
+                "title": "DownwardAPIVolumeFile represents information to create the file containing the pod field",
+                "properties": {
+                  "fieldRef": {
+                    "description": "ObjectFieldSelector selects an APIVersioned field of an object.",
+                    "type": "object",
+                    "properties": {
+                      "apiVersion": {
+                        "type": "string",
+                        "title": "Version of the schema the FieldPath is written in terms of, defaults to \"v1\".\n+optional"
+                      },
+                      "fieldPath": {
+                        "description": "Path of the field to select in the specified API version.",
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "mode": {
+                    "type": "integer",
+                    "format": "int32",
+                    "title": "Optional: mode bits to use on this file, must be a value between 0\nand 0777. If not specified, the volume defaultMode will be used.\nThis might be in conflict with other options that affect the file\nmode, like fsGroup, and the result can be other mode bits set.\n+optional"
+                  },
+                  "path": {
+                    "type": "string",
+                    "title": "Required: Path is  the relative path name of the file to be created. Must not be absolute or contain the '..' path. Must be utf-8 encoded. The first item of the relative path must not start with '..'"
+                  },
+                  "resourceFieldRef": {
+                    "type": "object",
+                    "title": "ResourceFieldSelector represents container resources (cpu, memory) and their output format",
+                    "properties": {
+                      "containerName": {
+                        "type": "string",
+                        "title": "Container name: required for volumes, optional for env vars\n+optional"
+                      },
+                      "divisor": {
+                        "description": "Quantity is a fixed-point representation of a number.\nIt provides convenient marshaling/unmarshaling in JSON and YAML,\nin addition to String() and AsInt64() accessors.\n\nThe serialization format is:\n\n<quantity>        ::= <signedNumber><suffix>\n  (Note that <suffix> may be empty, from the \"\" case in <decimalSI>.)\n<digit>           ::= 0 | 1 | ... | 9\n<digits>          ::= <digit> | <digit><digits>\n<number>          ::= <digits> | <digits>.<digits> | <digits>. | .<digits>\n<sign>            ::= \"+\" | \"-\"\n<signedNumber>    ::= <number> | <sign><number>\n<suffix>          ::= <binarySI> | <decimalExponent> | <decimalSI>\n<binarySI>        ::= Ki | Mi | Gi | Ti | Pi | Ei\n  (International System of units; See: http://physics.nist.gov/cuu/Units/binary.html)\n<decimalSI>       ::= m | \"\" | k | M | G | T | P | E\n  (Note that 1024 = 1Ki but 1000 = 1k; I didn't choose the capitalization.)\n<decimalExponent> ::= \"e\" <signedNumber> | \"E\" <signedNumber>\n\nNo matter which of the three exponent forms is used, no quantity may represent\na number greater than 2^63-1 in magnitude, nor may it have more than 3 decimal\nplaces. Numbers larger or more precise will be capped or rounded up.\n(E.g.: 0.1m will rounded up to 1m.)\nThis may be extended in the future if we require larger or smaller quantities.\n\nWhen a Quantity is parsed from a string, it will remember the type of suffix\nit had, and will use the same type again when it is serialized.\n\nBefore serializing, Quantity will be put in \"canonical form\".\nThis means that Exponent/suffix will be adjusted up or down (with a\ncorresponding increase or decrease in Mantissa) such that:\n  a. No precision is lost\n  b. No fractional digits will be emitted\n  c. The exponent (or suffix) is as large as possible.\nThe sign will be omitted unless the number is negative.\n\nExamples:\n  1.5 will be serialized as \"1500m\"\n  1.5Gi will be serialized as \"1536Mi\"\n\nNote that the quantity will NEVER be internally represented by a\nfloating point number. That is the whole point of this exercise.\n\nNon-canonical values will still parse as long as they are well formed,\nbut will be re-emitted in their canonical form. (So always use canonical\nform, or don't diff.)\n\nThis format is intended to make it difficult to use these numbers without\nwriting some sort of special handling code in the hopes that that will\ncause implementors to also use a fixed point implementation.\n\n+protobuf=true\n+protobuf.embed=string\n+protobuf.options.marshal=false\n+protobuf.options.(gogoproto.goproto_stringer)=false\n+k8s:deepcopy-gen=true\n+k8s:openapi-gen=true",
+                        "type": "object",
+                        "properties": {
+                          "string": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "resource": {
+                        "type": "string",
+                        "title": "Required: resource to select"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "emptyDir": {
+          "description": "Represents an empty directory for a pod.\nEmpty directory volumes support ownership management and SELinux relabeling.",
+          "type": "object",
+          "properties": {
+            "medium": {
+              "type": "string",
+              "title": "What type of storage medium should back this directory.\nThe default is \"\" which means to use the node's default medium.\nMust be an empty string (default) or Memory.\nMore info: https://kubernetes.io/docs/concepts/storage/volumes#emptydir\n+optional"
+            },
+            "sizeLimit": {
+              "description": "Quantity is a fixed-point representation of a number.\nIt provides convenient marshaling/unmarshaling in JSON and YAML,\nin addition to String() and AsInt64() accessors.\n\nThe serialization format is:\n\n<quantity>        ::= <signedNumber><suffix>\n  (Note that <suffix> may be empty, from the \"\" case in <decimalSI>.)\n<digit>           ::= 0 | 1 | ... | 9\n<digits>          ::= <digit> | <digit><digits>\n<number>          ::= <digits> | <digits>.<digits> | <digits>. | .<digits>\n<sign>            ::= \"+\" | \"-\"\n<signedNumber>    ::= <number> | <sign><number>\n<suffix>          ::= <binarySI> | <decimalExponent> | <decimalSI>\n<binarySI>        ::= Ki | Mi | Gi | Ti | Pi | Ei\n  (International System of units; See: http://physics.nist.gov/cuu/Units/binary.html)\n<decimalSI>       ::= m | \"\" | k | M | G | T | P | E\n  (Note that 1024 = 1Ki but 1000 = 1k; I didn't choose the capitalization.)\n<decimalExponent> ::= \"e\" <signedNumber> | \"E\" <signedNumber>\n\nNo matter which of the three exponent forms is used, no quantity may represent\na number greater than 2^63-1 in magnitude, nor may it have more than 3 decimal\nplaces. Numbers larger or more precise will be capped or rounded up.\n(E.g.: 0.1m will rounded up to 1m.)\nThis may be extended in the future if we require larger or smaller quantities.\n\nWhen a Quantity is parsed from a string, it will remember the type of suffix\nit had, and will use the same type again when it is serialized.\n\nBefore serializing, Quantity will be put in \"canonical form\".\nThis means that Exponent/suffix will be adjusted up or down (with a\ncorresponding increase or decrease in Mantissa) such that:\n  a. No precision is lost\n  b. No fractional digits will be emitted\n  c. The exponent (or suffix) is as large as possible.\nThe sign will be omitted unless the number is negative.\n\nExamples:\n  1.5 will be serialized as \"1500m\"\n  1.5Gi will be serialized as \"1536Mi\"\n\nNote that the quantity will NEVER be internally represented by a\nfloating point number. That is the whole point of this exercise.\n\nNon-canonical values will still parse as long as they are well formed,\nbut will be re-emitted in their canonical form. (So always use canonical\nform, or don't diff.)\n\nThis format is intended to make it difficult to use these numbers without\nwriting some sort of special handling code in the hopes that that will\ncause implementors to also use a fixed point implementation.\n\n+protobuf=true\n+protobuf.embed=string\n+protobuf.options.marshal=false\n+protobuf.options.(gogoproto.goproto_stringer)=false\n+k8s:deepcopy-gen=true\n+k8s:openapi-gen=true",
+              "type": "object",
+              "properties": {
+                "string": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "fc": {
+          "description": "Represents a Fibre Channel volume.\nFibre Channel volumes can only be mounted as read/write once.\nFibre Channel volumes support ownership management and SELinux relabeling.",
+          "type": "object",
+          "properties": {
+            "fsType": {
+              "type": "string",
+              "title": "Filesystem type to mount.\nMust be a filesystem type supported by the host operating system.\nEx. \"ext4\", \"xfs\", \"ntfs\". Implicitly inferred to be \"ext4\" if unspecified.\nTODO: how do we prevent errors in the filesystem from compromising the machine\n+optional"
+            },
+            "lun": {
+              "type": "integer",
+              "format": "int32",
+              "title": "Optional: FC target lun number\n+optional"
+            },
+            "readOnly": {
+              "type": "boolean",
+              "format": "boolean",
+              "title": "Optional: Defaults to false (read/write). ReadOnly here will force\nthe ReadOnly setting in VolumeMounts.\n+optional"
+            },
+            "targetWWNs": {
+              "type": "array",
+              "title": "Optional: FC target worldwide names (WWNs)\n+optional",
+              "items": {
+                "type": "string"
+              }
+            },
+            "wwids": {
+              "type": "array",
+              "title": "Optional: FC volume world wide identifiers (wwids)\nEither wwids or combination of targetWWNs and lun must be set, but not both simultaneously.\n+optional",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "flexVolume": {
+          "description": "FlexVolume represents a generic volume resource that is\nprovisioned/attached using an exec based plugin.",
+          "type": "object",
+          "properties": {
+            "driver": {
+              "description": "Driver is the name of the driver to use for this volume.",
+              "type": "string"
+            },
+            "fsType": {
+              "type": "string",
+              "title": "Filesystem type to mount.\nMust be a filesystem type supported by the host operating system.\nEx. \"ext4\", \"xfs\", \"ntfs\". The default filesystem depends on FlexVolume script.\n+optional"
+            },
+            "options": {
+              "type": "object",
+              "title": "Optional: Extra command options if any.\n+optional",
+              "additionalProperties": {
+                "type": "string"
+              }
+            },
+            "readOnly": {
+              "type": "boolean",
+              "format": "boolean",
+              "title": "Optional: Defaults to false (read/write). ReadOnly here will force\nthe ReadOnly setting in VolumeMounts.\n+optional"
+            },
+            "secretRef": {
+              "description": "LocalObjectReference contains enough information to let you locate the\nreferenced object inside the same namespace.",
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "title": "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?\n+optional"
+                }
+              }
+            }
+          }
+        },
+        "flocker": {
+          "description": "Represents a Flocker volume mounted by the Flocker agent.\nOne and only one of datasetName and datasetUUID should be set.\nFlocker volumes do not support ownership management or SELinux relabeling.",
+          "type": "object",
+          "properties": {
+            "datasetName": {
+              "type": "string",
+              "title": "Name of the dataset stored as metadata -> name on the dataset for Flocker\nshould be considered as deprecated\n+optional"
+            },
+            "datasetUUID": {
+              "type": "string",
+              "title": "UUID of the dataset. This is unique identifier of a Flocker dataset\n+optional"
+            }
+          }
+        },
+        "gcePersistentDisk": {
+          "description": "Represents a Persistent Disk resource in Google Compute Engine.\n\nA GCE PD must exist before mounting to a container. The disk must\nalso be in the same GCE project and zone as the kubelet. A GCE PD\ncan only be mounted as read/write once or read-only many times. GCE\nPDs support ownership management and SELinux relabeling.",
+          "type": "object",
+          "properties": {
+            "fsType": {
+              "type": "string",
+              "title": "Filesystem type of the volume that you want to mount.\nTip: Ensure that the filesystem type is supported by the host operating system.\nExamples: \"ext4\", \"xfs\", \"ntfs\". Implicitly inferred to be \"ext4\" if unspecified.\nMore info: https://kubernetes.io/docs/concepts/storage/volumes#gcepersistentdisk\nTODO: how do we prevent errors in the filesystem from compromising the machine\n+optional"
+            },
+            "partition": {
+              "type": "integer",
+              "format": "int32",
+              "title": "The partition in the volume that you want to mount.\nIf omitted, the default is to mount by volume name.\nExamples: For volume /dev/sda1, you specify the partition as \"1\".\nSimilarly, the volume partition for /dev/sda is \"0\" (or you can leave the property empty).\nMore info: https://kubernetes.io/docs/concepts/storage/volumes#gcepersistentdisk\n+optional"
+            },
+            "pdName": {
+              "type": "string",
+              "title": "Unique name of the PD resource in GCE. Used to identify the disk in GCE.\nMore info: https://kubernetes.io/docs/concepts/storage/volumes#gcepersistentdisk"
+            },
+            "readOnly": {
+              "type": "boolean",
+              "format": "boolean",
+              "title": "ReadOnly here will force the ReadOnly setting in VolumeMounts.\nDefaults to false.\nMore info: https://kubernetes.io/docs/concepts/storage/volumes#gcepersistentdisk\n+optional"
+            }
+          }
+        },
+        "gitRepo": {
+          "description": "Represents a volume that is populated with the contents of a git repository.\nGit repo volumes do not support ownership management.\nGit repo volumes support SELinux relabeling.\n\nDEPRECATED: GitRepo is deprecated. To provision a container with a git repo, mount an\nEmptyDir into an InitContainer that clones the repo using git, then mount the EmptyDir\ninto the Pod's container.",
+          "type": "object",
+          "properties": {
+            "directory": {
+              "type": "string",
+              "title": "Target directory name.\nMust not contain or start with '..'.  If '.' is supplied, the volume directory will be the\ngit repository.  Otherwise, if specified, the volume will contain the git repository in\nthe subdirectory with the given name.\n+optional"
+            },
+            "repository": {
+              "type": "string",
+              "title": "Repository URL"
+            },
+            "revision": {
+              "type": "string",
+              "title": "Commit hash for the specified revision.\n+optional"
+            }
+          }
+        },
+        "glusterfs": {
+          "description": "Represents a Glusterfs mount that lasts the lifetime of a pod.\nGlusterfs volumes do not support ownership management or SELinux relabeling.",
+          "type": "object",
+          "properties": {
+            "endpoints": {
+              "type": "string",
+              "title": "EndpointsName is the endpoint name that details Glusterfs topology.\nMore info: https://examples.k8s.io/volumes/glusterfs/README.md#create-a-pod"
+            },
+            "path": {
+              "type": "string",
+              "title": "Path is the Glusterfs volume path.\nMore info: https://examples.k8s.io/volumes/glusterfs/README.md#create-a-pod"
+            },
+            "readOnly": {
+              "type": "boolean",
+              "format": "boolean",
+              "title": "ReadOnly here will force the Glusterfs volume to be mounted with read-only permissions.\nDefaults to false.\nMore info: https://examples.k8s.io/volumes/glusterfs/README.md#create-a-pod\n+optional"
+            }
+          }
+        },
+        "hostPath": {
+          "description": "Represents a host path mapped into a pod.\nHost path volumes do not support ownership management or SELinux relabeling.",
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "title": "Path of the directory on the host.\nIf the path is a symlink, it will follow the link to the real path.\nMore info: https://kubernetes.io/docs/concepts/storage/volumes#hostpath"
+            },
+            "type": {
+              "type": "string",
+              "title": "Type for HostPath Volume\nDefaults to \"\"\nMore info: https://kubernetes.io/docs/concepts/storage/volumes#hostpath\n+optional"
+            }
+          }
+        },
+        "iscsi": {
+          "description": "Represents an ISCSI disk.\nISCSI volumes can only be mounted as read/write once.\nISCSI volumes support ownership management and SELinux relabeling.",
+          "type": "object",
+          "properties": {
+            "chapAuthDiscovery": {
+              "type": "boolean",
+              "format": "boolean",
+              "title": "whether support iSCSI Discovery CHAP authentication\n+optional"
+            },
+            "chapAuthSession": {
+              "type": "boolean",
+              "format": "boolean",
+              "title": "whether support iSCSI Session CHAP authentication\n+optional"
+            },
+            "fsType": {
+              "type": "string",
+              "title": "Filesystem type of the volume that you want to mount.\nTip: Ensure that the filesystem type is supported by the host operating system.\nExamples: \"ext4\", \"xfs\", \"ntfs\". Implicitly inferred to be \"ext4\" if unspecified.\nMore info: https://kubernetes.io/docs/concepts/storage/volumes#iscsi\nTODO: how do we prevent errors in the filesystem from compromising the machine\n+optional"
+            },
+            "initiatorName": {
+              "type": "string",
+              "title": "Custom iSCSI Initiator Name.\nIf initiatorName is specified with iscsiInterface simultaneously, new iSCSI interface\n<target portal>:<volume name> will be created for the connection.\n+optional"
+            },
+            "iqn": {
+              "description": "Target iSCSI Qualified Name.",
+              "type": "string"
+            },
+            "iscsiInterface": {
+              "type": "string",
+              "title": "iSCSI Interface Name that uses an iSCSI transport.\nDefaults to 'default' (tcp).\n+optional"
+            },
+            "lun": {
+              "description": "iSCSI Target Lun number.",
+              "type": "integer",
+              "format": "int32"
+            },
+            "portals": {
+              "type": "array",
+              "title": "iSCSI Target Portal List. The portal is either an IP or ip_addr:port if the port\nis other than default (typically TCP ports 860 and 3260).\n+optional",
+              "items": {
+                "type": "string"
+              }
+            },
+            "readOnly": {
+              "type": "boolean",
+              "format": "boolean",
+              "title": "ReadOnly here will force the ReadOnly setting in VolumeMounts.\nDefaults to false.\n+optional"
+            },
+            "secretRef": {
+              "description": "LocalObjectReference contains enough information to let you locate the\nreferenced object inside the same namespace.",
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "title": "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?\n+optional"
+                }
+              }
+            },
+            "targetPortal": {
+              "description": "iSCSI Target Portal. The Portal is either an IP or ip_addr:port if the port\nis other than default (typically TCP ports 860 and 3260).",
+              "type": "string"
+            }
+          }
+        },
+        "nfs": {
+          "description": "Represents an NFS mount that lasts the lifetime of a pod.\nNFS volumes do not support ownership management or SELinux relabeling.",
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "title": "Path that is exported by the NFS server.\nMore info: https://kubernetes.io/docs/concepts/storage/volumes#nfs"
+            },
+            "readOnly": {
+              "type": "boolean",
+              "format": "boolean",
+              "title": "ReadOnly here will force\nthe NFS export to be mounted with read-only permissions.\nDefaults to false.\nMore info: https://kubernetes.io/docs/concepts/storage/volumes#nfs\n+optional"
+            },
+            "server": {
+              "type": "string",
+              "title": "Server is the hostname or IP address of the NFS server.\nMore info: https://kubernetes.io/docs/concepts/storage/volumes#nfs"
+            }
+          }
+        },
+        "persistentVolumeClaim": {
+          "description": "PersistentVolumeClaimVolumeSource references the user's PVC in the same namespace.\nThis volume finds the bound PV and mounts that volume for the pod. A\nPersistentVolumeClaimVolumeSource is, essentially, a wrapper around another\ntype of volume that is owned by someone else (the system).",
+          "type": "object",
+          "properties": {
+            "claimName": {
+              "type": "string",
+              "title": "ClaimName is the name of a PersistentVolumeClaim in the same namespace as the pod using this volume.\nMore info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#persistentvolumeclaims"
+            },
+            "readOnly": {
+              "type": "boolean",
+              "format": "boolean",
+              "title": "Will force the ReadOnly setting in VolumeMounts.\nDefault false.\n+optional"
+            }
+          }
+        },
+        "photonPersistentDisk": {
+          "description": "Represents a Photon Controller persistent disk resource.",
+          "type": "object",
+          "properties": {
+            "fsType": {
+              "description": "Filesystem type to mount.\nMust be a filesystem type supported by the host operating system.\nEx. \"ext4\", \"xfs\", \"ntfs\". Implicitly inferred to be \"ext4\" if unspecified.",
+              "type": "string"
+            },
+            "pdID": {
+              "type": "string",
+              "title": "ID that identifies Photon Controller persistent disk"
+            }
+          }
+        },
+        "portworxVolume": {
+          "description": "PortworxVolumeSource represents a Portworx volume resource.",
+          "type": "object",
+          "properties": {
+            "fsType": {
+              "description": "FSType represents the filesystem type to mount\nMust be a filesystem type supported by the host operating system.\nEx. \"ext4\", \"xfs\". Implicitly inferred to be \"ext4\" if unspecified.",
+              "type": "string"
+            },
+            "readOnly": {
+              "type": "boolean",
+              "format": "boolean",
+              "title": "Defaults to false (read/write). ReadOnly here will force\nthe ReadOnly setting in VolumeMounts.\n+optional"
+            },
+            "volumeID": {
+              "type": "string",
+              "title": "VolumeID uniquely identifies a Portworx volume"
+            }
+          }
+        },
+        "projected": {
+          "type": "object",
+          "title": "Represents a projected volume source",
+          "properties": {
+            "defaultMode": {
+              "type": "integer",
+              "format": "int32",
+              "title": "Mode bits to use on created files by default. Must be a value between\n0 and 0777.\nDirectories within the path are not affected by this setting.\nThis might be in conflict with other options that affect the file\nmode, like fsGroup, and the result can be other mode bits set.\n+optional"
+            },
+            "sources": {
+              "type": "array",
+              "title": "list of volume projections",
+              "items": {
+                "type": "object",
+                "title": "Projection that may be projected along with other supported volume types",
+                "properties": {
+                  "configMap": {
+                    "description": "Adapts a ConfigMap into a projected volume.\n\nThe contents of the target ConfigMap's Data field will be presented in a\nprojected volume as files using the keys in the Data field as the file names,\nunless the items element is populated with specific mappings of keys to paths.\nNote that this is identical to a configmap volume source without the default\nmode.",
+                    "type": "object",
+                    "properties": {
+                      "items": {
+                        "type": "array",
+                        "title": "If unspecified, each key-value pair in the Data field of the referenced\nConfigMap will be projected into the volume as a file whose name is the\nkey and content is the value. If specified, the listed keys will be\nprojected into the specified paths, and unlisted keys will not be\npresent. If a key is specified which is not present in the ConfigMap,\nthe volume setup will error unless it is marked optional. Paths must be\nrelative and may not contain the '..' path or start with '..'.\n+optional",
+                        "items": {
+                          "description": "Maps a string key to a path within a volume.",
+                          "type": "object",
+                          "properties": {
+                            "key": {
+                              "description": "The key to project.",
+                              "type": "string"
+                            },
+                            "mode": {
+                              "type": "integer",
+                              "format": "int32",
+                              "title": "Optional: mode bits to use on this file, must be a value between 0\nand 0777. If not specified, the volume defaultMode will be used.\nThis might be in conflict with other options that affect the file\nmode, like fsGroup, and the result can be other mode bits set.\n+optional"
+                            },
+                            "path": {
+                              "description": "The relative path of the file to map the key to.\nMay not be an absolute path.\nMay not contain the path element '..'.\nMay not start with the string '..'.",
+                              "type": "string"
+                            }
+                          }
+                        }
+                      },
+                      "localObjectReference": {
+                        "description": "LocalObjectReference contains enough information to let you locate the\nreferenced object inside the same namespace.",
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string",
+                            "title": "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?\n+optional"
+                          }
+                        }
+                      },
+                      "optional": {
+                        "type": "boolean",
+                        "format": "boolean",
+                        "title": "Specify whether the ConfigMap or its keys must be defined\n+optional"
+                      }
+                    }
+                  },
+                  "downwardAPI": {
+                    "description": "Represents downward API info for projecting into a projected volume.\nNote that this is identical to a downwardAPI volume source without the default\nmode.",
+                    "type": "object",
+                    "properties": {
+                      "items": {
+                        "type": "array",
+                        "title": "Items is a list of DownwardAPIVolume file\n+optional",
+                        "items": {
+                          "type": "object",
+                          "title": "DownwardAPIVolumeFile represents information to create the file containing the pod field",
+                          "properties": {
+                            "fieldRef": {
+                              "description": "ObjectFieldSelector selects an APIVersioned field of an object.",
+                              "type": "object",
+                              "properties": {
+                                "apiVersion": {
+                                  "type": "string",
+                                  "title": "Version of the schema the FieldPath is written in terms of, defaults to \"v1\".\n+optional"
+                                },
+                                "fieldPath": {
+                                  "description": "Path of the field to select in the specified API version.",
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "mode": {
+                              "type": "integer",
+                              "format": "int32",
+                              "title": "Optional: mode bits to use on this file, must be a value between 0\nand 0777. If not specified, the volume defaultMode will be used.\nThis might be in conflict with other options that affect the file\nmode, like fsGroup, and the result can be other mode bits set.\n+optional"
+                            },
+                            "path": {
+                              "type": "string",
+                              "title": "Required: Path is  the relative path name of the file to be created. Must not be absolute or contain the '..' path. Must be utf-8 encoded. The first item of the relative path must not start with '..'"
+                            },
+                            "resourceFieldRef": {
+                              "type": "object",
+                              "title": "ResourceFieldSelector represents container resources (cpu, memory) and their output format",
+                              "properties": {
+                                "containerName": {
+                                  "type": "string",
+                                  "title": "Container name: required for volumes, optional for env vars\n+optional"
+                                },
+                                "divisor": {
+                                  "description": "Quantity is a fixed-point representation of a number.\nIt provides convenient marshaling/unmarshaling in JSON and YAML,\nin addition to String() and AsInt64() accessors.\n\nThe serialization format is:\n\n<quantity>        ::= <signedNumber><suffix>\n  (Note that <suffix> may be empty, from the \"\" case in <decimalSI>.)\n<digit>           ::= 0 | 1 | ... | 9\n<digits>          ::= <digit> | <digit><digits>\n<number>          ::= <digits> | <digits>.<digits> | <digits>. | .<digits>\n<sign>            ::= \"+\" | \"-\"\n<signedNumber>    ::= <number> | <sign><number>\n<suffix>          ::= <binarySI> | <decimalExponent> | <decimalSI>\n<binarySI>        ::= Ki | Mi | Gi | Ti | Pi | Ei\n  (International System of units; See: http://physics.nist.gov/cuu/Units/binary.html)\n<decimalSI>       ::= m | \"\" | k | M | G | T | P | E\n  (Note that 1024 = 1Ki but 1000 = 1k; I didn't choose the capitalization.)\n<decimalExponent> ::= \"e\" <signedNumber> | \"E\" <signedNumber>\n\nNo matter which of the three exponent forms is used, no quantity may represent\na number greater than 2^63-1 in magnitude, nor may it have more than 3 decimal\nplaces. Numbers larger or more precise will be capped or rounded up.\n(E.g.: 0.1m will rounded up to 1m.)\nThis may be extended in the future if we require larger or smaller quantities.\n\nWhen a Quantity is parsed from a string, it will remember the type of suffix\nit had, and will use the same type again when it is serialized.\n\nBefore serializing, Quantity will be put in \"canonical form\".\nThis means that Exponent/suffix will be adjusted up or down (with a\ncorresponding increase or decrease in Mantissa) such that:\n  a. No precision is lost\n  b. No fractional digits will be emitted\n  c. The exponent (or suffix) is as large as possible.\nThe sign will be omitted unless the number is negative.\n\nExamples:\n  1.5 will be serialized as \"1500m\"\n  1.5Gi will be serialized as \"1536Mi\"\n\nNote that the quantity will NEVER be internally represented by a\nfloating point number. That is the whole point of this exercise.\n\nNon-canonical values will still parse as long as they are well formed,\nbut will be re-emitted in their canonical form. (So always use canonical\nform, or don't diff.)\n\nThis format is intended to make it difficult to use these numbers without\nwriting some sort of special handling code in the hopes that that will\ncause implementors to also use a fixed point implementation.\n\n+protobuf=true\n+protobuf.embed=string\n+protobuf.options.marshal=false\n+protobuf.options.(gogoproto.goproto_stringer)=false\n+k8s:deepcopy-gen=true\n+k8s:openapi-gen=true",
+                                  "type": "object",
+                                  "properties": {
+                                    "string": {
+                                      "type": "string"
+                                    }
+                                  }
+                                },
+                                "resource": {
+                                  "type": "string",
+                                  "title": "Required: resource to select"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "secret": {
+                    "description": "Adapts a secret into a projected volume.\n\nThe contents of the target Secret's Data field will be presented in a\nprojected volume as files using the keys in the Data field as the file names.\nNote that this is identical to a secret volume source without the default\nmode.",
+                    "type": "object",
+                    "properties": {
+                      "items": {
+                        "type": "array",
+                        "title": "If unspecified, each key-value pair in the Data field of the referenced\nSecret will be projected into the volume as a file whose name is the\nkey and content is the value. If specified, the listed keys will be\nprojected into the specified paths, and unlisted keys will not be\npresent. If a key is specified which is not present in the Secret,\nthe volume setup will error unless it is marked optional. Paths must be\nrelative and may not contain the '..' path or start with '..'.\n+optional",
+                        "items": {
+                          "description": "Maps a string key to a path within a volume.",
+                          "type": "object",
+                          "properties": {
+                            "key": {
+                              "description": "The key to project.",
+                              "type": "string"
+                            },
+                            "mode": {
+                              "type": "integer",
+                              "format": "int32",
+                              "title": "Optional: mode bits to use on this file, must be a value between 0\nand 0777. If not specified, the volume defaultMode will be used.\nThis might be in conflict with other options that affect the file\nmode, like fsGroup, and the result can be other mode bits set.\n+optional"
+                            },
+                            "path": {
+                              "description": "The relative path of the file to map the key to.\nMay not be an absolute path.\nMay not contain the path element '..'.\nMay not start with the string '..'.",
+                              "type": "string"
+                            }
+                          }
+                        }
+                      },
+                      "localObjectReference": {
+                        "description": "LocalObjectReference contains enough information to let you locate the\nreferenced object inside the same namespace.",
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string",
+                            "title": "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?\n+optional"
+                          }
+                        }
+                      },
+                      "optional": {
+                        "type": "boolean",
+                        "format": "boolean",
+                        "title": "Specify whether the Secret or its key must be defined\n+optional"
+                      }
+                    }
+                  },
+                  "serviceAccountToken": {
+                    "description": "ServiceAccountTokenProjection represents a projected service account token\nvolume. This projection can be used to insert a service account token into\nthe pods runtime filesystem for use against APIs (Kubernetes API Server or\notherwise).",
+                    "type": "object",
+                    "properties": {
+                      "audience": {
+                        "type": "string",
+                        "title": "Audience is the intended audience of the token. A recipient of a token\nmust identify itself with an identifier specified in the audience of the\ntoken, and otherwise should reject the token. The audience defaults to the\nidentifier of the apiserver.\n+optional"
+                      },
+                      "expirationSeconds": {
+                        "type": "string",
+                        "format": "int64",
+                        "title": "ExpirationSeconds is the requested duration of validity of the service\naccount token. As the token approaches expiration, the kubelet volume\nplugin will proactively rotate the service account token. The kubelet will\nstart trying to rotate the token if the token is older than 80 percent of\nits time to live or if the token is older than 24 hours.Defaults to 1 hour\nand must be at least 10 minutes.\n+optional"
+                      },
+                      "path": {
+                        "description": "Path is the path relative to the mount point of the file to project the\ntoken into.",
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "quobyte": {
+          "description": "Represents a Quobyte mount that lasts the lifetime of a pod.\nQuobyte volumes do not support ownership management or SELinux relabeling.",
+          "type": "object",
+          "properties": {
+            "group": {
+              "type": "string",
+              "title": "Group to map volume access to\nDefault is no group\n+optional"
+            },
+            "readOnly": {
+              "type": "boolean",
+              "format": "boolean",
+              "title": "ReadOnly here will force the Quobyte volume to be mounted with read-only permissions.\nDefaults to false.\n+optional"
+            },
+            "registry": {
+              "type": "string",
+              "title": "Registry represents a single or multiple Quobyte Registry services\nspecified as a string as host:port pair (multiple entries are separated with commas)\nwhich acts as the central registry for volumes"
+            },
+            "tenant": {
+              "type": "string",
+              "title": "Tenant owning the given Quobyte volume in the Backend\nUsed with dynamically provisioned Quobyte volumes, value is set by the plugin\n+optional"
+            },
+            "user": {
+              "type": "string",
+              "title": "User to map volume access to\nDefaults to serivceaccount user\n+optional"
+            },
+            "volume": {
+              "description": "Volume is a string that references an already created Quobyte volume by name.",
+              "type": "string"
+            }
+          }
+        },
+        "rbd": {
+          "description": "Represents a Rados Block Device mount that lasts the lifetime of a pod.\nRBD volumes support ownership management and SELinux relabeling.",
+          "type": "object",
+          "properties": {
+            "fsType": {
+              "type": "string",
+              "title": "Filesystem type of the volume that you want to mount.\nTip: Ensure that the filesystem type is supported by the host operating system.\nExamples: \"ext4\", \"xfs\", \"ntfs\". Implicitly inferred to be \"ext4\" if unspecified.\nMore info: https://kubernetes.io/docs/concepts/storage/volumes#rbd\nTODO: how do we prevent errors in the filesystem from compromising the machine\n+optional"
+            },
+            "image": {
+              "type": "string",
+              "title": "The rados image name.\nMore info: https://examples.k8s.io/volumes/rbd/README.md#how-to-use-it"
+            },
+            "keyring": {
+              "type": "string",
+              "title": "Keyring is the path to key ring for RBDUser.\nDefault is /etc/ceph/keyring.\nMore info: https://examples.k8s.io/volumes/rbd/README.md#how-to-use-it\n+optional"
+            },
+            "monitors": {
+              "type": "array",
+              "title": "A collection of Ceph monitors.\nMore info: https://examples.k8s.io/volumes/rbd/README.md#how-to-use-it",
+              "items": {
+                "type": "string"
+              }
+            },
+            "pool": {
+              "type": "string",
+              "title": "The rados pool name.\nDefault is rbd.\nMore info: https://examples.k8s.io/volumes/rbd/README.md#how-to-use-it\n+optional"
+            },
+            "readOnly": {
+              "type": "boolean",
+              "format": "boolean",
+              "title": "ReadOnly here will force the ReadOnly setting in VolumeMounts.\nDefaults to false.\nMore info: https://examples.k8s.io/volumes/rbd/README.md#how-to-use-it\n+optional"
+            },
+            "secretRef": {
+              "description": "LocalObjectReference contains enough information to let you locate the\nreferenced object inside the same namespace.",
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "title": "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?\n+optional"
+                }
+              }
+            },
+            "user": {
+              "type": "string",
+              "title": "The rados user name.\nDefault is admin.\nMore info: https://examples.k8s.io/volumes/rbd/README.md#how-to-use-it\n+optional"
+            }
+          }
+        },
+        "scaleIO": {
+          "type": "object",
+          "title": "ScaleIOVolumeSource represents a persistent ScaleIO volume",
+          "properties": {
+            "fsType": {
+              "type": "string",
+              "title": "Filesystem type to mount.\nMust be a filesystem type supported by the host operating system.\nEx. \"ext4\", \"xfs\", \"ntfs\".\nDefault is \"xfs\".\n+optional"
+            },
+            "gateway": {
+              "description": "The host address of the ScaleIO API Gateway.",
+              "type": "string"
+            },
+            "protectionDomain": {
+              "type": "string",
+              "title": "The name of the ScaleIO Protection Domain for the configured storage.\n+optional"
+            },
+            "readOnly": {
+              "type": "boolean",
+              "format": "boolean",
+              "title": "Defaults to false (read/write). ReadOnly here will force\nthe ReadOnly setting in VolumeMounts.\n+optional"
+            },
+            "secretRef": {
+              "description": "LocalObjectReference contains enough information to let you locate the\nreferenced object inside the same namespace.",
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "title": "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?\n+optional"
+                }
+              }
+            },
+            "sslEnabled": {
+              "type": "boolean",
+              "format": "boolean",
+              "title": "Flag to enable/disable SSL communication with Gateway, default false\n+optional"
+            },
+            "storageMode": {
+              "type": "string",
+              "title": "Indicates whether the storage for a volume should be ThickProvisioned or ThinProvisioned.\nDefault is ThinProvisioned.\n+optional"
+            },
+            "storagePool": {
+              "type": "string",
+              "title": "The ScaleIO Storage Pool associated with the protection domain.\n+optional"
+            },
+            "system": {
+              "description": "The name of the storage system as configured in ScaleIO.",
+              "type": "string"
+            },
+            "volumeName": {
+              "description": "The name of a volume already created in the ScaleIO system\nthat is associated with this volume source.",
+              "type": "string"
+            }
+          }
+        },
+        "secret": {
+          "description": "Adapts a Secret into a volume.\n\nThe contents of the target Secret's Data field will be presented in a volume\nas files using the keys in the Data field as the file names.\nSecret volumes support ownership management and SELinux relabeling.",
+          "type": "object",
+          "properties": {
+            "defaultMode": {
+              "type": "integer",
+              "format": "int32",
+              "title": "Optional: mode bits to use on created files by default. Must be a\nvalue between 0 and 0777. Defaults to 0644.\nDirectories within the path are not affected by this setting.\nThis might be in conflict with other options that affect the file\nmode, like fsGroup, and the result can be other mode bits set.\n+optional"
+            },
+            "items": {
+              "type": "array",
+              "title": "If unspecified, each key-value pair in the Data field of the referenced\nSecret will be projected into the volume as a file whose name is the\nkey and content is the value. If specified, the listed keys will be\nprojected into the specified paths, and unlisted keys will not be\npresent. If a key is specified which is not present in the Secret,\nthe volume setup will error unless it is marked optional. Paths must be\nrelative and may not contain the '..' path or start with '..'.\n+optional",
+              "items": {
+                "description": "Maps a string key to a path within a volume.",
+                "type": "object",
+                "properties": {
+                  "key": {
+                    "description": "The key to project.",
+                    "type": "string"
+                  },
+                  "mode": {
+                    "type": "integer",
+                    "format": "int32",
+                    "title": "Optional: mode bits to use on this file, must be a value between 0\nand 0777. If not specified, the volume defaultMode will be used.\nThis might be in conflict with other options that affect the file\nmode, like fsGroup, and the result can be other mode bits set.\n+optional"
+                  },
+                  "path": {
+                    "description": "The relative path of the file to map the key to.\nMay not be an absolute path.\nMay not contain the path element '..'.\nMay not start with the string '..'.",
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "optional": {
+              "type": "boolean",
+              "format": "boolean",
+              "title": "Specify whether the Secret or its keys must be defined\n+optional"
+            },
+            "secretName": {
+              "type": "string",
+              "title": "Name of the secret in the pod's namespace to use.\nMore info: https://kubernetes.io/docs/concepts/storage/volumes#secret\n+optional"
+            }
+          }
+        },
+        "storageos": {
+          "description": "Represents a StorageOS persistent volume resource.",
+          "type": "object",
+          "properties": {
+            "fsType": {
+              "type": "string",
+              "title": "Filesystem type to mount.\nMust be a filesystem type supported by the host operating system.\nEx. \"ext4\", \"xfs\", \"ntfs\". Implicitly inferred to be \"ext4\" if unspecified.\n+optional"
+            },
+            "readOnly": {
+              "type": "boolean",
+              "format": "boolean",
+              "title": "Defaults to false (read/write). ReadOnly here will force\nthe ReadOnly setting in VolumeMounts.\n+optional"
+            },
+            "secretRef": {
+              "description": "LocalObjectReference contains enough information to let you locate the\nreferenced object inside the same namespace.",
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "title": "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?\n+optional"
+                }
+              }
+            },
+            "volumeName": {
+              "description": "VolumeName is the human-readable name of the StorageOS volume.  Volume\nnames are only unique within a namespace.",
+              "type": "string"
+            },
+            "volumeNamespace": {
+              "type": "string",
+              "title": "VolumeNamespace specifies the scope of the volume within StorageOS.  If no\nnamespace is specified then the Pod's namespace will be used.  This allows the\nKubernetes name scoping to be mirrored within StorageOS for tighter integration.\nSet VolumeName to any name to override the default behaviour.\nSet to \"default\" if you are not using namespaces within StorageOS.\nNamespaces that do not pre-exist within StorageOS will be created.\n+optional"
+            }
+          }
+        },
+        "vsphereVolume": {
+          "description": "Represents a vSphere volume resource.",
+          "type": "object",
+          "properties": {
+            "fsType": {
+              "type": "string",
+              "title": "Filesystem type to mount.\nMust be a filesystem type supported by the host operating system.\nEx. \"ext4\", \"xfs\", \"ntfs\". Implicitly inferred to be \"ext4\" if unspecified.\n+optional"
+            },
+            "storagePolicyID": {
+              "type": "string",
+              "title": "Storage Policy Based Management (SPBM) profile ID associated with the StoragePolicyName.\n+optional"
+            },
+            "storagePolicyName": {
+              "type": "string",
+              "title": "Storage Policy Based Management (SPBM) profile name.\n+optional"
+            },
+            "volumePath": {
+              "type": "string",
+              "title": "Path that identifies vSphere volume vmdk"
+            }
+          }
+        }
+      }
+    }
+  },
+  "$schema": "http://json-schema.org/schema#"
+}

@@ -1,0 +1,12 @@
+{
+  "type": "object",
+  "properties": {
+    "content": {
+      "type": "string"
+    },
+    "podName": {
+      "type": "string"
+    }
+  },
+  "$schema": "http://json-schema.org/schema#"
+}

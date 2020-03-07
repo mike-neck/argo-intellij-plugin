@@ -1,0 +1,34 @@
+{
+  "description": "Represents a StorageOS persistent volume resource.",
+  "type": "object",
+  "properties": {
+    "fsType": {
+      "type": "string",
+      "title": "Filesystem type to mount.\nMust be a filesystem type supported by the host operating system.\nEx. \"ext4\", \"xfs\", \"ntfs\". Implicitly inferred to be \"ext4\" if unspecified.\n+optional"
+    },
+    "readOnly": {
+      "type": "boolean",
+      "format": "boolean",
+      "title": "Defaults to false (read/write). ReadOnly here will force\nthe ReadOnly setting in VolumeMounts.\n+optional"
+    },
+    "secretRef": {
+      "description": "LocalObjectReference contains enough information to let you locate the\nreferenced object inside the same namespace.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?\n+optional"
+        }
+      }
+    },
+    "volumeName": {
+      "description": "VolumeName is the human-readable name of the StorageOS volume.  Volume\nnames are only unique within a namespace.",
+      "type": "string"
+    },
+    "volumeNamespace": {
+      "type": "string",
+      "title": "VolumeNamespace specifies the scope of the volume within StorageOS.  If no\nnamespace is specified then the Pod's namespace will be used.  This allows the\nKubernetes name scoping to be mirrored within StorageOS for tighter integration.\nSet VolumeName to any name to override the default behaviour.\nSet to \"default\" if you are not using namespaces within StorageOS.\nNamespaces that do not pre-exist within StorageOS will be created.\n+optional"
+    }
+  },
+  "$schema": "http://json-schema.org/schema#"
+}

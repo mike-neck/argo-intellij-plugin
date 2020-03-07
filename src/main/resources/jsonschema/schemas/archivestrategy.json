@@ -1,0 +1,15 @@
+{
+  "type": "object",
+  "title": "ArchiveStrategy describes how to archive files/directory when saving artifacts",
+  "properties": {
+    "none": {
+      "description": "NoneStrategy indicates to skip tar process and upload the files or directory tree as independent\nfiles. Note that if the artifact is a directory, the artifact driver must support the ability to\nsave/load the directory appropriately.",
+      "type": "object"
+    },
+    "tar": {
+      "type": "object",
+      "title": "TarStrategy will tar and gzip the file or directory when saving"
+    }
+  },
+  "$schema": "http://json-schema.org/schema#"
+}

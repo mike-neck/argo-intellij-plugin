@@ -1,0 +1,19 @@
+{
+  "description": "TypedLocalObjectReference contains enough information to let you locate the\ntyped referenced object inside the same namespace.",
+  "type": "object",
+  "properties": {
+    "apiGroup": {
+      "type": "string",
+      "title": "APIGroup is the group for the resource being referenced.\nIf APIGroup is not specified, the specified Kind must be in the core API group.\nFor any other third-party types, APIGroup is required.\n+optional"
+    },
+    "kind": {
+      "type": "string",
+      "title": "Kind is the type of resource being referenced"
+    },
+    "name": {
+      "type": "string",
+      "title": "Name is the name of resource being referenced"
+    }
+  },
+  "$schema": "http://json-schema.org/schema#"
+}

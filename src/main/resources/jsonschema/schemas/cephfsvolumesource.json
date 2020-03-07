@@ -1,0 +1,41 @@
+{
+  "description": "Represents a Ceph Filesystem mount that lasts the lifetime of a pod\nCephfs volumes do not support ownership management or SELinux relabeling.",
+  "type": "object",
+  "properties": {
+    "monitors": {
+      "type": "array",
+      "title": "Required: Monitors is a collection of Ceph monitors\nMore info: https://examples.k8s.io/volumes/cephfs/README.md#how-to-use-it",
+      "items": {
+        "type": "string"
+      }
+    },
+    "path": {
+      "type": "string",
+      "title": "Optional: Used as the mounted root, rather than the full Ceph tree, default is /\n+optional"
+    },
+    "readOnly": {
+      "type": "boolean",
+      "format": "boolean",
+      "title": "Optional: Defaults to false (read/write). ReadOnly here will force\nthe ReadOnly setting in VolumeMounts.\nMore info: https://examples.k8s.io/volumes/cephfs/README.md#how-to-use-it\n+optional"
+    },
+    "secretFile": {
+      "type": "string",
+      "title": "Optional: SecretFile is the path to key ring for User, default is /etc/ceph/user.secret\nMore info: https://examples.k8s.io/volumes/cephfs/README.md#how-to-use-it\n+optional"
+    },
+    "secretRef": {
+      "description": "LocalObjectReference contains enough information to let you locate the\nreferenced object inside the same namespace.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?\n+optional"
+        }
+      }
+    },
+    "user": {
+      "type": "string",
+      "title": "Optional: User is the rados user name, default is admin\nMore info: https://examples.k8s.io/volumes/cephfs/README.md#how-to-use-it\n+optional"
+    }
+  },
+  "$schema": "http://json-schema.org/schema#"
+}

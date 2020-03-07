@@ -1,0 +1,30 @@
+{
+  "description": "Represents a cinder volume resource in Openstack.\nA Cinder volume must exist before mounting to a container.\nThe volume must also be in the same region as the kubelet.\nCinder volumes support ownership management and SELinux relabeling.",
+  "type": "object",
+  "properties": {
+    "fsType": {
+      "type": "string",
+      "title": "Filesystem type to mount.\nMust be a filesystem type supported by the host operating system.\nExamples: \"ext4\", \"xfs\", \"ntfs\". Implicitly inferred to be \"ext4\" if unspecified.\nMore info: https://examples.k8s.io/mysql-cinder-pd/README.md\n+optional"
+    },
+    "readOnly": {
+      "type": "boolean",
+      "format": "boolean",
+      "title": "Optional: Defaults to false (read/write). ReadOnly here will force\nthe ReadOnly setting in VolumeMounts.\nMore info: https://examples.k8s.io/mysql-cinder-pd/README.md\n+optional"
+    },
+    "secretRef": {
+      "description": "LocalObjectReference contains enough information to let you locate the\nreferenced object inside the same namespace.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?\n+optional"
+        }
+      }
+    },
+    "volumeID": {
+      "type": "string",
+      "title": "volume id used to identify the volume in cinder.\nMore info: https://examples.k8s.io/mysql-cinder-pd/README.md"
+    }
+  },
+  "$schema": "http://json-schema.org/schema#"
+}

@@ -1,0 +1,20 @@
+{
+  "description": "Represents a Glusterfs mount that lasts the lifetime of a pod.\nGlusterfs volumes do not support ownership management or SELinux relabeling.",
+  "type": "object",
+  "properties": {
+    "endpoints": {
+      "type": "string",
+      "title": "EndpointsName is the endpoint name that details Glusterfs topology.\nMore info: https://examples.k8s.io/volumes/glusterfs/README.md#create-a-pod"
+    },
+    "path": {
+      "type": "string",
+      "title": "Path is the Glusterfs volume path.\nMore info: https://examples.k8s.io/volumes/glusterfs/README.md#create-a-pod"
+    },
+    "readOnly": {
+      "type": "boolean",
+      "format": "boolean",
+      "title": "ReadOnly here will force the Glusterfs volume to be mounted with read-only permissions.\nDefaults to false.\nMore info: https://examples.k8s.io/volumes/glusterfs/README.md#create-a-pod\n+optional"
+    }
+  },
+  "$schema": "http://json-schema.org/schema#"
+}

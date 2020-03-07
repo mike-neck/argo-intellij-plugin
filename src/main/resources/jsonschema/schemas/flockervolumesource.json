@@ -1,0 +1,15 @@
+{
+  "description": "Represents a Flocker volume mounted by the Flocker agent.\nOne and only one of datasetName and datasetUUID should be set.\nFlocker volumes do not support ownership management or SELinux relabeling.",
+  "type": "object",
+  "properties": {
+    "datasetName": {
+      "type": "string",
+      "title": "Name of the dataset stored as metadata -> name on the dataset for Flocker\nshould be considered as deprecated\n+optional"
+    },
+    "datasetUUID": {
+      "type": "string",
+      "title": "UUID of the dataset. This is unique identifier of a Flocker dataset\n+optional"
+    }
+  },
+  "$schema": "http://json-schema.org/schema#"
+}

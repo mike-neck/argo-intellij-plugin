@@ -1,0 +1,16 @@
+{
+  "type": "object",
+  "properties": {
+    "duration": {
+      "type": "string"
+    },
+    "factor": {
+      "type": "integer",
+      "format": "int32"
+    },
+    "maxDuration": {
+      "type": "string"
+    }
+  },
+  "$schema": "http://json-schema.org/schema#"
+}

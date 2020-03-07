@@ -1,0 +1,11 @@
+{
+  "description": "ExecutorConfig holds configurations of an executor container.",
+  "type": "object",
+  "properties": {
+    "serviceAccountName": {
+      "description": "ServiceAccountName specifies the service account name of the executor container.",
+      "type": "string"
+    }
+  },
+  "$schema": "http://json-schema.org/schema#"
+}

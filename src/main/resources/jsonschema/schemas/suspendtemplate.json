@@ -1,0 +1,11 @@
+{
+  "type": "object",
+  "title": "SuspendTemplate is a template subtype to suspend a workflow at a predetermined point in time",
+  "properties": {
+    "duration": {
+      "type": "string",
+      "title": "Duration is the seconds to wait before automatically resuming a template"
+    }
+  },
+  "$schema": "http://json-schema.org/schema#"
+}

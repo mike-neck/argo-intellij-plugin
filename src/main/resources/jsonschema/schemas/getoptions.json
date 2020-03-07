@@ -1,0 +1,11 @@
+{
+  "description": "GetOptions is the standard query options to the standard REST get call.",
+  "type": "object",
+  "properties": {
+    "resourceVersion": {
+      "description": "When specified:\n- if unset, then the result is returned from remote storage based on quorum-read flag;\n- if it's 0, then we simply return what we currently have in cache, no guarantee;\n- if set to non zero, then the result is at least as fresh as given rv.",
+      "type": "string"
+    }
+  },
+  "$schema": "http://json-schema.org/schema#"
+}

@@ -1,0 +1,392 @@
+{
+  "type": "object",
+  "title": "PersistentVolumeClaim is a user's request for and claim to a persistent volume",
+  "properties": {
+    "metadata": {
+      "description": "ObjectMeta is metadata that all persisted resources must have, which includes all objects\nusers must create.",
+      "type": "object",
+      "properties": {
+        "annotations": {
+          "type": "object",
+          "title": "Annotations is an unstructured key value map stored with a resource that may be\nset by external tools to store and retrieve arbitrary metadata. They are not\nqueryable and should be preserved when modifying objects.\nMore info: http://kubernetes.io/docs/user-guide/annotations\n+optional",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "clusterName": {
+          "type": "string",
+          "title": "The name of the cluster which the object belongs to.\nThis is used to distinguish resources with same name and namespace in different clusters.\nThis field is not set anywhere right now and apiserver is going to ignore it if set in create or update request.\n+optional"
+        },
+        "creationTimestamp": {
+          "description": "Time is a wrapper around time.Time which supports correct\nmarshaling to YAML and JSON.  Wrappers are provided for many\nof the factory methods that the time package offers.\n\n+protobuf.options.marshal=false\n+protobuf.as=Timestamp\n+protobuf.options.(gogoproto.goproto_stringer)=false",
+          "type": "object",
+          "properties": {
+            "nanos": {
+              "description": "Non-negative fractions of a second at nanosecond resolution. Negative\nsecond values with fractions must still have non-negative nanos values\nthat count forward in time. Must be from 0 to 999,999,999\ninclusive. This field may be limited in precision depending on context.",
+              "type": "integer",
+              "format": "int32"
+            },
+            "seconds": {
+              "description": "Represents seconds of UTC time since Unix epoch\n1970-01-01T00:00:00Z. Must be from 0001-01-01T00:00:00Z to\n9999-12-31T23:59:59Z inclusive.",
+              "type": "string",
+              "format": "int64"
+            }
+          }
+        },
+        "deletionGracePeriodSeconds": {
+          "type": "string",
+          "format": "int64",
+          "title": "Number of seconds allowed for this object to gracefully terminate before\nit will be removed from the system. Only set when deletionTimestamp is also set.\nMay only be shortened.\nRead-only.\n+optional"
+        },
+        "deletionTimestamp": {
+          "description": "Time is a wrapper around time.Time which supports correct\nmarshaling to YAML and JSON.  Wrappers are provided for many\nof the factory methods that the time package offers.\n\n+protobuf.options.marshal=false\n+protobuf.as=Timestamp\n+protobuf.options.(gogoproto.goproto_stringer)=false",
+          "type": "object",
+          "properties": {
+            "nanos": {
+              "description": "Non-negative fractions of a second at nanosecond resolution. Negative\nsecond values with fractions must still have non-negative nanos values\nthat count forward in time. Must be from 0 to 999,999,999\ninclusive. This field may be limited in precision depending on context.",
+              "type": "integer",
+              "format": "int32"
+            },
+            "seconds": {
+              "description": "Represents seconds of UTC time since Unix epoch\n1970-01-01T00:00:00Z. Must be from 0001-01-01T00:00:00Z to\n9999-12-31T23:59:59Z inclusive.",
+              "type": "string",
+              "format": "int64"
+            }
+          }
+        },
+        "finalizers": {
+          "type": "array",
+          "title": "Must be empty before the object is deleted from the registry. Each entry\nis an identifier for the responsible component that will remove the entry\nfrom the list. If the deletionTimestamp of the object is non-nil, entries\nin this list can only be removed.\n+optional\n+patchStrategy=merge",
+          "items": {
+            "type": "string"
+          }
+        },
+        "generateName": {
+          "description": "GenerateName is an optional prefix, used by the server, to generate a unique\nname ONLY IF the Name field has not been provided.\nIf this field is used, the name returned to the client will be different\nthan the name passed. This value will also be combined with a unique suffix.\nThe provided value has the same validation rules as the Name field,\nand may be truncated by the length of the suffix required to make the value\nunique on the server.\n\nIf this field is specified and the generated name exists, the server will\nNOT return a 409 - instead, it will either return 201 Created or 500 with Reason\nServerTimeout indicating a unique name could not be found in the time allotted, and the client\nshould retry (optionally after the time indicated in the Retry-After header).\n\nApplied only if Name is not specified.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#idempotency\n+optional",
+          "type": "string"
+        },
+        "generation": {
+          "type": "string",
+          "format": "int64",
+          "title": "A sequence number representing a specific generation of the desired state.\nPopulated by the system. Read-only.\n+optional"
+        },
+        "labels": {
+          "type": "object",
+          "title": "Map of string keys and values that can be used to organize and categorize\n(scope and select) objects. May match selectors of replication controllers\nand services.\nMore info: http://kubernetes.io/docs/user-guide/labels\n+optional",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "managedFields": {
+          "description": "ManagedFields maps workflow-id and version to the set of fields\nthat are managed by that io.argoproj.workflow.v1alpha1. This is mostly for internal\nhousekeeping, and users typically shouldn't need to set or\nunderstand this field. A workflow can be the user's name, a\ncontroller's name, or the name of a specific apply path like\n\"ci-cd\". The set of fields is always in the version that the\nworkflow used when modifying the object.\n\n+optional",
+          "type": "array",
+          "items": {
+            "description": "ManagedFieldsEntry is a workflow-id, a FieldSet and the group version of the resource\nthat the fieldset applies to.",
+            "type": "object",
+            "properties": {
+              "apiVersion": {
+                "description": "APIVersion defines the version of this resource that this field set\napplies to. The format is \"group/version\" just like the top-level\nAPIVersion field. It is necessary to track the version of a field\nset because it cannot be automatically converted.",
+                "type": "string"
+              },
+              "fieldsType": {
+                "type": "string",
+                "title": "FieldsType is the discriminator for the different fields format and version.\nThere is currently only one possible value: \"FieldsV1\""
+              },
+              "fieldsV1": {
+                "description": "FieldsV1 stores a set of fields in a data structure like a Trie, in JSON format.\n\nEach key is either a '.' representing the field itself, and will always map to an empty set,\nor a string representing a sub-field or item. The string will follow one of these four formats:\n'f:<name>', where <name> is the name of a field in a struct, or key in a map\n'v:<value>', where <value> is the exact json formatted value of a list item\n'i:<index>', where <index> is position of a item in a list\n'k:<keys>', where <keys> is a map of  a list item's key fields to their unique values\nIf a key maps to an empty Fields value, the field that key represents is part of the set.\n\nThe exact format is defined in sigs.k8s.io/structured-merge-diff",
+                "type": "object",
+                "properties": {
+                  "Raw": {
+                    "description": "Raw is the underlying serialization of this object.",
+                    "type": "string",
+                    "format": "byte"
+                  }
+                }
+              },
+              "manager": {
+                "description": "Manager is an identifier of the workflow managing these fields.",
+                "type": "string"
+              },
+              "operation": {
+                "description": "Operation is the type of operation which lead to this ManagedFieldsEntry being created.\nThe only valid values for this field are 'Apply' and 'Update'.",
+                "type": "string"
+              },
+              "time": {
+                "description": "Time is a wrapper around time.Time which supports correct\nmarshaling to YAML and JSON.  Wrappers are provided for many\nof the factory methods that the time package offers.\n\n+protobuf.options.marshal=false\n+protobuf.as=Timestamp\n+protobuf.options.(gogoproto.goproto_stringer)=false",
+                "type": "object",
+                "properties": {
+                  "nanos": {
+                    "description": "Non-negative fractions of a second at nanosecond resolution. Negative\nsecond values with fractions must still have non-negative nanos values\nthat count forward in time. Must be from 0 to 999,999,999\ninclusive. This field may be limited in precision depending on context.",
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "seconds": {
+                    "description": "Represents seconds of UTC time since Unix epoch\n1970-01-01T00:00:00Z. Must be from 0001-01-01T00:00:00Z to\n9999-12-31T23:59:59Z inclusive.",
+                    "type": "string",
+                    "format": "int64"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "name": {
+          "type": "string",
+          "title": "Name must be unique within a namespace. Is required when creating resources, although\nsome resources may allow a client to request the generation of an appropriate name\nautomatically. Name is primarily intended for creation idempotence and configuration\ndefinition.\nCannot be updated.\nMore info: http://kubernetes.io/docs/user-guide/identifiers#names\n+optional"
+        },
+        "namespace": {
+          "description": "Namespace defines the space within each name must be unique. An empty namespace is\nequivalent to the \"default\" namespace, but \"default\" is the canonical representation.\nNot all objects are required to be scoped to a namespace - the value of this field for\nthose objects will be empty.\n\nMust be a DNS_LABEL.\nCannot be updated.\nMore info: http://kubernetes.io/docs/user-guide/namespaces\n+optional",
+          "type": "string"
+        },
+        "ownerReferences": {
+          "type": "array",
+          "title": "List of objects depended by this object. If ALL objects in the list have\nbeen deleted, this object will be garbage collected. If this object is managed by a controller,\nthen an entry in this list will point to this controller, with the controller field set to true.\nThere cannot be more than one managing controller.\n+optional\n+patchMergeKey=uid\n+patchStrategy=merge",
+          "items": {
+            "description": "OwnerReference contains enough information to let you identify an owning\nobject. An owning object must be in the same namespace as the dependent, or\nbe cluster-scoped, so there is no namespace field.",
+            "type": "object",
+            "properties": {
+              "apiVersion": {
+                "description": "API version of the referent.",
+                "type": "string"
+              },
+              "blockOwnerDeletion": {
+                "type": "boolean",
+                "format": "boolean",
+                "title": "If true, AND if the owner has the \"foregroundDeletion\" finalizer, then\nthe owner cannot be deleted from the key-value store until this\nreference is removed.\nDefaults to false.\nTo set this field, a user needs \"delete\" permission of the owner,\notherwise 422 (Unprocessable Entity) will be returned.\n+optional"
+              },
+              "controller": {
+                "type": "boolean",
+                "format": "boolean",
+                "title": "If true, this reference points to the managing controller.\n+optional"
+              },
+              "kind": {
+                "type": "string",
+                "title": "Kind of the referent.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds"
+              },
+              "name": {
+                "type": "string",
+                "title": "Name of the referent.\nMore info: http://kubernetes.io/docs/user-guide/identifiers#names"
+              },
+              "uid": {
+                "type": "string",
+                "title": "UID of the referent.\nMore info: http://kubernetes.io/docs/user-guide/identifiers#uids"
+              }
+            }
+          }
+        },
+        "resourceVersion": {
+          "description": "An opaque value that represents the internal version of this object that can\nbe used by clients to determine when objects have changed. May be used for optimistic\nconcurrency, change detection, and the watch operation on a resource or set of resources.\nClients must treat these values as opaque and passed unmodified back to the server.\nThey may only be valid for a particular resource or set of resources.\n\nPopulated by the system.\nRead-only.\nValue must be treated as opaque by clients and .\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency\n+optional",
+          "type": "string"
+        },
+        "selfLink": {
+          "description": "SelfLink is a URL representing this object.\nPopulated by the system.\nRead-only.\n\nDEPRECATED\nKubernetes will stop propagating this field in 1.20 release and the field is planned\nto be removed in 1.21 release.\n+optional",
+          "type": "string"
+        },
+        "uid": {
+          "description": "UID is the unique in time and space value for this object. It is typically generated by\nthe server on successful creation of a resource and is not allowed to change on PUT\noperations.\n\nPopulated by the system.\nRead-only.\nMore info: http://kubernetes.io/docs/user-guide/identifiers#uids\n+optional",
+          "type": "string"
+        }
+      }
+    },
+    "spec": {
+      "type": "object",
+      "title": "PersistentVolumeClaimSpec describes the common attributes of storage devices\nand allows a Source for provider-specific attributes",
+      "properties": {
+        "accessModes": {
+          "type": "array",
+          "title": "AccessModes contains the desired access modes the volume should have.\nMore info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#access-modes-1\n+optional",
+          "items": {
+            "type": "string"
+          }
+        },
+        "dataSource": {
+          "description": "TypedLocalObjectReference contains enough information to let you locate the\ntyped referenced object inside the same namespace.",
+          "type": "object",
+          "properties": {
+            "apiGroup": {
+              "type": "string",
+              "title": "APIGroup is the group for the resource being referenced.\nIf APIGroup is not specified, the specified Kind must be in the core API group.\nFor any other third-party types, APIGroup is required.\n+optional"
+            },
+            "kind": {
+              "type": "string",
+              "title": "Kind is the type of resource being referenced"
+            },
+            "name": {
+              "type": "string",
+              "title": "Name is the name of resource being referenced"
+            }
+          }
+        },
+        "resources": {
+          "description": "ResourceRequirements describes the compute resource requirements.",
+          "type": "object",
+          "properties": {
+            "limits": {
+              "type": "object",
+              "title": "Limits describes the maximum amount of compute resources allowed.\nMore info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/\n+optional",
+              "additionalProperties": {
+                "description": "Quantity is a fixed-point representation of a number.\nIt provides convenient marshaling/unmarshaling in JSON and YAML,\nin addition to String() and AsInt64() accessors.\n\nThe serialization format is:\n\n<quantity>        ::= <signedNumber><suffix>\n  (Note that <suffix> may be empty, from the \"\" case in <decimalSI>.)\n<digit>           ::= 0 | 1 | ... | 9\n<digits>          ::= <digit> | <digit><digits>\n<number>          ::= <digits> | <digits>.<digits> | <digits>. | .<digits>\n<sign>            ::= \"+\" | \"-\"\n<signedNumber>    ::= <number> | <sign><number>\n<suffix>          ::= <binarySI> | <decimalExponent> | <decimalSI>\n<binarySI>        ::= Ki | Mi | Gi | Ti | Pi | Ei\n  (International System of units; See: http://physics.nist.gov/cuu/Units/binary.html)\n<decimalSI>       ::= m | \"\" | k | M | G | T | P | E\n  (Note that 1024 = 1Ki but 1000 = 1k; I didn't choose the capitalization.)\n<decimalExponent> ::= \"e\" <signedNumber> | \"E\" <signedNumber>\n\nNo matter which of the three exponent forms is used, no quantity may represent\na number greater than 2^63-1 in magnitude, nor may it have more than 3 decimal\nplaces. Numbers larger or more precise will be capped or rounded up.\n(E.g.: 0.1m will rounded up to 1m.)\nThis may be extended in the future if we require larger or smaller quantities.\n\nWhen a Quantity is parsed from a string, it will remember the type of suffix\nit had, and will use the same type again when it is serialized.\n\nBefore serializing, Quantity will be put in \"canonical form\".\nThis means that Exponent/suffix will be adjusted up or down (with a\ncorresponding increase or decrease in Mantissa) such that:\n  a. No precision is lost\n  b. No fractional digits will be emitted\n  c. The exponent (or suffix) is as large as possible.\nThe sign will be omitted unless the number is negative.\n\nExamples:\n  1.5 will be serialized as \"1500m\"\n  1.5Gi will be serialized as \"1536Mi\"\n\nNote that the quantity will NEVER be internally represented by a\nfloating point number. That is the whole point of this exercise.\n\nNon-canonical values will still parse as long as they are well formed,\nbut will be re-emitted in their canonical form. (So always use canonical\nform, or don't diff.)\n\nThis format is intended to make it difficult to use these numbers without\nwriting some sort of special handling code in the hopes that that will\ncause implementors to also use a fixed point implementation.\n\n+protobuf=true\n+protobuf.embed=string\n+protobuf.options.marshal=false\n+protobuf.options.(gogoproto.goproto_stringer)=false\n+k8s:deepcopy-gen=true\n+k8s:openapi-gen=true",
+                "type": "object",
+                "properties": {
+                  "string": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "requests": {
+              "type": "object",
+              "title": "Requests describes the minimum amount of compute resources required.\nIf Requests is omitted for a container, it defaults to Limits if that is explicitly specified,\notherwise to an implementation-defined value.\nMore info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/\n+optional",
+              "additionalProperties": {
+                "description": "Quantity is a fixed-point representation of a number.\nIt provides convenient marshaling/unmarshaling in JSON and YAML,\nin addition to String() and AsInt64() accessors.\n\nThe serialization format is:\n\n<quantity>        ::= <signedNumber><suffix>\n  (Note that <suffix> may be empty, from the \"\" case in <decimalSI>.)\n<digit>           ::= 0 | 1 | ... | 9\n<digits>          ::= <digit> | <digit><digits>\n<number>          ::= <digits> | <digits>.<digits> | <digits>. | .<digits>\n<sign>            ::= \"+\" | \"-\"\n<signedNumber>    ::= <number> | <sign><number>\n<suffix>          ::= <binarySI> | <decimalExponent> | <decimalSI>\n<binarySI>        ::= Ki | Mi | Gi | Ti | Pi | Ei\n  (International System of units; See: http://physics.nist.gov/cuu/Units/binary.html)\n<decimalSI>       ::= m | \"\" | k | M | G | T | P | E\n  (Note that 1024 = 1Ki but 1000 = 1k; I didn't choose the capitalization.)\n<decimalExponent> ::= \"e\" <signedNumber> | \"E\" <signedNumber>\n\nNo matter which of the three exponent forms is used, no quantity may represent\na number greater than 2^63-1 in magnitude, nor may it have more than 3 decimal\nplaces. Numbers larger or more precise will be capped or rounded up.\n(E.g.: 0.1m will rounded up to 1m.)\nThis may be extended in the future if we require larger or smaller quantities.\n\nWhen a Quantity is parsed from a string, it will remember the type of suffix\nit had, and will use the same type again when it is serialized.\n\nBefore serializing, Quantity will be put in \"canonical form\".\nThis means that Exponent/suffix will be adjusted up or down (with a\ncorresponding increase or decrease in Mantissa) such that:\n  a. No precision is lost\n  b. No fractional digits will be emitted\n  c. The exponent (or suffix) is as large as possible.\nThe sign will be omitted unless the number is negative.\n\nExamples:\n  1.5 will be serialized as \"1500m\"\n  1.5Gi will be serialized as \"1536Mi\"\n\nNote that the quantity will NEVER be internally represented by a\nfloating point number. That is the whole point of this exercise.\n\nNon-canonical values will still parse as long as they are well formed,\nbut will be re-emitted in their canonical form. (So always use canonical\nform, or don't diff.)\n\nThis format is intended to make it difficult to use these numbers without\nwriting some sort of special handling code in the hopes that that will\ncause implementors to also use a fixed point implementation.\n\n+protobuf=true\n+protobuf.embed=string\n+protobuf.options.marshal=false\n+protobuf.options.(gogoproto.goproto_stringer)=false\n+k8s:deepcopy-gen=true\n+k8s:openapi-gen=true",
+                "type": "object",
+                "properties": {
+                  "string": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "selector": {
+          "description": "A label selector is a label query over a set of resources. The result of matchLabels and\nmatchExpressions are ANDed. An empty label selector matches all objects. A null\nlabel selector matches no objects.",
+          "type": "object",
+          "properties": {
+            "matchExpressions": {
+              "type": "array",
+              "title": "matchExpressions is a list of label selector requirements. The requirements are ANDed.\n+optional",
+              "items": {
+                "description": "A label selector requirement is a selector that contains values, a key, and an operator that\nrelates the key and values.",
+                "type": "object",
+                "properties": {
+                  "key": {
+                    "type": "string",
+                    "title": "key is the label key that the selector applies to.\n+patchMergeKey=key\n+patchStrategy=merge"
+                  },
+                  "operator": {
+                    "description": "operator represents a key's relationship to a set of values.\nValid operators are In, NotIn, Exists and DoesNotExist.",
+                    "type": "string"
+                  },
+                  "values": {
+                    "type": "array",
+                    "title": "values is an array of string values. If the operator is In or NotIn,\nthe values array must be non-empty. If the operator is Exists or DoesNotExist,\nthe values array must be empty. This array is replaced during a strategic\nmerge patch.\n+optional",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            },
+            "matchLabels": {
+              "type": "object",
+              "title": "matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels\nmap is equivalent to an element of matchExpressions, whose key field is \"key\", the\noperator is \"In\", and the values array contains only \"value\". The requirements are ANDed.\n+optional",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "storageClassName": {
+          "type": "string",
+          "title": "Name of the StorageClass required by the claim.\nMore info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#class-1\n+optional"
+        },
+        "volumeMode": {
+          "type": "string",
+          "title": "volumeMode defines what type of volume is required by the claim.\nValue of Filesystem is implied when not included in claim spec.\nThis is a beta feature.\n+optional"
+        },
+        "volumeName": {
+          "type": "string",
+          "title": "VolumeName is the binding reference to the PersistentVolume backing this claim.\n+optional"
+        }
+      }
+    },
+    "status": {
+      "description": "PersistentVolumeClaimStatus is the current status of a persistent volume claim.",
+      "type": "object",
+      "properties": {
+        "accessModes": {
+          "type": "array",
+          "title": "AccessModes contains the actual access modes the volume backing the PVC has.\nMore info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#access-modes-1\n+optional",
+          "items": {
+            "type": "string"
+          }
+        },
+        "capacity": {
+          "type": "object",
+          "title": "Represents the actual resources of the underlying volume.\n+optional",
+          "additionalProperties": {
+            "description": "Quantity is a fixed-point representation of a number.\nIt provides convenient marshaling/unmarshaling in JSON and YAML,\nin addition to String() and AsInt64() accessors.\n\nThe serialization format is:\n\n<quantity>        ::= <signedNumber><suffix>\n  (Note that <suffix> may be empty, from the \"\" case in <decimalSI>.)\n<digit>           ::= 0 | 1 | ... | 9\n<digits>          ::= <digit> | <digit><digits>\n<number>          ::= <digits> | <digits>.<digits> | <digits>. | .<digits>\n<sign>            ::= \"+\" | \"-\"\n<signedNumber>    ::= <number> | <sign><number>\n<suffix>          ::= <binarySI> | <decimalExponent> | <decimalSI>\n<binarySI>        ::= Ki | Mi | Gi | Ti | Pi | Ei\n  (International System of units; See: http://physics.nist.gov/cuu/Units/binary.html)\n<decimalSI>       ::= m | \"\" | k | M | G | T | P | E\n  (Note that 1024 = 1Ki but 1000 = 1k; I didn't choose the capitalization.)\n<decimalExponent> ::= \"e\" <signedNumber> | \"E\" <signedNumber>\n\nNo matter which of the three exponent forms is used, no quantity may represent\na number greater than 2^63-1 in magnitude, nor may it have more than 3 decimal\nplaces. Numbers larger or more precise will be capped or rounded up.\n(E.g.: 0.1m will rounded up to 1m.)\nThis may be extended in the future if we require larger or smaller quantities.\n\nWhen a Quantity is parsed from a string, it will remember the type of suffix\nit had, and will use the same type again when it is serialized.\n\nBefore serializing, Quantity will be put in \"canonical form\".\nThis means that Exponent/suffix will be adjusted up or down (with a\ncorresponding increase or decrease in Mantissa) such that:\n  a. No precision is lost\n  b. No fractional digits will be emitted\n  c. The exponent (or suffix) is as large as possible.\nThe sign will be omitted unless the number is negative.\n\nExamples:\n  1.5 will be serialized as \"1500m\"\n  1.5Gi will be serialized as \"1536Mi\"\n\nNote that the quantity will NEVER be internally represented by a\nfloating point number. That is the whole point of this exercise.\n\nNon-canonical values will still parse as long as they are well formed,\nbut will be re-emitted in their canonical form. (So always use canonical\nform, or don't diff.)\n\nThis format is intended to make it difficult to use these numbers without\nwriting some sort of special handling code in the hopes that that will\ncause implementors to also use a fixed point implementation.\n\n+protobuf=true\n+protobuf.embed=string\n+protobuf.options.marshal=false\n+protobuf.options.(gogoproto.goproto_stringer)=false\n+k8s:deepcopy-gen=true\n+k8s:openapi-gen=true",
+            "type": "object",
+            "properties": {
+              "string": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "conditions": {
+          "type": "array",
+          "title": "Current Condition of persistent volume claim. If underlying persistent volume is being\nresized then the Condition will be set to 'ResizeStarted'.\n+optional\n+patchMergeKey=type\n+patchStrategy=merge",
+          "items": {
+            "type": "object",
+            "title": "PersistentVolumeClaimCondition contails details about state of pvc",
+            "properties": {
+              "lastProbeTime": {
+                "description": "Time is a wrapper around time.Time which supports correct\nmarshaling to YAML and JSON.  Wrappers are provided for many\nof the factory methods that the time package offers.\n\n+protobuf.options.marshal=false\n+protobuf.as=Timestamp\n+protobuf.options.(gogoproto.goproto_stringer)=false",
+                "type": "object",
+                "properties": {
+                  "nanos": {
+                    "description": "Non-negative fractions of a second at nanosecond resolution. Negative\nsecond values with fractions must still have non-negative nanos values\nthat count forward in time. Must be from 0 to 999,999,999\ninclusive. This field may be limited in precision depending on context.",
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "seconds": {
+                    "description": "Represents seconds of UTC time since Unix epoch\n1970-01-01T00:00:00Z. Must be from 0001-01-01T00:00:00Z to\n9999-12-31T23:59:59Z inclusive.",
+                    "type": "string",
+                    "format": "int64"
+                  }
+                }
+              },
+              "lastTransitionTime": {
+                "description": "Time is a wrapper around time.Time which supports correct\nmarshaling to YAML and JSON.  Wrappers are provided for many\nof the factory methods that the time package offers.\n\n+protobuf.options.marshal=false\n+protobuf.as=Timestamp\n+protobuf.options.(gogoproto.goproto_stringer)=false",
+                "type": "object",
+                "properties": {
+                  "nanos": {
+                    "description": "Non-negative fractions of a second at nanosecond resolution. Negative\nsecond values with fractions must still have non-negative nanos values\nthat count forward in time. Must be from 0 to 999,999,999\ninclusive. This field may be limited in precision depending on context.",
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "seconds": {
+                    "description": "Represents seconds of UTC time since Unix epoch\n1970-01-01T00:00:00Z. Must be from 0001-01-01T00:00:00Z to\n9999-12-31T23:59:59Z inclusive.",
+                    "type": "string",
+                    "format": "int64"
+                  }
+                }
+              },
+              "message": {
+                "type": "string",
+                "title": "Human-readable message indicating details about last transition.\n+optional"
+              },
+              "reason": {
+                "type": "string",
+                "title": "Unique, this should be a short, machine understandable string that gives the reason\nfor condition's last transition. If it reports \"ResizeStarted\" that means the underlying\npersistent volume is being resized.\n+optional"
+              },
+              "status": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "phase": {
+          "type": "string",
+          "title": "Phase represents the current phase of PersistentVolumeClaim.\n+optional"
+        }
+      }
+    }
+  },
+  "$schema": "http://json-schema.org/schema#"
+}

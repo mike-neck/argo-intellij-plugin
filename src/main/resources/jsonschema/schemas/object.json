@@ -1,0 +1,5 @@
+{
+  "title": "This is a hack do deal with this problem: https://github.com/kubernetes/kube-openapi/issues/174",
+  "$schema": "http://json-schema.org/schema#",
+  "type": "object"
+}

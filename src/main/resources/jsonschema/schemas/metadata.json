@@ -1,0 +1,19 @@
+{
+  "type": "object",
+  "title": "Pod metdata",
+  "properties": {
+    "annotations": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "labels": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    }
+  },
+  "$schema": "http://json-schema.org/schema#"
+}
