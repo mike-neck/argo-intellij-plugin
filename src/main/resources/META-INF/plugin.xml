@@ -12,9 +12,12 @@
     <depends>com.intellij.modules.platform</depends>
     <depends>org.jetbrains.plugins.yaml</depends>
 
+    <extensions defaultExtensionNs="com.intellij">
+        <psi.referenceContributor language="yaml" implementation="me.vnagy.intellijplugins.argo.references.workflowname.WorkflowTemplateNameReferenceContributor" />
+    </extensions>
+
     <extensions defaultExtensionNs="JavaScript">
-        <JsonSchema.ProviderFactory
-                implementation="me.vnagy.intellijplugins.argo.providers.ArgoJsonSchemaProviderFactory"/>
+        <JsonSchema.ProviderFactory implementation="me.vnagy.intellijplugins.argo.jsonschema.ArgoJsonSchemaProviderFactory"/>
     </extensions>
 
     <actions>

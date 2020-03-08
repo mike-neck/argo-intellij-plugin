@@ -13,6 +13,9 @@
                   <Item>
                     <option name="path" value="src/test/resources/psi-exploring/basic-workflow.yml" />
                   </Item>
+                  <Item>
+                    <option name="path" value="src/test/resources/psi-exploring/basic-dag-workflow.yml" />
+                  </Item>
                 </list>
               </option>
             </SchemaInfo>
