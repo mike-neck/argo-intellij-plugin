@@ -17,7 +17,7 @@ class WorkflowTemplateNameReference(element: PsiElement) : PsiReferenceBase<PsiE
     }
 
     override fun resolve(): PsiElement? {
-        if (isThisElementADagTemplateReference()) {
+        if (isThisElementADagTemplateReference() || isThisElementAStepTemplateReference()) {
             val referencedTemplateName = (myElement as YAMLScalar).textValue
             val templates = myElement
                 .parent
@@ -32,6 +32,7 @@ class WorkflowTemplateNameReference(element: PsiElement) : PsiReferenceBase<PsiE
                 .parent
                 .children
                 .filterIsInstance<YAMLSequenceItem>() // TODO do something with these many `.parent` calls
+
             return templates
                 .flatMap { it.children.asList() }
                 .flatMap { it.children.asList() }
@@ -49,6 +50,17 @@ class WorkflowTemplateNameReference(element: PsiElement) : PsiReferenceBase<PsiE
         if (currentElementParent is YAMLKeyValue) {
             if (currentElementParent.keyText == "template") {
                 if ((currentElementParent.parent.parent.parent.parent.parent.parent as? YAMLKeyValue)?.keyText == "dag")
+                    return true
+            }
+        }
+        return false
+    }
+
+    private fun isThisElementAStepTemplateReference(): Boolean {
+        val currentElementParent = myElement.parent
+        if (currentElementParent is YAMLKeyValue) {
+            if (currentElementParent.keyText == "template") {
+                if ((currentElementParent.parent.parent.parent.parent.parent.parent as? YAMLKeyValue)?.keyText == "steps")
                     return true
             }
         }

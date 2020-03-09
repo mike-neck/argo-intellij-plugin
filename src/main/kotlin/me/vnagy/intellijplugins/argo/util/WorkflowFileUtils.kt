@@ -21,3 +21,21 @@ fun isWorkflowFile(psiFile: PsiFile?): Boolean {
     }
     return false
 }
+
+fun isWorkflowTemplateFile(psiFile: PsiFile?): Boolean {
+    if (psiFile is YAMLFile) {
+        val topLevelValue = psiFile.documents.firstOrNull()?.topLevelValue
+        if (topLevelValue != null) {
+            val apiVersionMatches = topLevelValue
+                .children
+                .filterIsInstance(YAMLKeyValueImpl::class.java)
+                .any { it.keyText == "apiVersion" && it.valueText == "argoproj.io/v1alpha1" }
+            val isWorkflowKind = topLevelValue
+                .children
+                .filterIsInstance(YAMLKeyValueImpl::class.java)
+                .any { it.keyText == "kind" && it.valueText == "WorkflowTemplate" }
+            return apiVersionMatches && isWorkflowKind
+        }
+    }
+    return false
+}

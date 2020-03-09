@@ -8,21 +8,23 @@ import com.jetbrains.jsonSchema.extension.JsonSchemaFileProvider
 import com.jetbrains.jsonSchema.extension.JsonSchemaProviderFactory
 import com.jetbrains.jsonSchema.extension.SchemaType
 import me.vnagy.intellijplugins.argo.util.isWorkflowFile
-import org.jetbrains.yaml.psi.YAMLFile
-import org.jetbrains.yaml.psi.impl.YAMLKeyValueImpl
+import me.vnagy.intellijplugins.argo.util.isWorkflowTemplateFile
 
 class ArgoJsonSchemaProviderFactory : JsonSchemaProviderFactory {
 
     override fun getProviders(project: Project): List<JsonSchemaFileProvider> {
-        return listOf(ArgoJsonSchemaFileProvider(project))
+        return listOf(
+            ArgoWorkflowSchemaFileProvider(project),
+            ArgoWorkflowTemplateSchemaFileProvider(project)
+        )
     }
 }
 
-class ArgoJsonSchemaFileProvider(private val project: Project) : JsonSchemaFileProvider {
+class ArgoWorkflowSchemaFileProvider(private val project: Project) : JsonSchemaFileProvider {
 
     private val psiManager = PsiManager.getInstance(project)
 
-    override fun getName() = "Argo Json Schema"
+    override fun getName() = "Argo Workflow Schema"
 
     override fun isAvailable(file: VirtualFile): Boolean {
         val psiFile = psiManager.findFile(file)
@@ -31,9 +33,34 @@ class ArgoJsonSchemaFileProvider(private val project: Project) : JsonSchemaFileP
 
     override fun getSchemaFile(): VirtualFile? {
         return VfsUtil.findFileByURL(
-            ArgoJsonSchemaFileProvider::class
+            ArgoWorkflowSchemaFileProvider::class
                 .java
                 .getResource("/jsonschema/schemas/workflow.json")
+        )
+    }
+
+    override fun getSchemaType(): SchemaType {
+        return SchemaType.embeddedSchema
+    }
+
+}
+
+class ArgoWorkflowTemplateSchemaFileProvider(private val project: Project) : JsonSchemaFileProvider {
+
+    private val psiManager = PsiManager.getInstance(project)
+
+    override fun getName() = "Argo WorkflowTemplate Schema"
+
+    override fun isAvailable(file: VirtualFile): Boolean {
+        val psiFile = psiManager.findFile(file)
+        return isWorkflowTemplateFile(psiFile)
+    }
+
+    override fun getSchemaFile(): VirtualFile? {
+        return VfsUtil.findFileByURL(
+            ArgoWorkflowSchemaFileProvider::class
+                .java
+                .getResource("/jsonschema/schemas/workflowtemplate.json")
         )
     }
 
