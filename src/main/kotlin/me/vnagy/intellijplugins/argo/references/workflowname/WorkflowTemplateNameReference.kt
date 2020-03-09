@@ -2,45 +2,38 @@ package me.vnagy.intellijplugins.argo.references.workflowname
 
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiReferenceBase
-import me.vnagy.intellijplugins.argo.util.isWorkflowFile
+import me.vnagy.intellijplugins.argo.wrapper.ArgoPsiFileWrapper
+import me.vnagy.intellijplugins.argo.wrapper.uniqueOrNull
+import org.jetbrains.yaml.psi.YAMLFile
 import org.jetbrains.yaml.psi.YAMLKeyValue
 import org.jetbrains.yaml.psi.YAMLScalar
-import org.jetbrains.yaml.psi.YAMLSequenceItem
 
 class WorkflowTemplateNameReference(element: PsiElement) : PsiReferenceBase<PsiElement>(element) {
 
+    private val argoPsiFileWrapper: ArgoPsiFileWrapper?
 
     init {
-        if (isWorkflowFile(element.containingFile)) {
-            // ???
+        val containingFile = element.containingFile
+        if (containingFile is YAMLFile) {
+            argoPsiFileWrapper = ArgoPsiFileWrapper(containingFile)
+        } else {
+            argoPsiFileWrapper = null
         }
     }
 
     override fun resolve(): PsiElement? {
         if (isThisElementADagTemplateReference() || isThisElementAStepTemplateReference()) {
             val referencedTemplateName = (myElement as YAMLScalar).textValue
-            val templates = myElement
-                .parent
-                .parent
-                .parent
-                .parent
-                .parent
-                .parent
-                .parent
-                .parent
-                .parent
-                .parent
-                .children
-                .filterIsInstance<YAMLSequenceItem>() // TODO do something with these many `.parent` calls
+            val templates = argoPsiFileWrapper
+                ?.spec
+                ?.templates ?: listOf()
+
 
             return templates
-                .flatMap { it.children.asList() }
-                .flatMap { it.children.asList() }
-                .filterIsInstance<YAMLKeyValue>()
-                .filter { it.keyText == "name" }
-                .filter { it.valueText == referencedTemplateName }
-                .firstOrNull()
-                ?.value
+                .asSequence()
+                .filter { it.name == referencedTemplateName }
+                .uniqueOrNull()
+                ?.namePsiElement
         }
         return null
     }

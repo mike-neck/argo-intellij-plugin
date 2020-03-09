@@ -7,8 +7,8 @@ import com.intellij.psi.PsiManager
 import com.jetbrains.jsonSchema.extension.JsonSchemaFileProvider
 import com.jetbrains.jsonSchema.extension.JsonSchemaProviderFactory
 import com.jetbrains.jsonSchema.extension.SchemaType
-import me.vnagy.intellijplugins.argo.util.isWorkflowFile
-import me.vnagy.intellijplugins.argo.util.isWorkflowTemplateFile
+import me.vnagy.intellijplugins.argo.wrapper.ArgoPsiFileWrapper
+import org.jetbrains.yaml.psi.YAMLFile
 
 class ArgoJsonSchemaProviderFactory : JsonSchemaProviderFactory {
 
@@ -28,7 +28,11 @@ class ArgoWorkflowSchemaFileProvider(private val project: Project) : JsonSchemaF
 
     override fun isAvailable(file: VirtualFile): Boolean {
         val psiFile = psiManager.findFile(file)
-        return isWorkflowFile(psiFile)
+        if (psiFile is YAMLFile) {
+            val argoWrapper = ArgoPsiFileWrapper(psiFile)
+            return argoWrapper.apiVersion == "argoproj.io/v1alpha1" && argoWrapper.kind == "Workflow"
+        }
+        return false
     }
 
     override fun getSchemaFile(): VirtualFile? {
@@ -53,7 +57,11 @@ class ArgoWorkflowTemplateSchemaFileProvider(private val project: Project) : Jso
 
     override fun isAvailable(file: VirtualFile): Boolean {
         val psiFile = psiManager.findFile(file)
-        return isWorkflowTemplateFile(psiFile)
+        if (psiFile is YAMLFile) {
+            val argoWrapper = ArgoPsiFileWrapper(psiFile)
+            return argoWrapper.apiVersion == "argoproj.io/v1alpha1" && argoWrapper.kind == "WorkflowTemplate"
+        }
+        return false
     }
 
     override fun getSchemaFile(): VirtualFile? {
