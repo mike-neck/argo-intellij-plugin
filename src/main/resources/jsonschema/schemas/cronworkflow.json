@@ -8606,169 +8606,54 @@
                     "type": "array",
                     "title": "Steps define a series of sequential/parallel workflow steps",
                     "items": {
-                      "type": "object",
-                      "properties": {
-                        "steps": {
-                          "type": "array",
-                          "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "title": "WorkflowStep is a reference to a template to execute in a series of step",
+                        "properties": {
+                          "arguments": {
                             "type": "object",
-                            "title": "WorkflowStep is a reference to a template to execute in a series of step",
+                            "title": "Arguments to a template",
                             "properties": {
-                              "arguments": {
-                                "type": "object",
-                                "title": "Arguments to a template",
-                                "properties": {
-                                  "artifacts": {
-                                    "type": "array",
-                                    "title": "Artifacts is the list of artifacts to pass to the template or workflow\n+patchStrategy=merge\n+patchMergeKey=name",
-                                    "items": {
+                              "artifacts": {
+                                "type": "array",
+                                "title": "Artifacts is the list of artifacts to pass to the template or workflow\n+patchStrategy=merge\n+patchMergeKey=name",
+                                "items": {
+                                  "type": "object",
+                                  "title": "Artifact indicates an artifact to place at a specified path",
+                                  "properties": {
+                                    "archive": {
                                       "type": "object",
-                                      "title": "Artifact indicates an artifact to place at a specified path",
+                                      "title": "ArchiveStrategy describes how to archive files/directory when saving artifacts",
                                       "properties": {
-                                        "archive": {
-                                          "type": "object",
-                                          "title": "ArchiveStrategy describes how to archive files/directory when saving artifacts",
-                                          "properties": {
-                                            "none": {
-                                              "description": "NoneStrategy indicates to skip tar process and upload the files or directory tree as independent\nfiles. Note that if the artifact is a directory, the artifact driver must support the ability to\nsave/load the directory appropriately.",
-                                              "type": "object"
-                                            },
-                                            "tar": {
-                                              "type": "object",
-                                              "title": "TarStrategy will tar and gzip the file or directory when saving"
-                                            }
-                                          }
+                                        "none": {
+                                          "description": "NoneStrategy indicates to skip tar process and upload the files or directory tree as independent\nfiles. Note that if the artifact is a directory, the artifact driver must support the ability to\nsave/load the directory appropriately.",
+                                          "type": "object"
                                         },
-                                        "artifactLocation": {
-                                          "description": "ArtifactLocation describes a location for a single or multiple artifacts.\nIt is used as single artifact in the context of inputs/outputs (e.g. outputs.artifacts.artname).\nIt is also used to describe the location of multiple artifacts such as the archive location\nof a single workflow step, which the executor will use as a default location to store its files.",
+                                        "tar": {
                                           "type": "object",
+                                          "title": "TarStrategy will tar and gzip the file or directory when saving"
+                                        }
+                                      }
+                                    },
+                                    "artifactLocation": {
+                                      "description": "ArtifactLocation describes a location for a single or multiple artifacts.\nIt is used as single artifact in the context of inputs/outputs (e.g. outputs.artifacts.artname).\nIt is also used to describe the location of multiple artifacts such as the archive location\nof a single workflow step, which the executor will use as a default location to store its files.",
+                                      "type": "object",
+                                      "properties": {
+                                        "archiveLogs": {
+                                          "type": "boolean",
+                                          "format": "boolean",
+                                          "title": "ArchiveLogs indicates if the container logs should be archived"
+                                        },
+                                        "artifactory": {
+                                          "type": "object",
+                                          "title": "ArtifactoryArtifact is the location of an artifactory artifact",
                                           "properties": {
-                                            "archiveLogs": {
-                                              "type": "boolean",
-                                              "format": "boolean",
-                                              "title": "ArchiveLogs indicates if the container logs should be archived"
-                                            },
-                                            "artifactory": {
+                                            "artifactoryAuth": {
                                               "type": "object",
-                                              "title": "ArtifactoryArtifact is the location of an artifactory artifact",
+                                              "title": "ArtifactoryAuth describes the secret selectors required for authenticating to artifactory",
                                               "properties": {
-                                                "artifactoryAuth": {
-                                                  "type": "object",
-                                                  "title": "ArtifactoryAuth describes the secret selectors required for authenticating to artifactory",
-                                                  "properties": {
-                                                    "passwordSecret": {
-                                                      "description": "SecretKeySelector selects a key of a Secret.",
-                                                      "type": "object",
-                                                      "properties": {
-                                                        "key": {
-                                                          "description": "The key of the secret to select from.  Must be a valid secret key.",
-                                                          "type": "string"
-                                                        },
-                                                        "localObjectReference": {
-                                                          "description": "LocalObjectReference contains enough information to let you locate the\nreferenced object inside the same namespace.",
-                                                          "type": "object",
-                                                          "properties": {
-                                                            "name": {
-                                                              "type": "string",
-                                                              "title": "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?\n+optional"
-                                                            }
-                                                          }
-                                                        },
-                                                        "optional": {
-                                                          "type": "boolean",
-                                                          "format": "boolean",
-                                                          "title": "Specify whether the Secret or its key must be defined\n+optional"
-                                                        }
-                                                      }
-                                                    },
-                                                    "usernameSecret": {
-                                                      "description": "SecretKeySelector selects a key of a Secret.",
-                                                      "type": "object",
-                                                      "properties": {
-                                                        "key": {
-                                                          "description": "The key of the secret to select from.  Must be a valid secret key.",
-                                                          "type": "string"
-                                                        },
-                                                        "localObjectReference": {
-                                                          "description": "LocalObjectReference contains enough information to let you locate the\nreferenced object inside the same namespace.",
-                                                          "type": "object",
-                                                          "properties": {
-                                                            "name": {
-                                                              "type": "string",
-                                                              "title": "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?\n+optional"
-                                                            }
-                                                          }
-                                                        },
-                                                        "optional": {
-                                                          "type": "boolean",
-                                                          "format": "boolean",
-                                                          "title": "Specify whether the Secret or its key must be defined\n+optional"
-                                                        }
-                                                      }
-                                                    }
-                                                  }
-                                                },
-                                                "url": {
-                                                  "type": "string",
-                                                  "title": "URL of the artifact"
-                                                }
-                                              }
-                                            },
-                                            "git": {
-                                              "type": "object",
-                                              "title": "GitArtifact is the location of an git artifact",
-                                              "properties": {
-                                                "depth": {
-                                                  "type": "string",
-                                                  "format": "uint64",
-                                                  "title": "Depth specifies clones/fetches should be shallow and include the given\nnumber of commits from the branch tip"
-                                                },
-                                                "fetch": {
-                                                  "type": "array",
-                                                  "title": "Fetch specifies a number of refs that should be fetched before checkout",
-                                                  "items": {
-                                                    "type": "string"
-                                                  }
-                                                },
-                                                "insecureIgnoreHostKey": {
-                                                  "type": "boolean",
-                                                  "format": "boolean",
-                                                  "title": "InsecureIgnoreHostKey disables SSH strict host key checking during git clone"
-                                                },
                                                 "passwordSecret": {
-                                                  "description": "SecretKeySelector selects a key of a Secret.",
-                                                  "type": "object",
-                                                  "properties": {
-                                                    "key": {
-                                                      "description": "The key of the secret to select from.  Must be a valid secret key.",
-                                                      "type": "string"
-                                                    },
-                                                    "localObjectReference": {
-                                                      "description": "LocalObjectReference contains enough information to let you locate the\nreferenced object inside the same namespace.",
-                                                      "type": "object",
-                                                      "properties": {
-                                                        "name": {
-                                                          "type": "string",
-                                                          "title": "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?\n+optional"
-                                                        }
-                                                      }
-                                                    },
-                                                    "optional": {
-                                                      "type": "boolean",
-                                                      "format": "boolean",
-                                                      "title": "Specify whether the Secret or its key must be defined\n+optional"
-                                                    }
-                                                  }
-                                                },
-                                                "repo": {
-                                                  "type": "string",
-                                                  "title": "Repo is the git repository"
-                                                },
-                                                "revision": {
-                                                  "type": "string",
-                                                  "title": "Revision is the git commit, tag, branch to checkout"
-                                                },
-                                                "sshPrivateKeySecret": {
                                                   "description": "SecretKeySelector selects a key of a Secret.",
                                                   "type": "object",
                                                   "properties": {
@@ -8820,492 +8705,602 @@
                                                 }
                                               }
                                             },
-                                            "hdfs": {
-                                              "type": "object",
-                                              "title": "HDFSArtifact is the location of an HDFS artifact",
-                                              "properties": {
-                                                "force": {
-                                                  "type": "boolean",
-                                                  "format": "boolean",
-                                                  "title": "Force copies a file forcibly even if it exists (default: false)"
-                                                },
-                                                "hDFSConfig": {
-                                                  "type": "object",
-                                                  "title": "HDFSConfig is configurations for HDFS",
-                                                  "properties": {
-                                                    "addresses": {
-                                                      "type": "array",
-                                                      "title": "Addresses is accessible addresses of HDFS name nodes",
-                                                      "items": {
-                                                        "type": "string"
-                                                      }
-                                                    },
-                                                    "hDFSKrbConfig": {
-                                                      "type": "object",
-                                                      "title": "HDFSKrbConfig is auth configurations for Kerberos",
-                                                      "properties": {
-                                                        "krbCCacheSecret": {
-                                                          "description": "SecretKeySelector selects a key of a Secret.",
-                                                          "type": "object",
-                                                          "properties": {
-                                                            "key": {
-                                                              "description": "The key of the secret to select from.  Must be a valid secret key.",
-                                                              "type": "string"
-                                                            },
-                                                            "localObjectReference": {
-                                                              "description": "LocalObjectReference contains enough information to let you locate the\nreferenced object inside the same namespace.",
-                                                              "type": "object",
-                                                              "properties": {
-                                                                "name": {
-                                                                  "type": "string",
-                                                                  "title": "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?\n+optional"
-                                                                }
-                                                              }
-                                                            },
-                                                            "optional": {
-                                                              "type": "boolean",
-                                                              "format": "boolean",
-                                                              "title": "Specify whether the Secret or its key must be defined\n+optional"
-                                                            }
-                                                          }
-                                                        },
-                                                        "krbConfigConfigMap": {
-                                                          "description": "Selects a key from a ConfigMap.",
-                                                          "type": "object",
-                                                          "properties": {
-                                                            "key": {
-                                                              "description": "The key to select.",
-                                                              "type": "string"
-                                                            },
-                                                            "localObjectReference": {
-                                                              "description": "LocalObjectReference contains enough information to let you locate the\nreferenced object inside the same namespace.",
-                                                              "type": "object",
-                                                              "properties": {
-                                                                "name": {
-                                                                  "type": "string",
-                                                                  "title": "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?\n+optional"
-                                                                }
-                                                              }
-                                                            },
-                                                            "optional": {
-                                                              "type": "boolean",
-                                                              "format": "boolean",
-                                                              "title": "Specify whether the ConfigMap or its key must be defined\n+optional"
-                                                            }
-                                                          }
-                                                        },
-                                                        "krbKeytabSecret": {
-                                                          "description": "SecretKeySelector selects a key of a Secret.",
-                                                          "type": "object",
-                                                          "properties": {
-                                                            "key": {
-                                                              "description": "The key of the secret to select from.  Must be a valid secret key.",
-                                                              "type": "string"
-                                                            },
-                                                            "localObjectReference": {
-                                                              "description": "LocalObjectReference contains enough information to let you locate the\nreferenced object inside the same namespace.",
-                                                              "type": "object",
-                                                              "properties": {
-                                                                "name": {
-                                                                  "type": "string",
-                                                                  "title": "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?\n+optional"
-                                                                }
-                                                              }
-                                                            },
-                                                            "optional": {
-                                                              "type": "boolean",
-                                                              "format": "boolean",
-                                                              "title": "Specify whether the Secret or its key must be defined\n+optional"
-                                                            }
-                                                          }
-                                                        },
-                                                        "krbRealm": {
-                                                          "description": "KrbRealm is the Kerberos realm used with Kerberos keytab\nIt must be set if keytab is used.",
-                                                          "type": "string"
-                                                        },
-                                                        "krbServicePrincipalName": {
-                                                          "description": "KrbServicePrincipalName is the principal name of Kerberos service\nIt must be set if either ccache or keytab is used.",
-                                                          "type": "string"
-                                                        },
-                                                        "krbUsername": {
-                                                          "description": "KrbUsername is the Kerberos username used with Kerberos keytab\nIt must be set if keytab is used.",
-                                                          "type": "string"
-                                                        }
-                                                      }
-                                                    },
-                                                    "hdfsUser": {
-                                                      "description": "HDFSUser is the user to access HDFS file system.\nIt is ignored if either ccache or keytab is used.",
-                                                      "type": "string"
-                                                    }
-                                                  }
-                                                },
-                                                "path": {
-                                                  "type": "string",
-                                                  "title": "Path is a file path in HDFS"
-                                                }
+                                            "url": {
+                                              "type": "string",
+                                              "title": "URL of the artifact"
+                                            }
+                                          }
+                                        },
+                                        "git": {
+                                          "type": "object",
+                                          "title": "GitArtifact is the location of an git artifact",
+                                          "properties": {
+                                            "depth": {
+                                              "type": "string",
+                                              "format": "uint64",
+                                              "title": "Depth specifies clones/fetches should be shallow and include the given\nnumber of commits from the branch tip"
+                                            },
+                                            "fetch": {
+                                              "type": "array",
+                                              "title": "Fetch specifies a number of refs that should be fetched before checkout",
+                                              "items": {
+                                                "type": "string"
                                               }
                                             },
-                                            "http": {
-                                              "type": "object",
-                                              "title": "HTTPArtifact allows an file served on HTTP to be placed as an input artifact in a container",
-                                              "properties": {
-                                                "url": {
-                                                  "type": "string",
-                                                  "title": "URL of the artifact"
-                                                }
-                                              }
+                                            "insecureIgnoreHostKey": {
+                                              "type": "boolean",
+                                              "format": "boolean",
+                                              "title": "InsecureIgnoreHostKey disables SSH strict host key checking during git clone"
                                             },
-                                            "raw": {
+                                            "passwordSecret": {
+                                              "description": "SecretKeySelector selects a key of a Secret.",
                                               "type": "object",
-                                              "title": "RawArtifact allows raw string content to be placed as an artifact in a container",
-                                              "properties": {
-                                                "data": {
-                                                  "type": "string",
-                                                  "title": "Data is the string contents of the artifact"
-                                                }
-                                              }
-                                            },
-                                            "s3": {
-                                              "type": "object",
-                                              "title": "S3Artifact is the location of an S3 artifact",
                                               "properties": {
                                                 "key": {
-                                                  "type": "string",
-                                                  "title": "Key is the key in the bucket where the artifact resides"
+                                                  "description": "The key of the secret to select from.  Must be a valid secret key.",
+                                                  "type": "string"
                                                 },
-                                                "s3Bucket": {
+                                                "localObjectReference": {
+                                                  "description": "LocalObjectReference contains enough information to let you locate the\nreferenced object inside the same namespace.",
                                                   "type": "object",
-                                                  "title": "S3Bucket contains the access information required for interfacing with an S3 bucket",
                                                   "properties": {
-                                                    "accessKeySecret": {
-                                                      "description": "SecretKeySelector selects a key of a Secret.",
-                                                      "type": "object",
-                                                      "properties": {
-                                                        "key": {
-                                                          "description": "The key of the secret to select from.  Must be a valid secret key.",
-                                                          "type": "string"
-                                                        },
-                                                        "localObjectReference": {
-                                                          "description": "LocalObjectReference contains enough information to let you locate the\nreferenced object inside the same namespace.",
-                                                          "type": "object",
-                                                          "properties": {
-                                                            "name": {
-                                                              "type": "string",
-                                                              "title": "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?\n+optional"
-                                                            }
-                                                          }
-                                                        },
-                                                        "optional": {
-                                                          "type": "boolean",
-                                                          "format": "boolean",
-                                                          "title": "Specify whether the Secret or its key must be defined\n+optional"
-                                                        }
-                                                      }
-                                                    },
-                                                    "bucket": {
+                                                    "name": {
                                                       "type": "string",
-                                                      "title": "Bucket is the name of the bucket"
-                                                    },
-                                                    "endpoint": {
-                                                      "type": "string",
-                                                      "title": "Endpoint is the hostname of the bucket endpoint"
-                                                    },
-                                                    "insecure": {
-                                                      "type": "boolean",
-                                                      "format": "boolean",
-                                                      "title": "Insecure will connect to the service with TLS"
-                                                    },
-                                                    "region": {
-                                                      "type": "string",
-                                                      "title": "Region contains the optional bucket region"
-                                                    },
-                                                    "roleARN": {
-                                                      "description": "RoleARN is the Amazon Resource Name (ARN) of the role to assume.",
-                                                      "type": "string"
-                                                    },
-                                                    "secretKeySecret": {
-                                                      "description": "SecretKeySelector selects a key of a Secret.",
-                                                      "type": "object",
-                                                      "properties": {
-                                                        "key": {
-                                                          "description": "The key of the secret to select from.  Must be a valid secret key.",
-                                                          "type": "string"
-                                                        },
-                                                        "localObjectReference": {
-                                                          "description": "LocalObjectReference contains enough information to let you locate the\nreferenced object inside the same namespace.",
-                                                          "type": "object",
-                                                          "properties": {
-                                                            "name": {
-                                                              "type": "string",
-                                                              "title": "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?\n+optional"
-                                                            }
-                                                          }
-                                                        },
-                                                        "optional": {
-                                                          "type": "boolean",
-                                                          "format": "boolean",
-                                                          "title": "Specify whether the Secret or its key must be defined\n+optional"
-                                                        }
-                                                      }
+                                                      "title": "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?\n+optional"
                                                     }
                                                   }
+                                                },
+                                                "optional": {
+                                                  "type": "boolean",
+                                                  "format": "boolean",
+                                                  "title": "Specify whether the Secret or its key must be defined\n+optional"
+                                                }
+                                              }
+                                            },
+                                            "repo": {
+                                              "type": "string",
+                                              "title": "Repo is the git repository"
+                                            },
+                                            "revision": {
+                                              "type": "string",
+                                              "title": "Revision is the git commit, tag, branch to checkout"
+                                            },
+                                            "sshPrivateKeySecret": {
+                                              "description": "SecretKeySelector selects a key of a Secret.",
+                                              "type": "object",
+                                              "properties": {
+                                                "key": {
+                                                  "description": "The key of the secret to select from.  Must be a valid secret key.",
+                                                  "type": "string"
+                                                },
+                                                "localObjectReference": {
+                                                  "description": "LocalObjectReference contains enough information to let you locate the\nreferenced object inside the same namespace.",
+                                                  "type": "object",
+                                                  "properties": {
+                                                    "name": {
+                                                      "type": "string",
+                                                      "title": "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?\n+optional"
+                                                    }
+                                                  }
+                                                },
+                                                "optional": {
+                                                  "type": "boolean",
+                                                  "format": "boolean",
+                                                  "title": "Specify whether the Secret or its key must be defined\n+optional"
+                                                }
+                                              }
+                                            },
+                                            "usernameSecret": {
+                                              "description": "SecretKeySelector selects a key of a Secret.",
+                                              "type": "object",
+                                              "properties": {
+                                                "key": {
+                                                  "description": "The key of the secret to select from.  Must be a valid secret key.",
+                                                  "type": "string"
+                                                },
+                                                "localObjectReference": {
+                                                  "description": "LocalObjectReference contains enough information to let you locate the\nreferenced object inside the same namespace.",
+                                                  "type": "object",
+                                                  "properties": {
+                                                    "name": {
+                                                      "type": "string",
+                                                      "title": "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?\n+optional"
+                                                    }
+                                                  }
+                                                },
+                                                "optional": {
+                                                  "type": "boolean",
+                                                  "format": "boolean",
+                                                  "title": "Specify whether the Secret or its key must be defined\n+optional"
                                                 }
                                               }
                                             }
                                           }
                                         },
-                                        "from": {
-                                          "type": "string",
-                                          "title": "From allows an artifact to reference an artifact from a previous step"
-                                        },
-                                        "globalName": {
-                                          "type": "string",
-                                          "title": "GlobalName exports an output artifact to the global scope, making it available as\n'{{io.argoproj.workflow.v1alpha1.outputs.artifacts.XXXX}} and in workflow.status.outputs.artifacts"
-                                        },
-                                        "mode": {
-                                          "description": "mode bits to use on this file, must be a value between 0 and 0777\nset when loading input artifacts.",
-                                          "type": "integer",
-                                          "format": "int32"
-                                        },
-                                        "name": {
-                                          "description": "name of the artifact. must be unique within a template's inputs/outputs.",
-                                          "type": "string"
-                                        },
-                                        "optional": {
-                                          "type": "boolean",
-                                          "format": "boolean",
-                                          "title": "Make Artifacts optional, if Artifacts doesn't generate or exist"
-                                        },
-                                        "path": {
-                                          "type": "string",
-                                          "title": "Path is the container path to the artifact"
-                                        }
-                                      }
-                                    }
-                                  },
-                                  "parameters": {
-                                    "type": "array",
-                                    "title": "Parameters is the list of parameters to pass to the template or workflow\n+patchStrategy=merge\n+patchMergeKey=name",
-                                    "items": {
-                                      "type": "object",
-                                      "title": "Parameter indicate a passed string parameter to a service template with an optional default value",
-                                      "properties": {
-                                        "default": {
-                                          "type": "string",
-                                          "title": "Default is the default value to use for an input parameter if a value was not supplied"
-                                        },
-                                        "globalName": {
-                                          "type": "string",
-                                          "title": "GlobalName exports an output parameter to the global scope, making it available as\n'{{io.argoproj.workflow.v1alpha1.outputs.parameters.XXXX}} and in workflow.status.outputs.parameters"
-                                        },
-                                        "name": {
-                                          "type": "string",
-                                          "title": "Name is the parameter name"
-                                        },
-                                        "value": {
-                                          "type": "string",
-                                          "title": "Value is the literal value to use for the parameter.\nIf specified in the context of an input parameter, the value takes precedence over any passed values"
-                                        },
-                                        "valueFrom": {
+                                        "hdfs": {
                                           "type": "object",
-                                          "title": "ValueFrom describes a location in which to obtain the value to a parameter",
+                                          "title": "HDFSArtifact is the location of an HDFS artifact",
                                           "properties": {
-                                            "jqFilter": {
-                                              "type": "string",
-                                              "title": "JQFilter expression against the resource object in resource templates"
+                                            "force": {
+                                              "type": "boolean",
+                                              "format": "boolean",
+                                              "title": "Force copies a file forcibly even if it exists (default: false)"
                                             },
-                                            "jsonPath": {
-                                              "type": "string",
-                                              "title": "JSONPath of a resource to retrieve an output parameter value from in resource templates"
-                                            },
-                                            "parameter": {
-                                              "type": "string",
-                                              "title": "Parameter reference to a step or dag task in which to retrieve an output parameter value from\n(e.g. '{{steps.mystep.outputs.myparam}}')"
+                                            "hDFSConfig": {
+                                              "type": "object",
+                                              "title": "HDFSConfig is configurations for HDFS",
+                                              "properties": {
+                                                "addresses": {
+                                                  "type": "array",
+                                                  "title": "Addresses is accessible addresses of HDFS name nodes",
+                                                  "items": {
+                                                    "type": "string"
+                                                  }
+                                                },
+                                                "hDFSKrbConfig": {
+                                                  "type": "object",
+                                                  "title": "HDFSKrbConfig is auth configurations for Kerberos",
+                                                  "properties": {
+                                                    "krbCCacheSecret": {
+                                                      "description": "SecretKeySelector selects a key of a Secret.",
+                                                      "type": "object",
+                                                      "properties": {
+                                                        "key": {
+                                                          "description": "The key of the secret to select from.  Must be a valid secret key.",
+                                                          "type": "string"
+                                                        },
+                                                        "localObjectReference": {
+                                                          "description": "LocalObjectReference contains enough information to let you locate the\nreferenced object inside the same namespace.",
+                                                          "type": "object",
+                                                          "properties": {
+                                                            "name": {
+                                                              "type": "string",
+                                                              "title": "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?\n+optional"
+                                                            }
+                                                          }
+                                                        },
+                                                        "optional": {
+                                                          "type": "boolean",
+                                                          "format": "boolean",
+                                                          "title": "Specify whether the Secret or its key must be defined\n+optional"
+                                                        }
+                                                      }
+                                                    },
+                                                    "krbConfigConfigMap": {
+                                                      "description": "Selects a key from a ConfigMap.",
+                                                      "type": "object",
+                                                      "properties": {
+                                                        "key": {
+                                                          "description": "The key to select.",
+                                                          "type": "string"
+                                                        },
+                                                        "localObjectReference": {
+                                                          "description": "LocalObjectReference contains enough information to let you locate the\nreferenced object inside the same namespace.",
+                                                          "type": "object",
+                                                          "properties": {
+                                                            "name": {
+                                                              "type": "string",
+                                                              "title": "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?\n+optional"
+                                                            }
+                                                          }
+                                                        },
+                                                        "optional": {
+                                                          "type": "boolean",
+                                                          "format": "boolean",
+                                                          "title": "Specify whether the ConfigMap or its key must be defined\n+optional"
+                                                        }
+                                                      }
+                                                    },
+                                                    "krbKeytabSecret": {
+                                                      "description": "SecretKeySelector selects a key of a Secret.",
+                                                      "type": "object",
+                                                      "properties": {
+                                                        "key": {
+                                                          "description": "The key of the secret to select from.  Must be a valid secret key.",
+                                                          "type": "string"
+                                                        },
+                                                        "localObjectReference": {
+                                                          "description": "LocalObjectReference contains enough information to let you locate the\nreferenced object inside the same namespace.",
+                                                          "type": "object",
+                                                          "properties": {
+                                                            "name": {
+                                                              "type": "string",
+                                                              "title": "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?\n+optional"
+                                                            }
+                                                          }
+                                                        },
+                                                        "optional": {
+                                                          "type": "boolean",
+                                                          "format": "boolean",
+                                                          "title": "Specify whether the Secret or its key must be defined\n+optional"
+                                                        }
+                                                      }
+                                                    },
+                                                    "krbRealm": {
+                                                      "description": "KrbRealm is the Kerberos realm used with Kerberos keytab\nIt must be set if keytab is used.",
+                                                      "type": "string"
+                                                    },
+                                                    "krbServicePrincipalName": {
+                                                      "description": "KrbServicePrincipalName is the principal name of Kerberos service\nIt must be set if either ccache or keytab is used.",
+                                                      "type": "string"
+                                                    },
+                                                    "krbUsername": {
+                                                      "description": "KrbUsername is the Kerberos username used with Kerberos keytab\nIt must be set if keytab is used.",
+                                                      "type": "string"
+                                                    }
+                                                  }
+                                                },
+                                                "hdfsUser": {
+                                                  "description": "HDFSUser is the user to access HDFS file system.\nIt is ignored if either ccache or keytab is used.",
+                                                  "type": "string"
+                                                }
+                                              }
                                             },
                                             "path": {
                                               "type": "string",
-                                              "title": "Path in the container to retrieve an output parameter value from in container templates"
+                                              "title": "Path is a file path in HDFS"
                                             }
                                           }
+                                        },
+                                        "http": {
+                                          "type": "object",
+                                          "title": "HTTPArtifact allows an file served on HTTP to be placed as an input artifact in a container",
+                                          "properties": {
+                                            "url": {
+                                              "type": "string",
+                                              "title": "URL of the artifact"
+                                            }
+                                          }
+                                        },
+                                        "raw": {
+                                          "type": "object",
+                                          "title": "RawArtifact allows raw string content to be placed as an artifact in a container",
+                                          "properties": {
+                                            "data": {
+                                              "type": "string",
+                                              "title": "Data is the string contents of the artifact"
+                                            }
+                                          }
+                                        },
+                                        "s3": {
+                                          "type": "object",
+                                          "title": "S3Artifact is the location of an S3 artifact",
+                                          "properties": {
+                                            "key": {
+                                              "type": "string",
+                                              "title": "Key is the key in the bucket where the artifact resides"
+                                            },
+                                            "s3Bucket": {
+                                              "type": "object",
+                                              "title": "S3Bucket contains the access information required for interfacing with an S3 bucket",
+                                              "properties": {
+                                                "accessKeySecret": {
+                                                  "description": "SecretKeySelector selects a key of a Secret.",
+                                                  "type": "object",
+                                                  "properties": {
+                                                    "key": {
+                                                      "description": "The key of the secret to select from.  Must be a valid secret key.",
+                                                      "type": "string"
+                                                    },
+                                                    "localObjectReference": {
+                                                      "description": "LocalObjectReference contains enough information to let you locate the\nreferenced object inside the same namespace.",
+                                                      "type": "object",
+                                                      "properties": {
+                                                        "name": {
+                                                          "type": "string",
+                                                          "title": "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?\n+optional"
+                                                        }
+                                                      }
+                                                    },
+                                                    "optional": {
+                                                      "type": "boolean",
+                                                      "format": "boolean",
+                                                      "title": "Specify whether the Secret or its key must be defined\n+optional"
+                                                    }
+                                                  }
+                                                },
+                                                "bucket": {
+                                                  "type": "string",
+                                                  "title": "Bucket is the name of the bucket"
+                                                },
+                                                "endpoint": {
+                                                  "type": "string",
+                                                  "title": "Endpoint is the hostname of the bucket endpoint"
+                                                },
+                                                "insecure": {
+                                                  "type": "boolean",
+                                                  "format": "boolean",
+                                                  "title": "Insecure will connect to the service with TLS"
+                                                },
+                                                "region": {
+                                                  "type": "string",
+                                                  "title": "Region contains the optional bucket region"
+                                                },
+                                                "roleARN": {
+                                                  "description": "RoleARN is the Amazon Resource Name (ARN) of the role to assume.",
+                                                  "type": "string"
+                                                },
+                                                "secretKeySecret": {
+                                                  "description": "SecretKeySelector selects a key of a Secret.",
+                                                  "type": "object",
+                                                  "properties": {
+                                                    "key": {
+                                                      "description": "The key of the secret to select from.  Must be a valid secret key.",
+                                                      "type": "string"
+                                                    },
+                                                    "localObjectReference": {
+                                                      "description": "LocalObjectReference contains enough information to let you locate the\nreferenced object inside the same namespace.",
+                                                      "type": "object",
+                                                      "properties": {
+                                                        "name": {
+                                                          "type": "string",
+                                                          "title": "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?\n+optional"
+                                                        }
+                                                      }
+                                                    },
+                                                    "optional": {
+                                                      "type": "boolean",
+                                                      "format": "boolean",
+                                                      "title": "Specify whether the Secret or its key must be defined\n+optional"
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    },
+                                    "from": {
+                                      "type": "string",
+                                      "title": "From allows an artifact to reference an artifact from a previous step"
+                                    },
+                                    "globalName": {
+                                      "type": "string",
+                                      "title": "GlobalName exports an output artifact to the global scope, making it available as\n'{{io.argoproj.workflow.v1alpha1.outputs.artifacts.XXXX}} and in workflow.status.outputs.artifacts"
+                                    },
+                                    "mode": {
+                                      "description": "mode bits to use on this file, must be a value between 0 and 0777\nset when loading input artifacts.",
+                                      "type": "integer",
+                                      "format": "int32"
+                                    },
+                                    "name": {
+                                      "description": "name of the artifact. must be unique within a template's inputs/outputs.",
+                                      "type": "string"
+                                    },
+                                    "optional": {
+                                      "type": "boolean",
+                                      "format": "boolean",
+                                      "title": "Make Artifacts optional, if Artifacts doesn't generate or exist"
+                                    },
+                                    "path": {
+                                      "type": "string",
+                                      "title": "Path is the container path to the artifact"
+                                    }
+                                  }
+                                }
+                              },
+                              "parameters": {
+                                "type": "array",
+                                "title": "Parameters is the list of parameters to pass to the template or workflow\n+patchStrategy=merge\n+patchMergeKey=name",
+                                "items": {
+                                  "type": "object",
+                                  "title": "Parameter indicate a passed string parameter to a service template with an optional default value",
+                                  "properties": {
+                                    "default": {
+                                      "type": "string",
+                                      "title": "Default is the default value to use for an input parameter if a value was not supplied"
+                                    },
+                                    "globalName": {
+                                      "type": "string",
+                                      "title": "GlobalName exports an output parameter to the global scope, making it available as\n'{{io.argoproj.workflow.v1alpha1.outputs.parameters.XXXX}} and in workflow.status.outputs.parameters"
+                                    },
+                                    "name": {
+                                      "type": "string",
+                                      "title": "Name is the parameter name"
+                                    },
+                                    "value": {
+                                      "type": "string",
+                                      "title": "Value is the literal value to use for the parameter.\nIf specified in the context of an input parameter, the value takes precedence over any passed values"
+                                    },
+                                    "valueFrom": {
+                                      "type": "object",
+                                      "title": "ValueFrom describes a location in which to obtain the value to a parameter",
+                                      "properties": {
+                                        "jqFilter": {
+                                          "type": "string",
+                                          "title": "JQFilter expression against the resource object in resource templates"
+                                        },
+                                        "jsonPath": {
+                                          "type": "string",
+                                          "title": "JSONPath of a resource to retrieve an output parameter value from in resource templates"
+                                        },
+                                        "parameter": {
+                                          "type": "string",
+                                          "title": "Parameter reference to a step or dag task in which to retrieve an output parameter value from\n(e.g. '{{steps.mystep.outputs.myparam}}')"
+                                        },
+                                        "path": {
+                                          "type": "string",
+                                          "title": "Path in the container to retrieve an output parameter value from in container templates"
                                         }
                                       }
                                     }
                                   }
                                 }
+                              }
+                            }
+                          },
+                          "continueOn": {
+                            "description": "ContinueOn defines if a workflow should continue even if a task or step fails/errors.\nIt can be specified if the workflow should continue when the pod errors, fails or both.",
+                            "type": "object",
+                            "properties": {
+                              "error": {
+                                "type": "boolean",
+                                "format": "boolean",
+                                "title": "+optional"
                               },
-                              "continueOn": {
-                                "description": "ContinueOn defines if a workflow should continue even if a task or step fails/errors.\nIt can be specified if the workflow should continue when the pod errors, fails or both.",
-                                "type": "object",
-                                "properties": {
-                                  "error": {
-                                    "type": "boolean",
-                                    "format": "boolean",
-                                    "title": "+optional"
-                                  },
-                                  "failed": {
-                                    "type": "boolean",
-                                    "format": "boolean",
-                                    "title": "+optional"
-                                  }
-                                }
-                              },
+                              "failed": {
+                                "type": "boolean",
+                                "format": "boolean",
+                                "title": "+optional"
+                              }
+                            }
+                          },
+                          "name": {
+                            "type": "string",
+                            "title": "Name of the step"
+                          },
+                          "onExit": {
+                            "description": "OnExit is a template reference which is invoked at the end of the\ntemplate, irrespective of the success, failure, or error of the\nprimary template.",
+                            "type": "string"
+                          },
+                          "template": {
+                            "type": "string",
+                            "title": "Template is the name of the template to execute as the step"
+                          },
+                          "templateRef": {
+                            "description": "TemplateRef is a reference of template resource.",
+                            "type": "object",
+                            "properties": {
                               "name": {
-                                "type": "string",
-                                "title": "Name of the step"
-                              },
-                              "onExit": {
-                                "description": "OnExit is a template reference which is invoked at the end of the\ntemplate, irrespective of the success, failure, or error of the\nprimary template.",
+                                "description": "Name is the resource name of the template.",
                                 "type": "string"
+                              },
+                              "runtimeResolution": {
+                                "description": "RuntimeResolution skips validation at creation time.\nBy enabling this option, you can create the referred workflow template before the actual runtime.",
+                                "type": "boolean",
+                                "format": "boolean"
                               },
                               "template": {
-                                "type": "string",
-                                "title": "Template is the name of the template to execute as the step"
-                              },
-                              "templateRef": {
-                                "description": "TemplateRef is a reference of template resource.",
-                                "type": "object",
-                                "properties": {
-                                  "name": {
-                                    "description": "Name is the resource name of the template.",
-                                    "type": "string"
-                                  },
-                                  "runtimeResolution": {
-                                    "description": "RuntimeResolution skips validation at creation time.\nBy enabling this option, you can create the referred workflow template before the actual runtime.",
-                                    "type": "boolean",
-                                    "format": "boolean"
-                                  },
-                                  "template": {
-                                    "description": "Template is the name of referred template in the resource.",
-                                    "type": "string"
-                                  }
-                                }
-                              },
-                              "when": {
-                                "type": "string",
-                                "title": "When is an expression in which the step should conditionally execute"
-                              },
-                              "withItems": {
-                                "type": "array",
-                                "title": "WithItems expands a step into multiple parallel steps from the items in the list",
-                                "items": {
-                                  "description": "+protobuf=true\n+protobuf.options.(gogoproto.goproto_stringer)=false\n+k8s:openapi-gen=true",
-                                  "type": "object",
-                                  "title": "Item expands a single workflow step into multiple parallel steps\nThe value of Item can be a map, string, bool, or number",
-                                  "properties": {
-                                    "boolVal": {
-                                      "type": "boolean",
-                                      "format": "boolean"
-                                    },
-                                    "listVal": {
-                                      "type": "array",
-                                      "items": {
-                                        "type": "object",
-                                        "title": "+protobuf=true\n+protobuf.options.(gogoproto.goproto_stringer)=false\n+k8s:openapi-gen=true",
-                                        "properties": {
-                                          "boolVal": {
-                                            "type": "boolean",
-                                            "format": "boolean"
-                                          },
-                                          "listVal": {
-                                            "type": "array",
-                                            "items": {
-                                              "type": "string",
-                                              "format": "byte"
-                                            }
-                                          },
-                                          "mapVal": {
-                                            "type": "object",
-                                            "additionalProperties": {
-                                              "type": "string"
-                                            }
-                                          },
-                                          "numVal": {
-                                            "type": "string"
-                                          },
-                                          "strVal": {
-                                            "type": "string"
-                                          },
-                                          "type": {
-                                            "type": "string",
-                                            "format": "int64"
-                                          }
+                                "description": "Template is the name of referred template in the resource.",
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "when": {
+                            "type": "string",
+                            "title": "When is an expression in which the step should conditionally execute"
+                          },
+                          "withItems": {
+                            "type": "array",
+                            "title": "WithItems expands a step into multiple parallel steps from the items in the list",
+                            "items": {
+                              "description": "+protobuf=true\n+protobuf.options.(gogoproto.goproto_stringer)=false\n+k8s:openapi-gen=true",
+                              "type": "object",
+                              "title": "Item expands a single workflow step into multiple parallel steps\nThe value of Item can be a map, string, bool, or number",
+                              "properties": {
+                                "boolVal": {
+                                  "type": "boolean",
+                                  "format": "boolean"
+                                },
+                                "listVal": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "title": "+protobuf=true\n+protobuf.options.(gogoproto.goproto_stringer)=false\n+k8s:openapi-gen=true",
+                                    "properties": {
+                                      "boolVal": {
+                                        "type": "boolean",
+                                        "format": "boolean"
+                                      },
+                                      "listVal": {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "string",
+                                          "format": "byte"
                                         }
-                                      }
-                                    },
-                                    "mapVal": {
-                                      "type": "object",
-                                      "additionalProperties": {
+                                      },
+                                      "mapVal": {
                                         "type": "object",
-                                        "title": "+protobuf=true\n+protobuf.options.(gogoproto.goproto_stringer)=false\n+k8s:openapi-gen=true",
-                                        "properties": {
-                                          "boolVal": {
-                                            "type": "boolean",
-                                            "format": "boolean"
-                                          },
-                                          "listVal": {
-                                            "type": "array",
-                                            "items": {
-                                              "type": "string",
-                                              "format": "byte"
-                                            }
-                                          },
-                                          "mapVal": {
-                                            "type": "object",
-                                            "additionalProperties": {
-                                              "type": "string"
-                                            }
-                                          },
-                                          "numVal": {
-                                            "type": "string"
-                                          },
-                                          "strVal": {
-                                            "type": "string"
-                                          },
-                                          "type": {
-                                            "type": "string",
-                                            "format": "int64"
-                                          }
+                                        "additionalProperties": {
+                                          "type": "string"
                                         }
+                                      },
+                                      "numVal": {
+                                        "type": "string"
+                                      },
+                                      "strVal": {
+                                        "type": "string"
+                                      },
+                                      "type": {
+                                        "type": "string",
+                                        "format": "int64"
                                       }
-                                    },
-                                    "numVal": {
-                                      "type": "string"
-                                    },
-                                    "strVal": {
-                                      "type": "string"
-                                    },
-                                    "type": {
-                                      "type": "string",
-                                      "format": "int64"
                                     }
                                   }
-                                }
-                              },
-                              "withParam": {
-                                "description": "WithParam expands a step into multiple parallel steps from the value in the parameter,\nwhich is expected to be a JSON list.",
-                                "type": "string"
-                              },
-                              "withSequence": {
-                                "type": "object",
-                                "title": "Sequence expands a workflow step into numeric range",
-                                "properties": {
-                                  "count": {
-                                    "type": "string",
-                                    "title": "Count is number of elements in the sequence (default: 0). Not to be used with end"
-                                  },
-                                  "end": {
-                                    "type": "string",
-                                    "title": "Number at which to end the sequence (default: 0). Not to be used with Count"
-                                  },
-                                  "format": {
-                                    "type": "string",
-                                    "title": "Format is a printf format string to format the value in the sequence"
-                                  },
-                                  "start": {
-                                    "type": "string",
-                                    "title": "Number at which to start the sequence (default: 0)"
+                                },
+                                "mapVal": {
+                                  "type": "object",
+                                  "additionalProperties": {
+                                    "type": "object",
+                                    "title": "+protobuf=true\n+protobuf.options.(gogoproto.goproto_stringer)=false\n+k8s:openapi-gen=true",
+                                    "properties": {
+                                      "boolVal": {
+                                        "type": "boolean",
+                                        "format": "boolean"
+                                      },
+                                      "listVal": {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "string",
+                                          "format": "byte"
+                                        }
+                                      },
+                                      "mapVal": {
+                                        "type": "object",
+                                        "additionalProperties": {
+                                          "type": "string"
+                                        }
+                                      },
+                                      "numVal": {
+                                        "type": "string"
+                                      },
+                                      "strVal": {
+                                        "type": "string"
+                                      },
+                                      "type": {
+                                        "type": "string",
+                                        "format": "int64"
+                                      }
+                                    }
                                   }
+                                },
+                                "numVal": {
+                                  "type": "string"
+                                },
+                                "strVal": {
+                                  "type": "string"
+                                },
+                                "type": {
+                                  "type": "string",
+                                  "format": "int64"
                                 }
+                              }
+                            }
+                          },
+                          "withParam": {
+                            "description": "WithParam expands a step into multiple parallel steps from the value in the parameter,\nwhich is expected to be a JSON list.",
+                            "type": "string"
+                          },
+                          "withSequence": {
+                            "type": "object",
+                            "title": "Sequence expands a workflow step into numeric range",
+                            "properties": {
+                              "count": {
+                                "type": "string",
+                                "title": "Count is number of elements in the sequence (default: 0). Not to be used with end"
+                              },
+                              "end": {
+                                "type": "string",
+                                "title": "Number at which to end the sequence (default: 0). Not to be used with Count"
+                              },
+                              "format": {
+                                "type": "string",
+                                "title": "Format is a printf format string to format the value in the sequence"
+                              },
+                              "start": {
+                                "type": "string",
+                                "title": "Number at which to start the sequence (default: 0)"
                               }
                             }
                           }
