@@ -7,14 +7,6 @@ import kotlin.reflect.KClass
 import kotlin.reflect.full.cast
 import kotlin.reflect.full.safeCast
 
-fun <T: ArgoPsi<*>> findParentOfType(klass: KClass<T>, argoElement: ArgoPsi<*>): T? {
-    return if (klass.isInstance(argoElement)) {
-        klass.cast(argoElement)
-    } else {
-        argoElement.parentElement?.let { findParentOfType(klass, it) }
-    }
-}
-
 operator fun YAMLValue?.get(key: String): YAMLValue? {
     return this?.children
         ?.asSequence()

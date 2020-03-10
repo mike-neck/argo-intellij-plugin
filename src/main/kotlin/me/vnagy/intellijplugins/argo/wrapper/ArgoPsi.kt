@@ -1,6 +1,8 @@
 package me.vnagy.intellijplugins.argo.wrapper
 
 import com.intellij.psi.PsiElement
+import kotlin.reflect.KClass
+import kotlin.reflect.full.cast
 
 interface ArgoPsi<T : PsiElement> {
     val psiElement: T
@@ -15,6 +17,14 @@ interface ArgoPsi<T : PsiElement> {
                 .map { it.findChildrenForPsiElement(psiElement) }
                 .filterNotNull()
                 .uniqueOrNull()
+        }
+    }
+
+    fun <T: ArgoPsi<*>> findParentOfType(klass: KClass<T>): T? {
+        return if (klass.isInstance(this)) {
+            klass.cast(this)
+        } else {
+            parentElement?.findParentOfType(klass)
         }
     }
 }
