@@ -1,7 +1,6 @@
 package me.vnagy.intellijplugins.argo.wrapper
 
 import org.jetbrains.yaml.psi.YAMLFile
-import java.lang.Exception
 
 class ArgoPsiFileWrapper(override val psiElement: YAMLFile) : ArgoPsi<YAMLFile> {
 
@@ -10,6 +9,12 @@ class ArgoPsiFileWrapper(override val psiElement: YAMLFile) : ArgoPsi<YAMLFile> 
 
     val apiVersion: String?
         get() = getTopLevelPropertyString("apiVersion")
+
+    override val parentElement: ArgoPsi<*>?
+        get() = null
+
+    override val children: Sequence<ArgoPsi<*>>
+        get() = sequenceOf(spec).filterNotNull()
 
     val spec: ArgoPsiSpec?
         get() {

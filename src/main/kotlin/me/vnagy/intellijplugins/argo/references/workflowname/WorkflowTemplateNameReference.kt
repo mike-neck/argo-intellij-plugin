@@ -2,10 +2,8 @@ package me.vnagy.intellijplugins.argo.references.workflowname
 
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiReferenceBase
-import me.vnagy.intellijplugins.argo.wrapper.ArgoPsiFileWrapper
-import me.vnagy.intellijplugins.argo.wrapper.uniqueOrNull
+import me.vnagy.intellijplugins.argo.wrapper.*
 import org.jetbrains.yaml.psi.YAMLFile
-import org.jetbrains.yaml.psi.YAMLKeyValue
 import org.jetbrains.yaml.psi.YAMLScalar
 
 class WorkflowTemplateNameReference(element: PsiElement) : PsiReferenceBase<PsiElement>(element) {
@@ -39,25 +37,15 @@ class WorkflowTemplateNameReference(element: PsiElement) : PsiReferenceBase<PsiE
     }
 
     private fun isThisElementADagTemplateReference(): Boolean {
-        val currentElementParent = myElement.parent
-        if (currentElementParent is YAMLKeyValue) {
-            if (currentElementParent.keyText == "template") {
-                if ((currentElementParent.parent.parent.parent.parent.parent.parent as? YAMLKeyValue)?.keyText == "dag")
-                    return true
-            }
-        }
-        return false
+        return argoPsiFileWrapper
+            ?.findChildrenForPsiElement(myElement)
+            ?.let { findParentOfType(ArgoPsiDagTaskSpecification::class, it) } != null
     }
 
     private fun isThisElementAStepTemplateReference(): Boolean {
-        val currentElementParent = myElement.parent
-        if (currentElementParent is YAMLKeyValue) {
-            if (currentElementParent.keyText == "template") {
-                if ((currentElementParent.parent.parent.parent.parent.parent.parent as? YAMLKeyValue)?.keyText == "steps")
-                    return true
-            }
-        }
-        return false
+        return argoPsiFileWrapper
+            ?.findChildrenForPsiElement(myElement)
+            ?.let { findParentOfType(ArgoPsiStepSpecification::class, it) } != null
     }
 
 }

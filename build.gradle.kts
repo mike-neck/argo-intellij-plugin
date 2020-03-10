@@ -14,7 +14,6 @@ repositories {
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation(kotlin("reflect"))
-    testImplementation("org.junit.jupiter:junit-jupiter:5.6.0")
 }
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
@@ -31,13 +30,6 @@ tasks {
     }
     compileTestKotlin {
         kotlinOptions.jvmTarget = "1.8"
-    }
-}
-
-tasks.test {
-    useJUnitPlatform()
-    testLogging {
-        events("passed", "skipped", "failed")
     }
 }
 
