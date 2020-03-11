@@ -21,6 +21,7 @@ class ArgoPsiFileWrapper(override val psiElement: YAMLFile) : ArgoPsi<YAMLFile> 
             val specElement = psiElement
                 .documents[0]
                 .topLevelValue["spec"]
+                ?.value
 
             return specElement?.let { ArgoPsiSpec(specElement, this) }
         }
@@ -29,6 +30,7 @@ class ArgoPsiFileWrapper(override val psiElement: YAMLFile) : ArgoPsi<YAMLFile> 
         return psiElement
             .documents[0]
             .topLevelValue[key]
+            ?.value
             ?.text
     }
 }

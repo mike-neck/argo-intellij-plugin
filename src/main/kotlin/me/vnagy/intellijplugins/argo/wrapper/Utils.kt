@@ -7,12 +7,11 @@ import kotlin.reflect.KClass
 import kotlin.reflect.full.cast
 import kotlin.reflect.full.safeCast
 
-operator fun YAMLValue?.get(key: String): YAMLValue? {
+operator fun YAMLValue?.get(key: String): YAMLKeyValue? {
     return this?.children
         ?.asSequence()
         ?.map { it as YAMLKeyValue }
         ?.filter { it.keyText == key }
-        ?.map { it.value }
         ?.uniqueOrNull()
 }
 

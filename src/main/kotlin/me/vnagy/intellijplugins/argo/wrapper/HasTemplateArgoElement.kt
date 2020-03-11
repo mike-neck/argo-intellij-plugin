@@ -7,10 +7,10 @@ import org.jetbrains.yaml.psi.impl.YAMLPlainTextImpl
 interface HasTemplateArgoElement {
 
     val template: String?
-        get() = (yamlChildren["template"] as? YAMLPlainTextImpl)?.textValue
+        get() = (yamlChildren["template"]?.value as YAMLPlainTextImpl?)?.textValue
 
     val templatePsiElement: PsiElement?
-        get() = (yamlChildren["template"] as? YAMLPlainTextImpl)
+        get() = (yamlChildren["template"]?.value as YAMLPlainTextImpl?)
 
     val yamlChildren: YAMLValue
 

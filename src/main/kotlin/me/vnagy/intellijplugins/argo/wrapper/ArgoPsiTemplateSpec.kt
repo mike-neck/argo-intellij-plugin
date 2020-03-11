@@ -14,14 +14,18 @@ class ArgoPsiTemplateSpec(
         get() = sequenceOf(
             namePsiElement?.let { GenericArgoPsiWrapper(it, this) },
             dag,
-            steps
+            steps,
+            inputs
         ).filterNotNull()
 
+    val inputs: ArgoInputsWrapper?
+        get() = (yamlChildren["inputs"]?.value as YAMLMapping?)?.let { ArgoInputsWrapper(it, this) }
+
     val dag: ArgoPsiDagTask?
-        get() = (yamlChildren["dag"] as? YAMLMapping)?.let { ArgoPsiDagTask(it, this) }
+        get() = (yamlChildren["dag"]?.value as YAMLMapping?)?.let { ArgoPsiDagTask(it, this) }
 
     val steps: ArgoPsiSteps?
-        get() = (yamlChildren["steps"] as? YAMLSequence)?.let { ArgoPsiSteps(it, this) }
+        get() = (yamlChildren["steps"]?.value as YAMLSequence?)?.let { ArgoPsiSteps(it, this) }
 
     override val yamlChildren
         get() = psiElement.children[0] as YAMLValue

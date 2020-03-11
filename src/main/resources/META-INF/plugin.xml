@@ -14,6 +14,7 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <psi.referenceContributor language="yaml" implementation="me.vnagy.intellijplugins.argo.references.workflowname.WorkflowTemplateNameReferenceContributor" />
+        <annotator language="yaml" implementationClass="me.vnagy.intellijplugins.argo.annotators.parameters.ParameterNameMissingInTemplateCallAnnotator" />
     </extensions>
 
     <extensions defaultExtensionNs="JavaScript">

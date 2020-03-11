@@ -7,10 +7,10 @@ import org.jetbrains.yaml.psi.impl.YAMLPlainTextImpl
 interface HasNameArgoElement {
 
     val name: String?
-        get() = (yamlChildren["name"] as? YAMLPlainTextImpl)?.textValue
+        get() = (yamlChildren["name"]?.value as YAMLPlainTextImpl?)?.textValue
 
     val namePsiElement: PsiElement?
-        get() = (yamlChildren["name"] as? YAMLPlainTextImpl)
+        get() = (yamlChildren["name"]?.value as YAMLPlainTextImpl?)
 
     val yamlChildren: YAMLValue
 }
