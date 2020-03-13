@@ -32,12 +32,12 @@ class ParameterNameMissingInTemplateCallAnnotator: Annotator {
             val parametersInTemplate = templateDefinition
                 ?.inputs
                 ?.parameters
-                ?.children ?: emptySequence()
+                ?.parameters ?: emptySequence()
 
             val parametersAtCallSite = templateCallDefinition
                 .arguments
                 ?.parameters
-                ?.children ?: emptySequence()
+                ?.parameters ?: emptySequence()
 
             val parameterNamesAtCallSize = parametersAtCallSite
                 .map { it.name }
@@ -55,7 +55,7 @@ class ParameterNameMissingInTemplateCallAnnotator: Annotator {
                     parametersElement.psiElement.textRange,
                     "The parameter(s) ${missingParameterNames.joinToString(",", "[", "]")} are missing from the template."
                 )
-                annotation.registerFix(ParameterNameMissingInTemplateCallQuickFix(parametersElement, missingParameterNames))
+//                annotation.registerFix(ParameterNameMissingInTemplateCallQuickFix(parametersElement, missingParameterNames))
             }
         }
     }

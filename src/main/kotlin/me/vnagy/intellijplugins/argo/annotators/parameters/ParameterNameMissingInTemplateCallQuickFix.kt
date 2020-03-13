@@ -4,8 +4,13 @@ import com.intellij.codeInsight.intention.IntentionAction
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiFile
+import com.intellij.psi.TokenType
+import com.intellij.psi.impl.source.tree.LeafPsiElement
 import me.vnagy.intellijplugins.argo.wrapper.ArgoParametersPsi
-import org.jetbrains.yaml.YAMLUtil
+import me.vnagy.intellijplugins.argo.wrapper.get
+import org.intellij.lang.annotations.Language
+import org.jetbrains.yaml.YAMLElementGenerator
+import org.jetbrains.yaml.psi.impl.YAMLArrayImpl
 
 class ParameterNameMissingInTemplateCallQuickFix(
     private val parametersElement: ArgoParametersPsi,
@@ -19,9 +24,33 @@ class ParameterNameMissingInTemplateCallQuickFix(
     override fun getFamilyName() = "Argo Workflow"
 
     override fun invoke(project: Project, editor: Editor?, file: PsiFile?) {
-        parametersElement
+        val existingParametersPsi = parametersElement
+            .parameters
+            .map { it.psiElement }
+            .toList()
+
+        val arrayValue = parametersElement
             .psiElement
-            .add()
+            .value as? YAMLArrayImpl
+
+        if (arrayValue != null) {
+            arrayValue.deleteChildRange(arrayValue.firstChild, arrayValue.lastChild)
+            existingParametersPsi.forEach { arrayValue.add(it) }
+        }
+
+        val elementGenerator = YAMLElementGenerator.getInstance(project)
+        missingParameterNames.forEach {
+            @Language("yaml")
+            val psiFile = elementGenerator.createDummyYamlWithText("""
+                parameters:
+                 - name: "${it}"
+            """.trimIndent())
+
+            parametersElement
+                .psiElement
+                .value
+                ?.add(psiFile.documents[0].topLevelValue["parameters"]?.value?.children?.get(0)!!)
+        }
     }
 
 }
