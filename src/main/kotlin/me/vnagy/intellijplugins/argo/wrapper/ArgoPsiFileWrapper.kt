@@ -1,8 +1,11 @@
 package me.vnagy.intellijplugins.argo.wrapper
 
+import com.intellij.psi.PsiElement
 import org.jetbrains.yaml.psi.YAMLFile
 
 class ArgoPsiFileWrapper(override val psiElement: YAMLFile) : ArgoPsi<YAMLFile> {
+
+    constructor(psiElement: PsiElement?): this(psiElement?.containingFile as YAMLFile)
 
     val kind: String?
         get() = getTopLevelPropertyString("kind")

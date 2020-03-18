@@ -9,7 +9,7 @@ interface HasTemplateArgoElement {
     val template: String?
         get() = (yamlChildren["template"]?.value as YAMLPlainTextImpl?)?.textValue
 
-    val templatePsiElement: PsiElement?
+    val templatePsiElement: YAMLPlainTextImpl?
         get() = (yamlChildren["template"]?.value as YAMLPlainTextImpl?)
 
     val yamlChildren: YAMLValue
