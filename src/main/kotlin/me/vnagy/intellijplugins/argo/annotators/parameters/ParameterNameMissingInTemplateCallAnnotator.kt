@@ -1,20 +1,22 @@
 package me.vnagy.intellijplugins.argo.annotators.parameters
 
-import com.intellij.lang.annotation.Annotation
 import com.intellij.lang.annotation.AnnotationHolder
 import com.intellij.lang.annotation.Annotator
 import com.intellij.lang.annotation.HighlightSeverity
 import com.intellij.psi.PsiElement
-import me.vnagy.intellijplugins.argo.wrapper.*
+import me.vnagy.intellijplugins.argo.wrapper.ArgoParametersPsi
+import me.vnagy.intellijplugins.argo.wrapper.ArgoPsiFileWrapper
+import me.vnagy.intellijplugins.argo.wrapper.ArgoPsiSpec
+import me.vnagy.intellijplugins.argo.wrapper.ArgoPsiStepSpecification
 import org.jetbrains.yaml.psi.YAMLFile
 
-class ParameterNameMissingInTemplateCallAnnotator: Annotator {
+class ParameterNameMissingInTemplateCallAnnotator : Annotator {
 
     override fun annotate(element: PsiElement, holder: AnnotationHolder) {
         val containingFile = element.containingFile
         if (containingFile is YAMLFile) {
             val argoPsiFileWrapper = ArgoPsiFileWrapper(containingFile)
-            when (val argoElement =  argoPsiFileWrapper.findChildrenForPsiElement(element)) {
+            when (val argoElement = argoPsiFileWrapper.findChildrenForPsiElement(element)) {
                 is ArgoParametersPsi -> annotateParametersElement(argoElement, holder)
             }
         }
@@ -53,7 +55,11 @@ class ParameterNameMissingInTemplateCallAnnotator: Annotator {
                 val annotation = holder.createAnnotation(
                     HighlightSeverity.ERROR,
                     parametersElement.psiElement.textRange,
-                    "The parameter(s) ${missingParameterNames.joinToString(",", "[", "]")} are missing from the template."
+                    "The parameter(s) ${missingParameterNames.joinToString(
+                        ",",
+                        "[",
+                        "]"
+                    )} are missing from the template."
                 )
 //                annotation.registerFix(ParameterNameMissingInTemplateCallQuickFix(parametersElement, missingParameterNames))
             }

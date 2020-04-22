@@ -4,8 +4,6 @@ import com.intellij.codeInsight.intention.IntentionAction
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiFile
-import com.intellij.psi.TokenType
-import com.intellij.psi.impl.source.tree.LeafPsiElement
 import me.vnagy.intellijplugins.argo.wrapper.ArgoParametersPsi
 import me.vnagy.intellijplugins.argo.wrapper.get
 import org.intellij.lang.annotations.Language
@@ -41,10 +39,12 @@ class ParameterNameMissingInTemplateCallQuickFix(
         val elementGenerator = YAMLElementGenerator.getInstance(project)
         missingParameterNames.forEach {
             @Language("yaml")
-            val psiFile = elementGenerator.createDummyYamlWithText("""
+            val psiFile = elementGenerator.createDummyYamlWithText(
+                """
                 parameters:
                  - name: "${it}"
-            """.trimIndent())
+            """.trimIndent()
+            )
 
             parametersElement
                 .psiElement
