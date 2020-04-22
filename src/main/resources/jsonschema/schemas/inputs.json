@@ -19,7 +19,14 @@
               },
               "tar": {
                 "type": "object",
-                "title": "TarStrategy will tar and gzip the file or directory when saving"
+                "title": "TarStrategy will tar and gzip the file or directory when saving",
+                "properties": {
+                  "compressionLevel": {
+                    "description": "CompressionLevel specifies the gzip compression level to use for the artifact.\nDefaults to gzip.DefaultCompression.",
+                    "type": "integer",
+                    "format": "int32"
+                  }
+                }
               }
             }
           },
@@ -95,6 +102,51 @@
                   "url": {
                     "type": "string",
                     "title": "URL of the artifact"
+                  }
+                }
+              },
+              "gcs": {
+                "type": "object",
+                "title": "GCSArtifact is the location of a GCS artifact",
+                "properties": {
+                  "gCSBucket": {
+                    "type": "object",
+                    "title": "GCSBucket contains the access information for interfacring with a GCS bucket",
+                    "properties": {
+                      "bucket": {
+                        "type": "string",
+                        "title": "Bucket is the name of the bucket"
+                      },
+                      "serviceAccountKeySecret": {
+                        "description": "SecretKeySelector selects a key of a Secret.",
+                        "type": "object",
+                        "properties": {
+                          "key": {
+                            "description": "The key of the secret to select from.  Must be a valid secret key.",
+                            "type": "string"
+                          },
+                          "localObjectReference": {
+                            "description": "LocalObjectReference contains enough information to let you locate the\nreferenced object inside the same namespace.",
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "type": "string",
+                                "title": "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?\n+optional"
+                              }
+                            }
+                          },
+                          "optional": {
+                            "type": "boolean",
+                            "format": "boolean",
+                            "title": "Specify whether the Secret or its key must be defined\n+optional"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "key": {
+                    "type": "string",
+                    "title": "Key is the path in the bucket where the artifact resides"
                   }
                 }
               },
@@ -339,6 +391,80 @@
                   }
                 }
               },
+              "oss": {
+                "type": "object",
+                "title": "OSSArtifact is the location of an OSS artifact",
+                "properties": {
+                  "key": {
+                    "type": "string",
+                    "title": "Key is the path in the bucket where the artifact resides"
+                  },
+                  "oSSBucket": {
+                    "type": "object",
+                    "title": "OSSBucket contains the access information required for interfacing with an OSS bucket",
+                    "properties": {
+                      "accessKeySecret": {
+                        "description": "SecretKeySelector selects a key of a Secret.",
+                        "type": "object",
+                        "properties": {
+                          "key": {
+                            "description": "The key of the secret to select from.  Must be a valid secret key.",
+                            "type": "string"
+                          },
+                          "localObjectReference": {
+                            "description": "LocalObjectReference contains enough information to let you locate the\nreferenced object inside the same namespace.",
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "type": "string",
+                                "title": "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?\n+optional"
+                              }
+                            }
+                          },
+                          "optional": {
+                            "type": "boolean",
+                            "format": "boolean",
+                            "title": "Specify whether the Secret or its key must be defined\n+optional"
+                          }
+                        }
+                      },
+                      "bucket": {
+                        "type": "string",
+                        "title": "Bucket is the name of the bucket"
+                      },
+                      "endpoint": {
+                        "type": "string",
+                        "title": "Endpoint is the hostname of the bucket endpoint"
+                      },
+                      "secretKeySecret": {
+                        "description": "SecretKeySelector selects a key of a Secret.",
+                        "type": "object",
+                        "properties": {
+                          "key": {
+                            "description": "The key of the secret to select from.  Must be a valid secret key.",
+                            "type": "string"
+                          },
+                          "localObjectReference": {
+                            "description": "LocalObjectReference contains enough information to let you locate the\nreferenced object inside the same namespace.",
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "type": "string",
+                                "title": "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?\n+optional"
+                              }
+                            }
+                          },
+                          "optional": {
+                            "type": "boolean",
+                            "format": "boolean",
+                            "title": "Specify whether the Secret or its key must be defined\n+optional"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
               "raw": {
                 "type": "object",
                 "title": "RawArtifact allows raw string content to be placed as an artifact in a container",
@@ -431,6 +557,11 @@
                             "title": "Specify whether the Secret or its key must be defined\n+optional"
                           }
                         }
+                      },
+                      "useSDKCreds": {
+                        "description": "UseSDKCreds tells the driver to figure out credentials based on sdk defaults.",
+                        "type": "boolean",
+                        "format": "boolean"
                       }
                     }
                   }
@@ -476,7 +607,7 @@
         "properties": {
           "default": {
             "type": "string",
-            "title": "Default is the default value to use for an input parameter if a value was not supplied"
+            "title": "Default is the default value to use for an input parameter if a value was not supplied\nDEPRECATED: This field is not used"
           },
           "globalName": {
             "type": "string",
@@ -494,6 +625,10 @@
             "type": "object",
             "title": "ValueFrom describes a location in which to obtain the value to a parameter",
             "properties": {
+              "default": {
+                "type": "string",
+                "title": "Default specifies a value to be used if retrieving the value from the specified source fails"
+              },
               "jqFilter": {
                 "type": "string",
                 "title": "JQFilter expression against the resource object in resource templates"

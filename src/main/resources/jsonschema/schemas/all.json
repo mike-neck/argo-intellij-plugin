@@ -1,6 +1,18 @@
 {
   "oneOf": [
     {
+      "$ref": "_definitions.json#/definitions/clusterio.argoproj.workflow.v1alpha1.ClusterWorkflowTemplateCreateRequest"
+    },
+    {
+      "$ref": "_definitions.json#/definitions/clusterio.argoproj.workflow.v1alpha1.ClusterWorkflowTemplateDeleteResponse"
+    },
+    {
+      "$ref": "_definitions.json#/definitions/clusterio.argoproj.workflow.v1alpha1.ClusterWorkflowTemplateLintRequest"
+    },
+    {
+      "$ref": "_definitions.json#/definitions/clusterio.argoproj.workflow.v1alpha1.ClusterWorkflowTemplateUpdateRequest"
+    },
+    {
       "$ref": "_definitions.json#/definitions/cronio.argoproj.workflow.v1alpha1.CreateCronWorkflowRequest"
     },
     {
@@ -37,7 +49,16 @@
       "$ref": "_definitions.json#/definitions/io.argoproj.workflow.v1alpha1.Backoff"
     },
     {
+      "$ref": "_definitions.json#/definitions/io.argoproj.workflow.v1alpha1.ClusterWorkflowTemplate"
+    },
+    {
+      "$ref": "_definitions.json#/definitions/io.argoproj.workflow.v1alpha1.ClusterWorkflowTemplateList"
+    },
+    {
       "$ref": "_definitions.json#/definitions/io.argoproj.workflow.v1alpha1.ContinueOn"
+    },
+    {
+      "$ref": "_definitions.json#/definitions/io.argoproj.workflow.v1alpha1.Counter"
     },
     {
       "$ref": "_definitions.json#/definitions/io.argoproj.workflow.v1alpha1.CronWorkflow"
@@ -61,6 +82,15 @@
       "$ref": "_definitions.json#/definitions/io.argoproj.workflow.v1alpha1.ExecutorConfig"
     },
     {
+      "$ref": "_definitions.json#/definitions/io.argoproj.workflow.v1alpha1.GCSArtifact"
+    },
+    {
+      "$ref": "_definitions.json#/definitions/io.argoproj.workflow.v1alpha1.GCSBucket"
+    },
+    {
+      "$ref": "_definitions.json#/definitions/io.argoproj.workflow.v1alpha1.Gauge"
+    },
+    {
       "$ref": "_definitions.json#/definitions/io.argoproj.workflow.v1alpha1.GitArtifact"
     },
     {
@@ -76,6 +106,9 @@
       "$ref": "_definitions.json#/definitions/io.argoproj.workflow.v1alpha1.HTTPArtifact"
     },
     {
+      "$ref": "_definitions.json#/definitions/io.argoproj.workflow.v1alpha1.Histogram"
+    },
+    {
       "$ref": "_definitions.json#/definitions/io.argoproj.workflow.v1alpha1.Inputs"
     },
     {
@@ -85,13 +118,28 @@
       "$ref": "_definitions.json#/definitions/io.argoproj.workflow.v1alpha1.ItemValue"
     },
     {
+      "$ref": "_definitions.json#/definitions/io.argoproj.workflow.v1alpha1.Link"
+    },
+    {
       "$ref": "_definitions.json#/definitions/io.argoproj.workflow.v1alpha1.Metadata"
+    },
+    {
+      "$ref": "_definitions.json#/definitions/io.argoproj.workflow.v1alpha1.MetricLabel"
+    },
+    {
+      "$ref": "_definitions.json#/definitions/io.argoproj.workflow.v1alpha1.Metrics"
     },
     {
       "$ref": "_definitions.json#/definitions/io.argoproj.workflow.v1alpha1.NodeStatus"
     },
     {
       "$ref": "_definitions.json#/definitions/io.argoproj.workflow.v1alpha1.NoneStrategy"
+    },
+    {
+      "$ref": "_definitions.json#/definitions/io.argoproj.workflow.v1alpha1.OSSArtifact"
+    },
+    {
+      "$ref": "_definitions.json#/definitions/io.argoproj.workflow.v1alpha1.OSSBucket"
     },
     {
       "$ref": "_definitions.json#/definitions/io.argoproj.workflow.v1alpha1.Outputs"
@@ -104,6 +152,9 @@
     },
     {
       "$ref": "_definitions.json#/definitions/io.argoproj.workflow.v1alpha1.PodGC"
+    },
+    {
+      "$ref": "_definitions.json#/definitions/io.argoproj.workflow.v1alpha1.Prometheus"
     },
     {
       "$ref": "_definitions.json#/definitions/io.argoproj.workflow.v1alpha1.RawArtifact"
@@ -125,6 +176,9 @@
     },
     {
       "$ref": "_definitions.json#/definitions/io.argoproj.workflow.v1alpha1.Sequence"
+    },
+    {
+      "$ref": "_definitions.json#/definitions/io.argoproj.workflow.v1alpha1.SubmitOpts"
     },
     {
       "$ref": "_definitions.json#/definitions/io.argoproj.workflow.v1alpha1.SuspendTemplate"
@@ -149,6 +203,9 @@
     },
     {
       "$ref": "_definitions.json#/definitions/io.argoproj.workflow.v1alpha1.Workflow"
+    },
+    {
+      "$ref": "_definitions.json#/definitions/io.argoproj.workflow.v1alpha1.WorkflowCondition"
     },
     {
       "$ref": "_definitions.json#/definitions/io.argoproj.workflow.v1alpha1.WorkflowList"
@@ -442,7 +499,7 @@
       "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.WindowsSecurityContextOptions"
     },
     {
-      "$ref": "_definitions.json#/definitions/k8s.io.api.policy.v1beta1.PodDisruptionBudgetSpec"
+      "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.PodDisruptionBudgetSpec"
     },
     {
       "$ref": "_definitions.json#/definitions/io.k8s.api.core.v1.Quantity"
@@ -509,6 +566,12 @@
     },
     {
       "$ref": "_definitions.json#/definitions/io.argoproj.workflow.v1alpha1.WorkflowRetryRequest"
+    },
+    {
+      "$ref": "_definitions.json#/definitions/io.argoproj.workflow.v1alpha1.WorkflowStopRequest"
+    },
+    {
+      "$ref": "_definitions.json#/definitions/io.argoproj.workflow.v1alpha1.WorkflowSubmitFromRequest"
     },
     {
       "$ref": "_definitions.json#/definitions/io.argoproj.workflow.v1alpha1.WorkflowSuspendRequest"

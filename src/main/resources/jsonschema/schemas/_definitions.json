@@ -1,5 +1,41 @@
 {
   "definitions": {
+    "clusterio.argoproj.workflow.v1alpha1.ClusterWorkflowTemplateCreateRequest": {
+      "type": "object",
+      "properties": {
+        "createOptions": {
+          "$ref": "#/definitions/io.k8s.api.core.v1.CreateOptions"
+        },
+        "template": {
+          "$ref": "#/definitions/io.argoproj.workflow.v1alpha1.ClusterWorkflowTemplate"
+        }
+      }
+    },
+    "clusterio.argoproj.workflow.v1alpha1.ClusterWorkflowTemplateDeleteResponse": {
+      "type": "object"
+    },
+    "clusterio.argoproj.workflow.v1alpha1.ClusterWorkflowTemplateLintRequest": {
+      "type": "object",
+      "properties": {
+        "createOptions": {
+          "$ref": "#/definitions/io.k8s.api.core.v1.CreateOptions"
+        },
+        "template": {
+          "$ref": "#/definitions/io.argoproj.workflow.v1alpha1.ClusterWorkflowTemplate"
+        }
+      }
+    },
+    "clusterio.argoproj.workflow.v1alpha1.ClusterWorkflowTemplateUpdateRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "template": {
+          "$ref": "#/definitions/io.argoproj.workflow.v1alpha1.ClusterWorkflowTemplate"
+        }
+      }
+    },
     "cronio.argoproj.workflow.v1alpha1.CreateCronWorkflowRequest": {
       "type": "object",
       "properties": {
@@ -127,6 +163,10 @@
           "title": "Artifactory contains artifactory artifact location details",
           "$ref": "#/definitions/io.argoproj.workflow.v1alpha1.ArtifactoryArtifact"
         },
+        "gcs": {
+          "title": "GCS contains GCS artifact location details",
+          "$ref": "#/definitions/io.argoproj.workflow.v1alpha1.GCSArtifact"
+        },
         "git": {
           "title": "Git contains git artifact location details",
           "$ref": "#/definitions/io.argoproj.workflow.v1alpha1.GitArtifact"
@@ -138,6 +178,10 @@
         "http": {
           "title": "HTTP contains HTTP artifact location details",
           "$ref": "#/definitions/io.argoproj.workflow.v1alpha1.HTTPArtifact"
+        },
+        "oss": {
+          "title": "OSS contains OSS artifact location details",
+          "$ref": "#/definitions/io.argoproj.workflow.v1alpha1.OSSArtifact"
         },
         "raw": {
           "title": "Raw contains raw artifact location details",
@@ -189,16 +233,47 @@
     },
     "io.argoproj.workflow.v1alpha1.Backoff": {
       "type": "object",
+      "title": "Backoff is a backoff strategy to use within retryStrategy",
       "properties": {
         "duration": {
-          "type": "string"
+          "type": "string",
+          "title": "Duration is the amount to back off. Default unit is seconds, but could also be a duration (e.g. \"2m\", \"1h\")"
         },
         "factor": {
           "type": "integer",
-          "format": "int32"
+          "format": "int32",
+          "title": "Factor is a factor to multiply the base duration after each failed retry"
         },
         "maxDuration": {
-          "type": "string"
+          "type": "string",
+          "title": "MaxDuration is the maximum amount of time allowed for the backoff strategy"
+        }
+      }
+    },
+    "io.argoproj.workflow.v1alpha1.ClusterWorkflowTemplate": {
+      "type": "object",
+      "title": "ClusterWorkflowTemplate is the definition of a workflow template resource in cluster scope\n+genclient\n+genclient:noStatus\n+genclient:nonNamespaced\n+k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object",
+      "properties": {
+        "metadata": {
+          "$ref": "#/definitions/io.k8s.api.core.v1.ObjectMeta"
+        },
+        "spec": {
+          "$ref": "#/definitions/io.argoproj.workflow.v1alpha1.WorkflowTemplateSpec"
+        }
+      }
+    },
+    "io.argoproj.workflow.v1alpha1.ClusterWorkflowTemplateList": {
+      "type": "object",
+      "title": "ClusterWorkflowTemplateList is list of ClusterWorkflowTemplate resources\n+k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/io.argoproj.workflow.v1alpha1.ClusterWorkflowTemplate"
+          }
+        },
+        "metadata": {
+          "$ref": "#/definitions/io.k8s.api.core.v1.ListMeta"
         }
       }
     },
@@ -215,6 +290,16 @@
           "type": "boolean",
           "format": "boolean",
           "title": "+optional"
+        }
+      }
+    },
+    "io.argoproj.workflow.v1alpha1.Counter": {
+      "type": "object",
+      "title": "Counter is a Counter prometheus metric",
+      "properties": {
+        "value": {
+          "type": "string",
+          "title": "Value is the value of the metric"
         }
       }
     },
@@ -250,6 +335,7 @@
     },
     "io.argoproj.workflow.v1alpha1.CronWorkflowSpec": {
       "type": "object",
+      "title": "CronWorkflowSpec is the specification of a CronWorkflow",
       "properties": {
         "concurrencyPolicy": {
           "type": "string",
@@ -283,6 +369,10 @@
           "description": "Timezone is the timezone against which the cron schedule will be calculated, e.g. \"Asia/Tokyo\". Default is machine's local time.",
           "type": "string"
         },
+        "workflowMeta": {
+          "title": "WorkflowMetadata contains some metadata of the workflow to be run",
+          "$ref": "#/definitions/io.k8s.api.core.v1.ObjectMeta"
+        },
         "workflowSpec": {
           "title": "WorkflowSpec is the spec of the workflow to be run",
           "$ref": "#/definitions/io.argoproj.workflow.v1alpha1.WorkflowSpec"
@@ -291,6 +381,7 @@
     },
     "io.argoproj.workflow.v1alpha1.CronWorkflowStatus": {
       "type": "object",
+      "title": "CronWorkflowStatus is the status of a CronWorkflow",
       "properties": {
         "active": {
           "type": "array",
@@ -390,6 +481,48 @@
         "serviceAccountName": {
           "description": "ServiceAccountName specifies the service account name of the executor container.",
           "type": "string"
+        }
+      }
+    },
+    "io.argoproj.workflow.v1alpha1.GCSArtifact": {
+      "type": "object",
+      "title": "GCSArtifact is the location of a GCS artifact",
+      "properties": {
+        "gCSBucket": {
+          "$ref": "#/definitions/io.argoproj.workflow.v1alpha1.GCSBucket"
+        },
+        "key": {
+          "type": "string",
+          "title": "Key is the path in the bucket where the artifact resides"
+        }
+      }
+    },
+    "io.argoproj.workflow.v1alpha1.GCSBucket": {
+      "type": "object",
+      "title": "GCSBucket contains the access information for interfacring with a GCS bucket",
+      "properties": {
+        "bucket": {
+          "type": "string",
+          "title": "Bucket is the name of the bucket"
+        },
+        "serviceAccountKeySecret": {
+          "title": "ServiceAccountKeySecret is the secret selector to the bucket's service account key",
+          "$ref": "#/definitions/io.k8s.api.core.v1.SecretKeySelector"
+        }
+      }
+    },
+    "io.argoproj.workflow.v1alpha1.Gauge": {
+      "type": "object",
+      "title": "Gauge is a Gauge prometheus metric",
+      "properties": {
+        "realtime": {
+          "type": "boolean",
+          "format": "boolean",
+          "title": "Realtime emits this metric in real time if applicable"
+        },
+        "value": {
+          "type": "string",
+          "title": "Value is the value of the metric"
         }
       }
     },
@@ -514,6 +647,24 @@
         }
       }
     },
+    "io.argoproj.workflow.v1alpha1.Histogram": {
+      "type": "object",
+      "title": "Histogram is a Histogram prometheus metric",
+      "properties": {
+        "buckets": {
+          "type": "array",
+          "title": "Buckets is a list of bucket divisors for the histogram",
+          "items": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "value": {
+          "type": "string",
+          "title": "Value is the value of the metric"
+        }
+      }
+    },
     "io.argoproj.workflow.v1alpha1.Inputs": {
       "type": "object",
       "title": "Inputs are the mechanism for passing parameters, artifacts, volumes from one template to another",
@@ -600,6 +751,24 @@
         }
       }
     },
+    "io.argoproj.workflow.v1alpha1.Link": {
+      "type": "object",
+      "title": "A link to another app.\n+patchStrategy=merge\n+patchMergeKey=name",
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "The name of the link, E.g. \"Workflow Logs\" or \"Pod Logs\""
+        },
+        "scope": {
+          "type": "string",
+          "title": "Either \"workflow\" or \"pod\""
+        },
+        "url": {
+          "description": "The URL. May contain \"${metadata.namespace}\" and \"${metadata.name}\".",
+          "type": "string"
+        }
+      }
+    },
     "io.argoproj.workflow.v1alpha1.Metadata": {
       "type": "object",
       "title": "Pod metdata",
@@ -614,6 +783,31 @@
           "type": "object",
           "additionalProperties": {
             "type": "string"
+          }
+        }
+      }
+    },
+    "io.argoproj.workflow.v1alpha1.MetricLabel": {
+      "type": "object",
+      "title": "MetricLabel is a single label for a prometheus metric",
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    "io.argoproj.workflow.v1alpha1.Metrics": {
+      "type": "object",
+      "title": "Metrics are a list of metrics emitted from a Workflow/Template",
+      "properties": {
+        "prometheus": {
+          "type": "array",
+          "title": "Prometheus is a list of prometheus metrics to be emitted",
+          "items": {
+            "$ref": "#/definitions/io.argoproj.workflow.v1alpha1.Prometheus"
           }
         }
       }
@@ -681,6 +875,14 @@
           "type": "string",
           "title": "PodIP captures the IP of the pod for daemoned steps"
         },
+        "resourcesDuration": {
+          "description": "ResourcesDuration is indicative, but not accurate, resource duration. This is populated when the nodes completes.",
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "format": "int64"
+          }
+        },
         "startedAt": {
           "title": "Time at which this node started",
           "$ref": "#/definitions/io.k8s.api.core.v1.Time"
@@ -715,6 +917,41 @@
       "description": "NoneStrategy indicates to skip tar process and upload the files or directory tree as independent\nfiles. Note that if the artifact is a directory, the artifact driver must support the ability to\nsave/load the directory appropriately.",
       "type": "object"
     },
+    "io.argoproj.workflow.v1alpha1.OSSArtifact": {
+      "type": "object",
+      "title": "OSSArtifact is the location of an OSS artifact",
+      "properties": {
+        "key": {
+          "type": "string",
+          "title": "Key is the path in the bucket where the artifact resides"
+        },
+        "oSSBucket": {
+          "$ref": "#/definitions/io.argoproj.workflow.v1alpha1.OSSBucket"
+        }
+      }
+    },
+    "io.argoproj.workflow.v1alpha1.OSSBucket": {
+      "type": "object",
+      "title": "OSSBucket contains the access information required for interfacing with an OSS bucket",
+      "properties": {
+        "accessKeySecret": {
+          "title": "AccessKeySecret is the secret selector to the bucket's access key",
+          "$ref": "#/definitions/io.k8s.api.core.v1.SecretKeySelector"
+        },
+        "bucket": {
+          "type": "string",
+          "title": "Bucket is the name of the bucket"
+        },
+        "endpoint": {
+          "type": "string",
+          "title": "Endpoint is the hostname of the bucket endpoint"
+        },
+        "secretKeySecret": {
+          "title": "SecretKeySecret is the secret selector to the bucket's secret key",
+          "$ref": "#/definitions/io.k8s.api.core.v1.SecretKeySelector"
+        }
+      }
+    },
     "io.argoproj.workflow.v1alpha1.Outputs": {
       "type": "object",
       "title": "Outputs hold parameters, artifacts, and results from a step",
@@ -725,6 +962,10 @@
           "items": {
             "$ref": "#/definitions/io.argoproj.workflow.v1alpha1.Artifact"
           }
+        },
+        "exitCode": {
+          "type": "string",
+          "title": "ExitCode holds the exit code of a script template"
         },
         "parameters": {
           "type": "array",
@@ -751,7 +992,7 @@
       "properties": {
         "default": {
           "type": "string",
-          "title": "Default is the default value to use for an input parameter if a value was not supplied"
+          "title": "Default is the default value to use for an input parameter if a value was not supplied\nDEPRECATED: This field is not used"
         },
         "globalName": {
           "type": "string",
@@ -776,7 +1017,45 @@
       "title": "PodGC describes how to delete completed pods as they complete",
       "properties": {
         "strategy": {
-          "type": "string"
+          "type": "string",
+          "title": "Strategy is the strategy to use. One of \"OnPodCompletion\", \"OnPodSuccess\", \"OnWorkflowCompletion\", \"OnWorkflowSuccess\""
+        }
+      }
+    },
+    "io.argoproj.workflow.v1alpha1.Prometheus": {
+      "type": "object",
+      "title": "Prometheus is a prometheus metric to be emitted",
+      "properties": {
+        "counter": {
+          "title": "Counter is a counter metric",
+          "$ref": "#/definitions/io.argoproj.workflow.v1alpha1.Counter"
+        },
+        "gauge": {
+          "title": "Gauge is a gauge metric",
+          "$ref": "#/definitions/io.argoproj.workflow.v1alpha1.Gauge"
+        },
+        "help": {
+          "type": "string",
+          "title": "Help is a string that describes the metric"
+        },
+        "histogram": {
+          "title": "Histogram is a histogram metric",
+          "$ref": "#/definitions/io.argoproj.workflow.v1alpha1.Histogram"
+        },
+        "labels": {
+          "type": "array",
+          "title": "Labels is a list of metric labels",
+          "items": {
+            "$ref": "#/definitions/io.argoproj.workflow.v1alpha1.MetricLabel"
+          }
+        },
+        "name": {
+          "type": "string",
+          "title": "Name is the name of the metric"
+        },
+        "when": {
+          "type": "string",
+          "title": "When is a conditional statement that decides when to emit the metric"
         }
       }
     },
@@ -801,6 +1080,13 @@
         "failureCondition": {
           "type": "string",
           "title": "FailureCondition is a label selector expression which describes the conditions\nof the k8s resource in which the step was considered failed"
+        },
+        "flags": {
+          "type": "array",
+          "title": "Flags is a set of additional options passed to kubectl before submitting a resource\nI.e. to disable resource validation:\nflags: [\n\t\"--validate=false\"  # disable resource validation\n]",
+          "items": {
+            "type": "string"
+          }
         },
         "manifest": {
           "type": "string",
@@ -885,6 +1171,11 @@
         "secretKeySecret": {
           "title": "SecretKeySecret is the secret selector to the bucket's secret key",
           "$ref": "#/definitions/io.k8s.api.core.v1.SecretKeySelector"
+        },
+        "useSDKCreds": {
+          "description": "UseSDKCreds tells the driver to figure out credentials based on sdk defaults.",
+          "type": "boolean",
+          "format": "boolean"
         }
       }
     },
@@ -923,6 +1214,61 @@
         }
       }
     },
+    "io.argoproj.workflow.v1alpha1.SubmitOpts": {
+      "type": "object",
+      "title": "SubmitOpts are workflow submission options",
+      "properties": {
+        "dryRun": {
+          "type": "boolean",
+          "format": "boolean",
+          "title": "DryRun validates the workflow on the client-side without creating it. This option is not supported in API"
+        },
+        "entrypoint": {
+          "type": "string",
+          "title": "Entrypoint overrides spec.entrypoint"
+        },
+        "generateName": {
+          "type": "string",
+          "title": "GenerateName overrides metadata.generateName"
+        },
+        "instanceID": {
+          "type": "string",
+          "title": "InstanceID binds the Resource to the specified instance ID"
+        },
+        "labels": {
+          "type": "string",
+          "title": "Labels adds to metadata.labels"
+        },
+        "name": {
+          "type": "string",
+          "title": "Name overrides metadata.name"
+        },
+        "ownerReference": {
+          "title": "OwnerReference creates a metadata.ownerReference",
+          "$ref": "#/definitions/io.k8s.api.core.v1.OwnerReference"
+        },
+        "parameterFile": {
+          "type": "string",
+          "title": "ParameterFile holds a reference to a parameter file. This option is not supported in API"
+        },
+        "parameters": {
+          "type": "array",
+          "title": "Parameters passes input parameters to workflow",
+          "items": {
+            "type": "string"
+          }
+        },
+        "serverDryRun": {
+          "type": "boolean",
+          "format": "boolean",
+          "title": "ServerDryRun validates the workflow on the server-side without creating it"
+        },
+        "serviceAccount": {
+          "description": "ServiceAccount runs all pods in the workflow using specified ServiceAccount.",
+          "type": "string"
+        }
+      }
+    },
     "io.argoproj.workflow.v1alpha1.SuspendTemplate": {
       "type": "object",
       "title": "SuspendTemplate is a template subtype to suspend a workflow at a predetermined point in time",
@@ -935,25 +1281,35 @@
     },
     "io.argoproj.workflow.v1alpha1.TTLStrategy": {
       "type": "object",
-      "title": "TTLStrategy is the strategy for the time to live depending on if the workflow succeded or failed",
+      "title": "TTLStrategy is the strategy for the time to live depending on if the workflow succeeded or failed",
       "properties": {
         "secondsAfterCompletion": {
           "type": "integer",
-          "format": "int32"
+          "format": "int32",
+          "title": "SecondsAfterCompletion is the number of seconds to live after completion"
         },
         "secondsAfterFailure": {
           "type": "integer",
-          "format": "int32"
+          "format": "int32",
+          "title": "SecondsAfterFailure is the number of seconds to live after failure"
         },
         "secondsAfterSuccess": {
           "type": "integer",
-          "format": "int32"
+          "format": "int32",
+          "title": "SecondsAfterSuccess is the number of seconds to live after success"
         }
       }
     },
     "io.argoproj.workflow.v1alpha1.TarStrategy": {
       "type": "object",
-      "title": "TarStrategy will tar and gzip the file or directory when saving"
+      "title": "TarStrategy will tar and gzip the file or directory when saving",
+      "properties": {
+        "compressionLevel": {
+          "description": "CompressionLevel specifies the gzip compression level to use for the artifact.\nDefaults to gzip.DefaultCompression.",
+          "type": "integer",
+          "format": "int32"
+        }
+      }
     },
     "io.argoproj.workflow.v1alpha1.Template": {
       "type": "object",
@@ -971,6 +1327,10 @@
         "archiveLocation": {
           "description": "Location in which all files related to the step will be stored (logs, artifacts, etc...).\nCan be overridden by individual items in Outputs. If omitted, will use the default\nartifact repository location configured in the controller, appended with the\n<workflowname>/<nodename> in the key.",
           "$ref": "#/definitions/io.argoproj.workflow.v1alpha1.ArtifactLocation"
+        },
+        "arguments": {
+          "description": "Arguments hold arguments to the template.\nDEPRECATED: This field is not used.",
+          "$ref": "#/definitions/io.argoproj.workflow.v1alpha1.Arguments"
         },
         "automountServiceAccountToken": {
           "description": "AutomountServiceAccountToken indicates whether a service account token should be automatically mounted in pods.\nServiceAccountName of ExecutorConfig must be specified if this value is false.",
@@ -1016,6 +1376,10 @@
           "title": "Metdata sets the pods's metadata, i.e. annotations and labels",
           "$ref": "#/definitions/io.argoproj.workflow.v1alpha1.Metadata"
         },
+        "metrics": {
+          "title": "Metrics are a list of metrics emitted from this template",
+          "$ref": "#/definitions/io.argoproj.workflow.v1alpha1.Metrics"
+        },
         "name": {
           "type": "string",
           "title": "Name is the name of the template"
@@ -1052,6 +1416,11 @@
         "resource": {
           "title": "Resource template subtype which can run k8s resources",
           "$ref": "#/definitions/io.argoproj.workflow.v1alpha1.ResourceTemplate"
+        },
+        "resubmitPendingPods": {
+          "type": "boolean",
+          "format": "boolean",
+          "title": "ResubmitPendingPods is a flag to enable resubmitting pods that remain Pending after initial submission"
         },
         "retryStrategy": {
           "title": "RetryStrategy describes how to retry a template when it fails",
@@ -1092,11 +1461,11 @@
           "$ref": "#/definitions/io.argoproj.workflow.v1alpha1.SuspendTemplate"
         },
         "template": {
-          "description": "Template is the name of the template which is used as the base of this template.",
+          "description": "Template is the name of the template which is used as the base of this template.\nDEPRECATED: This field is not used.",
           "type": "string"
         },
         "templateRef": {
-          "description": "TemplateRef is the reference to the template resource which is used as the base of this template.",
+          "description": "TemplateRef is the reference to the template resource which is used as the base of this template.\nDEPRECATED: This field is not used.",
           "$ref": "#/definitions/io.argoproj.workflow.v1alpha1.TemplateRef"
         },
         "tolerations": {
@@ -1119,6 +1488,11 @@
       "description": "TemplateRef is a reference of template resource.",
       "type": "object",
       "properties": {
+        "clusterScope": {
+          "description": "ClusterScope indicates the referred template is cluster scoped (i.e., a ClusterWorkflowTemplate).",
+          "type": "boolean",
+          "format": "boolean"
+        },
         "name": {
           "description": "Name is the resource name of the template.",
           "type": "string"
@@ -1152,6 +1526,10 @@
       "type": "object",
       "title": "ValueFrom describes a location in which to obtain the value to a parameter",
       "properties": {
+        "default": {
+          "type": "string",
+          "title": "Default specifies a value to be used if retrieving the value from the specified source fails"
+        },
         "jqFilter": {
           "type": "string",
           "title": "JQFilter expression against the resource object in resource templates"
@@ -1182,6 +1560,23 @@
         },
         "status": {
           "$ref": "#/definitions/io.argoproj.workflow.v1alpha1.WorkflowStatus"
+        }
+      }
+    },
+    "io.argoproj.workflow.v1alpha1.WorkflowCondition": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "title": "Message is the condition message"
+        },
+        "status": {
+          "type": "string",
+          "title": "Status is the status of the condition"
+        },
+        "type": {
+          "type": "string",
+          "title": "Type is the type of condition"
         }
       }
     },
@@ -1235,8 +1630,8 @@
           "type": "string"
         },
         "entrypoint": {
-          "type": "string",
-          "title": "Entrypoint is a template reference to the starting point of the workflow"
+          "description": "Entrypoint is a template reference to the starting point of the io.argoproj.workflow.v1alpha1.",
+          "type": "string"
         },
         "executor": {
           "description": "Executor holds configurations of executor containers of the io.argoproj.workflow.v1alpha1.",
@@ -1261,6 +1656,10 @@
             "$ref": "#/definitions/io.k8s.api.core.v1.LocalObjectReference"
           }
         },
+        "metrics": {
+          "title": "Metrics are a list of metrics emitted from this Workflow",
+          "$ref": "#/definitions/io.argoproj.workflow.v1alpha1.Metrics"
+        },
         "nodeSelector": {
           "description": "NodeSelector is a selector which will result in all pods of the workflow\nto be scheduled on the selected node(s). This is able to be overridden by\na nodeSelector specified in the template.",
           "type": "object",
@@ -1279,7 +1678,7 @@
         },
         "podDisruptionBudget": {
           "title": "PodDisruptionBudget holds the number of concurrent disruptions that you allow for Workflow's Pods.\nController will automatically add the selector with workflow name, if selector is empty.\nOptional: Defaults to empty.\n+optional",
-          "$ref": "#/definitions/k8s.io.api.policy.v1beta1.PodDisruptionBudgetSpec"
+          "$ref": "#/definitions/io.k8s.api.core.v1.PodDisruptionBudgetSpec"
         },
         "podGC": {
           "title": "PodGC describes the strategy to use when to deleting completed pods",
@@ -1315,6 +1714,10 @@
           "description": "ServiceAccountName is the name of the ServiceAccount to run all pods of the workflow as.",
           "type": "string"
         },
+        "shutdown": {
+          "type": "string",
+          "title": "Shutdown will shutdown the workflow according to its ShutdownStrategy"
+        },
         "suspend": {
           "type": "boolean",
           "format": "boolean",
@@ -1340,7 +1743,7 @@
           "format": "int32"
         },
         "ttlStrategy": {
-          "title": "TTLStrategy limits the lifetime of a Workflow that has finished execution depending on if it\nSucceeded or Failed. If this struct is set, once the Workflow finishes, it will be\ndeleted after the time to live expires. If this field is unset,\nthe controller config map will hold the default values\nUpdate",
+          "description": "TTLStrategy limits the lifetime of a Workflow that has finished execution depending on if it\nSucceeded or Failed. If this struct is set, once the Workflow finishes, it will be\ndeleted after the time to live expires. If this field is unset,\nthe controller config map will hold the default values.",
           "$ref": "#/definitions/io.argoproj.workflow.v1alpha1.TTLStrategy"
         },
         "volumeClaimTemplates": {
@@ -1366,6 +1769,13 @@
         "compressedNodes": {
           "type": "string",
           "title": "Compressed and base64 decoded Nodes map"
+        },
+        "conditions": {
+          "type": "array",
+          "title": "Conditions is a list of conditions the Workflow may have",
+          "items": {
+            "$ref": "#/definitions/io.argoproj.workflow.v1alpha1.WorkflowCondition"
+          }
         },
         "finishedAt": {
           "title": "Time at which this workflow completed",
@@ -1400,6 +1810,14 @@
         "phase": {
           "description": "Phase a simple, high-level summary of where the workflow is in its lifecycle.",
           "type": "string"
+        },
+        "resourcesDuration": {
+          "type": "object",
+          "title": "ResourcesDuration is the total for the workflow",
+          "additionalProperties": {
+            "type": "string",
+            "format": "int64"
+          }
         },
         "startedAt": {
           "title": "Time at which this workflow started",
@@ -1494,16 +1912,8 @@
       "description": "WorkflowTemplateSpec is a spec of WorkflowTemplate.",
       "type": "object",
       "properties": {
-        "arguments": {
-          "description": "Arguments hold arguments to the template.",
-          "$ref": "#/definitions/io.argoproj.workflow.v1alpha1.Arguments"
-        },
-        "templates": {
-          "description": "Templates is a list of workflow templates.",
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/io.argoproj.workflow.v1alpha1.Template"
-          }
+        "workflowSpec": {
+          "$ref": "#/definitions/io.argoproj.workflow.v1alpha1.WorkflowSpec"
         }
       }
     },
@@ -1547,6 +1957,12 @@
     "io.argoproj.workflow.v1alpha1.InfoResponse": {
       "type": "object",
       "properties": {
+        "links": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/io.argoproj.workflow.v1alpha1.Link"
+          }
+        },
         "managedNamespace": {
           "type": "string"
         }
@@ -3703,7 +4119,7 @@
         }
       }
     },
-    "k8s.io.api.policy.v1beta1.PodDisruptionBudgetSpec": {
+    "io.k8s.api.core.v1.PodDisruptionBudgetSpec": {
       "description": "PodDisruptionBudgetSpec is a description of a PodDisruptionBudget.",
       "type": "object",
       "properties": {
@@ -4171,6 +4587,9 @@
         },
         "namespace": {
           "type": "string"
+        },
+        "nodeFieldSelector": {
+          "type": "string"
         }
       }
     },
@@ -4182,6 +4601,50 @@
         },
         "namespace": {
           "type": "string"
+        },
+        "nodeFieldSelector": {
+          "type": "string"
+        },
+        "restartSuccesful": {
+          "type": "boolean",
+          "format": "boolean"
+        }
+      }
+    },
+    "io.argoproj.workflow.v1alpha1.WorkflowStopRequest": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "namespace": {
+          "type": "string"
+        },
+        "nodeFieldSelector": {
+          "type": "string"
+        }
+      }
+    },
+    "io.argoproj.workflow.v1alpha1.WorkflowSubmitFromRequest": {
+      "type": "object",
+      "properties": {
+        "createOptions": {
+          "$ref": "#/definitions/io.k8s.api.core.v1.CreateOptions"
+        },
+        "namespace": {
+          "type": "string"
+        },
+        "resourceKind": {
+          "type": "string"
+        },
+        "resourceName": {
+          "type": "string"
+        },
+        "submitOptions": {
+          "$ref": "#/definitions/io.argoproj.workflow.v1alpha1.SubmitOpts"
         }
       }
     },

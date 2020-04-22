@@ -1,0 +1,11 @@
+{
+  "type": "object",
+  "title": "Counter is a Counter prometheus metric",
+  "properties": {
+    "value": {
+      "type": "string",
+      "title": "Value is the value of the metric"
+    }
+  },
+  "$schema": "http://json-schema.org/schema#"
+}

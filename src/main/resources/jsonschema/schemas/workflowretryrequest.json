@@ -6,6 +6,13 @@
     },
     "namespace": {
       "type": "string"
+    },
+    "nodeFieldSelector": {
+      "type": "string"
+    },
+    "restartSuccesful": {
+      "type": "boolean",
+      "format": "boolean"
     }
   },
   "$schema": "http://json-schema.org/schema#"

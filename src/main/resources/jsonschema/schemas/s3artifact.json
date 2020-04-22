@@ -80,6 +80,11 @@
               "title": "Specify whether the Secret or its key must be defined\n+optional"
             }
           }
+        },
+        "useSDKCreds": {
+          "description": "UseSDKCreds tells the driver to figure out credentials based on sdk defaults.",
+          "type": "boolean",
+          "format": "boolean"
         }
       }
     }

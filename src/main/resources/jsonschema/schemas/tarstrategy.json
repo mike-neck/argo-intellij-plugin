@@ -1,5 +1,12 @@
 {
   "type": "object",
   "title": "TarStrategy will tar and gzip the file or directory when saving",
+  "properties": {
+    "compressionLevel": {
+      "description": "CompressionLevel specifies the gzip compression level to use for the artifact.\nDefaults to gzip.DefaultCompression.",
+      "type": "integer",
+      "format": "int32"
+    }
+  },
   "$schema": "http://json-schema.org/schema#"
 }

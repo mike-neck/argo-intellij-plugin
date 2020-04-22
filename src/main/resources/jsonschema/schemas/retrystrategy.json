@@ -4,16 +4,20 @@
   "properties": {
     "backoff": {
       "type": "object",
+      "title": "Backoff is a backoff strategy to use within retryStrategy",
       "properties": {
         "duration": {
-          "type": "string"
+          "type": "string",
+          "title": "Duration is the amount to back off. Default unit is seconds, but could also be a duration (e.g. \"2m\", \"1h\")"
         },
         "factor": {
           "type": "integer",
-          "format": "int32"
+          "format": "int32",
+          "title": "Factor is a factor to multiply the base duration after each failed retry"
         },
         "maxDuration": {
-          "type": "string"
+          "type": "string",
+          "title": "MaxDuration is the maximum amount of time allowed for the backoff strategy"
         }
       }
     },

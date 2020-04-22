@@ -1,0 +1,18 @@
+{
+  "type": "object",
+  "properties": {
+    "message": {
+      "type": "string",
+      "title": "Message is the condition message"
+    },
+    "status": {
+      "type": "string",
+      "title": "Status is the status of the condition"
+    },
+    "type": {
+      "type": "string",
+      "title": "Type is the type of condition"
+    }
+  },
+  "$schema": "http://json-schema.org/schema#"
+}

@@ -1,0 +1,16 @@
+{
+  "type": "object",
+  "title": "Gauge is a Gauge prometheus metric",
+  "properties": {
+    "realtime": {
+      "type": "boolean",
+      "format": "boolean",
+      "title": "Realtime emits this metric in real time if applicable"
+    },
+    "value": {
+      "type": "string",
+      "title": "Value is the value of the metric"
+    }
+  },
+  "$schema": "http://json-schema.org/schema#"
+}

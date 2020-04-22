@@ -1,5 +1,6 @@
 {
   "type": "object",
+  "title": "CronWorkflowStatus is the status of a CronWorkflow",
   "properties": {
     "active": {
       "type": "array",

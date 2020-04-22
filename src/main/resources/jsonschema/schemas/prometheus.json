@@ -1,0 +1,78 @@
+{
+  "type": "object",
+  "title": "Prometheus is a prometheus metric to be emitted",
+  "properties": {
+    "counter": {
+      "type": "object",
+      "title": "Counter is a Counter prometheus metric",
+      "properties": {
+        "value": {
+          "type": "string",
+          "title": "Value is the value of the metric"
+        }
+      }
+    },
+    "gauge": {
+      "type": "object",
+      "title": "Gauge is a Gauge prometheus metric",
+      "properties": {
+        "realtime": {
+          "type": "boolean",
+          "format": "boolean",
+          "title": "Realtime emits this metric in real time if applicable"
+        },
+        "value": {
+          "type": "string",
+          "title": "Value is the value of the metric"
+        }
+      }
+    },
+    "help": {
+      "type": "string",
+      "title": "Help is a string that describes the metric"
+    },
+    "histogram": {
+      "type": "object",
+      "title": "Histogram is a Histogram prometheus metric",
+      "properties": {
+        "buckets": {
+          "type": "array",
+          "title": "Buckets is a list of bucket divisors for the histogram",
+          "items": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "value": {
+          "type": "string",
+          "title": "Value is the value of the metric"
+        }
+      }
+    },
+    "labels": {
+      "type": "array",
+      "title": "Labels is a list of metric labels",
+      "items": {
+        "type": "object",
+        "title": "MetricLabel is a single label for a prometheus metric",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "name": {
+      "type": "string",
+      "title": "Name is the name of the metric"
+    },
+    "when": {
+      "type": "string",
+      "title": "When is a conditional statement that decides when to emit the metric"
+    }
+  },
+  "$schema": "http://json-schema.org/schema#"
+}

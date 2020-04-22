@@ -3,7 +3,8 @@
   "title": "PodGC describes how to delete completed pods as they complete",
   "properties": {
     "strategy": {
-      "type": "string"
+      "type": "string",
+      "title": "Strategy is the strategy to use. One of \"OnPodCompletion\", \"OnPodSuccess\", \"OnWorkflowCompletion\", \"OnWorkflowSuccess\""
     }
   },
   "$schema": "http://json-schema.org/schema#"
