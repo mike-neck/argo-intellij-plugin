@@ -10,7 +10,8 @@ import kotlin.reflect.full.safeCast
 operator fun YAMLValue?.get(key: String): YAMLKeyValue? {
     return this?.children
         ?.asSequence()
-        ?.map { it as YAMLKeyValue }
+        ?.map { it as? YAMLKeyValue }
+        ?.filterNotNull()
         ?.filter { it.keyText == key }
         ?.uniqueOrNull()
 }
