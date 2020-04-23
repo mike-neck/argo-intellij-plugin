@@ -1,5 +1,5 @@
 build:
-  image: gradle
+  image: gradle:6.3-jdk
   script: ./gradlew build --info --stacktrace
   artifacts:
     name: plugin

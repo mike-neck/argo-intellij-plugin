@@ -16,7 +16,8 @@ class ArgoPsiSpec(
             return psiElement
                 .children
                 .asSequence()
-                .map { it as YAMLKeyValue }
+                .map { it as? YAMLKeyValue }
+                .filterNotNull()
                 .filter { it.keyText == "templates" }
                 .uniqueOrNull()
                 ?.children[0]
