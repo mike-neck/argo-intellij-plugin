@@ -1,6 +1,8 @@
 build:
   image: gradle:6.3-jdk
   script: ./gradlew build --info --stacktrace
+  variables:
+    NO_FS_ROOTS_ACCESS_CHECK: "yep"
   artifacts:
     name: plugin
     paths:
