@@ -4,10 +4,7 @@ import com.intellij.lang.annotation.Annotation
 import com.intellij.lang.annotation.AnnotationHolder
 import com.intellij.lang.annotation.HighlightSeverity
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.whenever
+import com.nhaarman.mockitokotlin2.*
 import me.vnagy.intellijplugins.argo.references.callsitetemplate.CallsiteTemplateNameReferenceTest
 import me.vnagy.intellijplugins.argo.wrapper.ArgoPsiFileWrapper
 import org.jetbrains.yaml.psi.YAMLFile
@@ -35,13 +32,30 @@ class ParameterNameMissingInTemplateCallAnnotatorTest  : BasePlatformTestCase() 
 
         testObj.annotate(parametersPsiElement.psiElement, annotator)
 
-        verify(annotator).createAnnotation(
+        verify(annotator).newAnnotation(
             HighlightSeverity.ERROR,
-            parametersPsiElement.psiElement.textRange,
             "The parameter(s) [name] are missing from the template."
         )
     }
 
+    fun testShouldNotReportErrorWhenTheParameterHasValueDefinedInTemplate() {
+        val psiYamlFile = myFixture.configureByFile("arguments/parameter-defined-in-the-template.yml")
+        val argoPsiWrapper = ArgoPsiFileWrapper(psiYamlFile as YAMLFile)
+        val annotator: AnnotationHolder = mock(defaultAnswer = RETURNS_DEEP_STUBS)
+        val parametersPsiElement = argoPsiWrapper
+            .spec
+            ?.getTemplateByName("steps-with-reference")
+            ?.steps
+            ?.getStepByName("echo-hello-world")
+            ?.arguments
+            ?.parameters!!
+
+        testObj.annotate(parametersPsiElement.psiElement, annotator)
+
+        verify(annotator, never()).newAnnotation(any(), any())
+    }
+
+    // TODO #7
     fun _testShouldAddParameterNameQuickFix() {
         val psiYamlFile = myFixture.configureByFile("arguments/empty-parameters-in-template-call.yml")
         val argoPsiWrapper = ArgoPsiFileWrapper(psiYamlFile as YAMLFile)

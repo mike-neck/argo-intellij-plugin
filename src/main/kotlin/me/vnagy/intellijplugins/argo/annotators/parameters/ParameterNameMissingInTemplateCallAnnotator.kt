@@ -31,30 +31,28 @@ class ParameterNameMissingInTemplateCallAnnotator : Annotator {
                 .findParentOfType(ArgoPsiSpec::class)
                 ?.getTemplateByName(templateName)
 
-            val parametersInTemplate = templateDefinition
+            val parametersInTemplateWithoutValue = templateDefinition
                 ?.inputs
                 ?.parameters
-                ?.parameters ?: emptySequence()
+                ?.parameters
+                ?.filter { it.value == null } ?: emptySequence()
 
-            val parametersAtCallSite = templateCallDefinition
+            val parameterNamesAtCallSize = templateCallDefinition
                 .arguments
                 ?.parameters
-                ?.parameters ?: emptySequence()
+                ?.parameters
+                ?.map { it.name }
+                ?.toList() ?: emptyList()
 
-            val parameterNamesAtCallSize = parametersAtCallSite
-                .map { it.name }
-                .toList()
-
-            val missingParameterNames = parametersInTemplate
+            val missingParameterNames = parametersInTemplateWithoutValue
                 .map { it.name }
                 .filterNotNull()
                 .filterNot { parameterNamesAtCallSize.contains(it) }
                 .toList()
 
             if (missingParameterNames.isNotEmpty()) {
-                val annotation = holder.createAnnotation(
+                val annotation = holder.newAnnotation(
                     HighlightSeverity.ERROR,
-                    parametersElement.psiElement.textRange,
                     "The parameter(s) ${missingParameterNames.joinToString(
                         ",",
                         "[",
