@@ -13,7 +13,9 @@
     <depends>org.jetbrains.plugins.yaml</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <psi.referenceContributor language="yaml" implementation="me.vnagy.intellijplugins.argo.references.workflowname.WorkflowTemplateNameReferenceContributor" />
+        <psi.referenceContributor language="yaml" implementation="me.vnagy.intellijplugins.argo.references.callsitetemplate.CallsiteTemplateNameReferenceContributor" />
+        <psi.referenceContributor language="yaml" implementation="me.vnagy.intellijplugins.argo.references.callsitedependson.CallsiteDependsOnReferenceContributor" />
+
         <annotator language="yaml" implementationClass="me.vnagy.intellijplugins.argo.annotators.parameters.ParameterNameMissingInTemplateCallAnnotator" />
     </extensions>
 

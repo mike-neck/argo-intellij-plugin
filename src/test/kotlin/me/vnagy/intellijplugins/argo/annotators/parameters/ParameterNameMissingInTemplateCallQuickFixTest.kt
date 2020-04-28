@@ -2,8 +2,7 @@ package me.vnagy.intellijplugins.argo.annotators.parameters
 
 import com.intellij.psi.PsiFile
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
-import junit.framework.TestCase
-import me.vnagy.intellijplugins.argo.references.workflowname.WorkflowTemplateNameReferenceTest
+import me.vnagy.intellijplugins.argo.references.callsitetemplate.CallsiteTemplateNameReferenceTest
 import me.vnagy.intellijplugins.argo.wrapper.ArgoParametersPsi
 import me.vnagy.intellijplugins.argo.wrapper.ArgoPsiFileWrapper
 import org.jetbrains.yaml.psi.YAMLFile
@@ -15,7 +14,7 @@ class ParameterNameMissingInTemplateCallQuickFixTest : BasePlatformTestCase() {
     private lateinit var parametersElement: ArgoParametersPsi
 
     override fun getTestDataPath(): String {
-        return WorkflowTemplateNameReferenceTest::class.java.getResource("/psi-files").toURI().path
+        return CallsiteTemplateNameReferenceTest::class.java.getResource("/psi-files").toURI().path
     }
 
     override fun isWriteActionRequired() = true
@@ -45,7 +44,7 @@ class ParameterNameMissingInTemplateCallQuickFixTest : BasePlatformTestCase() {
         testObj.invoke(project, null, psiFile)
 
         val actualContent = psiFile.text
-        val expectedContent = WorkflowTemplateNameReferenceTest::class.java
+        val expectedContent = CallsiteTemplateNameReferenceTest::class.java
             .getResourceAsStream("/psi-files/arguments/expected-parameters-in-template-call.yml")
             .reader()
             .readText()

@@ -13,6 +13,14 @@ spec:
         tasks:
           - template: steps-with-reference
             name: steps-with-reference
+          - template: steps-with-reference
+            name: some-template-with-different-name
+          - name: other-dag-step
+            template: steps-with-reference
+            dependencies:
+              - steps-with-reference
+              - some-template-with-different-name
+
     - name: steps-with-reference
       steps:
         - - template: echo-hello-world

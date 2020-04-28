@@ -8,10 +8,9 @@ import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
-import me.vnagy.intellijplugins.argo.references.workflowname.WorkflowTemplateNameReferenceTest
+import me.vnagy.intellijplugins.argo.references.callsitetemplate.CallsiteTemplateNameReferenceTest
 import me.vnagy.intellijplugins.argo.wrapper.ArgoPsiFileWrapper
 import org.jetbrains.yaml.psi.YAMLFile
-import org.junit.Assert.*
 import org.mockito.Mockito.RETURNS_DEEP_STUBS
 
 class ParameterNameMissingInTemplateCallAnnotatorTest  : BasePlatformTestCase() {
@@ -19,7 +18,7 @@ class ParameterNameMissingInTemplateCallAnnotatorTest  : BasePlatformTestCase() 
     private val testObj = ParameterNameMissingInTemplateCallAnnotator()
 
     override fun getTestDataPath(): String {
-        return WorkflowTemplateNameReferenceTest::class.java.getResource("/psi-files").toURI().path
+        return CallsiteTemplateNameReferenceTest::class.java.getResource("/psi-files").toURI().path
     }
 
     fun testShouldReportErrorOnMissingParameterInWorkflow() {

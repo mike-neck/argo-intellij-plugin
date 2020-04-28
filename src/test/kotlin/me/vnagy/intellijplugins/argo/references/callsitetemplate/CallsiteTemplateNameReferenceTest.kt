@@ -1,14 +1,14 @@
-package me.vnagy.intellijplugins.argo.references.workflowname
+package me.vnagy.intellijplugins.argo.references.callsitetemplate
 
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import me.vnagy.intellijplugins.argo.wrapper.ArgoPsiFileWrapper
 import me.vnagy.intellijplugins.argo.wrapper.uniqueOrNull
 import org.jetbrains.yaml.psi.YAMLFile
 
-class WorkflowTemplateNameReferenceTest : BasePlatformTestCase() {
+class CallsiteTemplateNameReferenceTest : BasePlatformTestCase() {
 
     override fun getTestDataPath(): String {
-        return WorkflowTemplateNameReferenceTest::class.java.getResource("/psi-files").toURI().path
+        return CallsiteTemplateNameReferenceTest::class.java.getResource("/psi-files").toURI().path
     }
 
     fun testShouldResolveDagTemplateNameReference() {
@@ -26,7 +26,7 @@ class WorkflowTemplateNameReferenceTest : BasePlatformTestCase() {
             ?.getTemplateByName("steps-with-reference")
             ?.namePsiElement
 
-        val testObj = WorkflowTemplateNameReference(dagTemplateReference)
+        val testObj = CallsiteTemplateNameReference(dagTemplateReference)
         val resolvedElement = testObj.resolve()
         assertNotNull(resolvedElement)
         assertEquals(expectedTemplateNameElement, resolvedElement)
@@ -48,7 +48,7 @@ class WorkflowTemplateNameReferenceTest : BasePlatformTestCase() {
             ?.getTemplateByName("echo-hello-world")
             ?.namePsiElement
 
-        val testObj = WorkflowTemplateNameReference(dagTemplateReference)
+        val testObj = CallsiteTemplateNameReference(dagTemplateReference)
         val resolvedElement = testObj.resolve()
         assertNotNull(resolvedElement)
         assertEquals(expectedTemplateNameElement, resolvedElement)
@@ -69,7 +69,7 @@ class WorkflowTemplateNameReferenceTest : BasePlatformTestCase() {
             ?.getTemplateByName("echo-hello-world")
             ?.namePsiElement
 
-        val testObj = WorkflowTemplateNameReference(stepTemplateReference)
+        val testObj = CallsiteTemplateNameReference(stepTemplateReference)
         val resolvedElement = testObj.resolve()
         assertNotNull(resolvedElement)
         assertEquals(expectedTemplateNameElement, resolvedElement)
@@ -85,7 +85,7 @@ class WorkflowTemplateNameReferenceTest : BasePlatformTestCase() {
             ?.getTaskByName("steps-with-reference")
             ?.namePsiElement!!
 
-        val testObj = WorkflowTemplateNameReference(namePsiElement)
+        val testObj = CallsiteTemplateNameReference(namePsiElement)
         val resolvedElement = testObj.resolve()
         assertNull(resolvedElement)
     }
@@ -100,7 +100,7 @@ class WorkflowTemplateNameReferenceTest : BasePlatformTestCase() {
             ?.getStepByName("echo-hello-world")
             ?.namePsiElement!!
 
-        val testObj = WorkflowTemplateNameReference(stepTemplateReference)
+        val testObj = CallsiteTemplateNameReference(stepTemplateReference)
         val resolvedElement = testObj.resolve()
         assertNull(resolvedElement)
     }

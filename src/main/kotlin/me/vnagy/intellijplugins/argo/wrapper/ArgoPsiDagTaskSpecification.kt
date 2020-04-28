@@ -10,10 +10,22 @@ class ArgoPsiDagTaskSpecification(
 
     override val children: Sequence<ArgoPsi<*>>
         get() = sequenceOf(
-            namePsiElement?.let { GenericArgoPsiWrapper(it, this) },
-            templatePsiElement?.let { GenericArgoPsiWrapper(it, this) }
-        ).filterNotNull()
+            sequenceOf(
+                namePsiElement?.let { GenericArgoPsiWrapper(it, this) },
+                templatePsiElement?.let { GenericArgoPsiWrapper(it, this) }
+            ).filterNotNull(),
+            dependencies.asSequence()
+        ).flatten()
 
     override val yamlChildren
         get() = psiElement.children[0] as YAMLValue
+
+    val dependencies: List<ArgoPsiDagDependency>
+        get() = yamlChildren["dependencies"]
+            ?.children
+            ?.get(0)
+            ?.children
+            ?.filterIsInstance(YAMLSequenceItem::class.java)
+            ?.map { ArgoPsiDagDependency(it, this) }
+            ?: emptyList()
 }
