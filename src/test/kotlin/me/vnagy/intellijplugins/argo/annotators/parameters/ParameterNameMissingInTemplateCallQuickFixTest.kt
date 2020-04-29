@@ -34,10 +34,12 @@ class ParameterNameMissingInTemplateCallQuickFixTest : BasePlatformTestCase() {
     }
 
     fun testShouldAddTheMissingParameterAndAccessItByTheApi() {
+        val countBeforeAdd = parametersElement.parameters.count()
+
         testObj.invoke(project, null, psiFile)
 
-        assertEquals(1, parametersElement.parameters.count())
-        assertEquals("name", parametersElement.parameters.first().name)
+        assertEquals(countBeforeAdd + 1, parametersElement.parameters.count())
+        assertEquals("name", parametersElement.parameters.last().name)
     }
 
     fun _testShouldAddTheMissingParameterToAnArrayOfParametersCorrectlyWhenTheArrayIsAYamlArray() {

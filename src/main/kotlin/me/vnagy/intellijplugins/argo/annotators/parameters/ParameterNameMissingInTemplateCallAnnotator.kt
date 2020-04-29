@@ -16,13 +16,17 @@ class ParameterNameMissingInTemplateCallAnnotator : Annotator {
         val containingFile = element.containingFile
         if (containingFile is YAMLFile) {
             val argoPsiFileWrapper = ArgoPsiFileWrapper(containingFile)
-            when (val argoElement = argoPsiFileWrapper.findChildrenForPsiElement(element)) {
-                is ArgoParametersPsi -> annotateParametersElement(argoElement, holder)
+            when (val argoElement = argoPsiFileWrapper.findChildrenForPsiElement(element)?.parentElement) {
+                is ArgoParametersPsi -> annotateParametersElement(argoElement, element, holder)
             }
         }
     }
 
-    private fun annotateParametersElement(parametersElement: ArgoParametersPsi, holder: AnnotationHolder) {
+    private fun annotateParametersElement(parametersElement: ArgoParametersPsi, element: PsiElement, holder: AnnotationHolder) {
+        if (element != parametersElement.keyPsiElement) {
+            return
+        }
+
         val templateCallDefinition = parametersElement.findParentOfType(ArgoPsiStepSpecification::class)
         val templateName = templateCallDefinition?.template
         if (templateName != null) {
@@ -59,6 +63,8 @@ class ParameterNameMissingInTemplateCallAnnotator : Annotator {
                         "]"
                     )} are missing from the template."
                 )
+
+                annotation.create()
 //                annotation.registerFix(ParameterNameMissingInTemplateCallQuickFix(parametersElement, missingParameterNames))
             }
         }

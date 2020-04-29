@@ -1,6 +1,6 @@
 package me.vnagy.intellijplugins.argo.annotators.parameters
 
-import com.intellij.lang.annotation.Annotation
+import com.intellij.lang.annotation.AnnotationBuilder
 import com.intellij.lang.annotation.AnnotationHolder
 import com.intellij.lang.annotation.HighlightSeverity
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
@@ -22,19 +22,47 @@ class ParameterNameMissingInTemplateCallAnnotatorTest  : BasePlatformTestCase() 
         val psiYamlFile = myFixture.configureByFile("arguments/empty-parameters-in-template-call.yml")
         val argoPsiWrapper = ArgoPsiFileWrapper(psiYamlFile as YAMLFile)
         val annotator: AnnotationHolder = mock(defaultAnswer = RETURNS_DEEP_STUBS)
+        val annotationBuilder: AnnotationBuilder = mock()
+
+        whenever(annotator.newAnnotation(any(), any())).thenReturn(annotationBuilder)
+
         val parametersPsiElement = argoPsiWrapper
             .spec
             ?.getTemplateByName("steps-with-reference")
             ?.steps
             ?.getStepByName("echo-hello-world")
             ?.arguments
-            ?.parameters!!
+            ?.parameters
+            ?.psiElement
+            ?.key!!
 
-        testObj.annotate(parametersPsiElement.psiElement, annotator)
+        testObj.annotate(parametersPsiElement, annotator)
 
         verify(annotator).newAnnotation(
             HighlightSeverity.ERROR,
             "The parameter(s) [name] are missing from the template."
+        )
+        verify(annotationBuilder).create()
+    }
+    fun testShouldNotReportErrorOnMissingParameterInOtherParameterDefinition() {
+        val psiYamlFile = myFixture.configureByFile("arguments/empty-parameters-in-template-call.yml")
+        val argoPsiWrapper = ArgoPsiFileWrapper(psiYamlFile as YAMLFile)
+        val annotator: AnnotationHolder = mock(defaultAnswer = RETURNS_DEEP_STUBS)
+        val parameterPsiElement = argoPsiWrapper
+            .spec
+            ?.getTemplateByName("steps-with-reference")
+            ?.steps
+            ?.getStepByName("echo-hello-world")
+            ?.arguments
+            ?.parameters
+            ?.getParameterByName("foobar")
+            ?.psiElement!!
+
+        testObj.annotate(parameterPsiElement, annotator)
+
+        verify(annotator, never()).newAnnotation(
+            any(),
+            any()
         )
     }
 
@@ -48,9 +76,11 @@ class ParameterNameMissingInTemplateCallAnnotatorTest  : BasePlatformTestCase() 
             ?.steps
             ?.getStepByName("echo-hello-world")
             ?.arguments
-            ?.parameters!!
+            ?.parameters
+            ?.psiElement
+            ?.key!!
 
-        testObj.annotate(parametersPsiElement.psiElement, annotator)
+        testObj.annotate(parametersPsiElement, annotator)
 
         verify(annotator, never()).newAnnotation(any(), any())
     }
@@ -60,9 +90,9 @@ class ParameterNameMissingInTemplateCallAnnotatorTest  : BasePlatformTestCase() 
         val psiYamlFile = myFixture.configureByFile("arguments/empty-parameters-in-template-call.yml")
         val argoPsiWrapper = ArgoPsiFileWrapper(psiYamlFile as YAMLFile)
         val annotator: AnnotationHolder = mock(defaultAnswer = RETURNS_DEEP_STUBS)
-        val annotation: Annotation = mock()
+        val annotationBuilder: AnnotationBuilder = mock()
 
-        whenever(annotator.createAnnotation(any(), any(), any())).thenReturn(annotation)
+        whenever(annotator.newAnnotation(any(), any())).thenReturn(annotationBuilder)
 
         val parametersPsiElement = argoPsiWrapper
             .spec
@@ -70,11 +100,13 @@ class ParameterNameMissingInTemplateCallAnnotatorTest  : BasePlatformTestCase() 
             ?.steps
             ?.getStepByName("echo-hello-world")
             ?.arguments
-            ?.parameters!!
+            ?.parameters
+            ?.psiElement
+            ?.key!!
 
-        testObj.annotate(parametersPsiElement.psiElement, annotator)
+        testObj.annotate(parametersPsiElement, annotator)
 
-        verify(annotator).createAnnotation(any(), any(), any())
-        verify(annotation).registerFix(any())
+        verify(annotator).newAnnotation(any(), any())
+        verify(annotationBuilder).create()
     }
 }

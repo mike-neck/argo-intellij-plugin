@@ -13,11 +13,13 @@ spec:
         - - template: echo-hello-world
             name: echo-hello-world
             arguments:
-              parameters: []
+              parameters:
+                - name: foobar
     - name: echo-hello-world
       inputs:
         parameters:
           - name: name
+          - name: foobar
       script:
         image: alpine
         command: ["sh", "-e"]
