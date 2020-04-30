@@ -6,7 +6,10 @@ import org.jetbrains.yaml.psi.YAMLValue
 class ArgoPsiStepSpecification(
     override val psiElement: YAMLSequenceItem,
     override val parentElement: ArgoPsiSteps
-) : ArgoPsi<YAMLSequenceItem>, HasNameArgoElement, HasTemplateArgoElement, HasArgumentArgoElement<YAMLSequenceItem> {
+) : ArgoPsi<YAMLSequenceItem>,
+    HasNameArgoElement,
+    HasTemplateArgoElement<YAMLSequenceItem>,
+    HasArgumentArgoElement<YAMLSequenceItem> {
 
     override val children: Sequence<ArgoPsi<*>>
         get() = sequenceOf(
