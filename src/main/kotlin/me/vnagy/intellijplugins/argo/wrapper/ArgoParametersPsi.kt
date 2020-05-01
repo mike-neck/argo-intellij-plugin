@@ -18,7 +18,8 @@ class ArgoParametersPsi(
                 ?.asSequence()
                 ?.flatMap { it.children.asSequence() }
                 ?.asSequence()
-                ?.map { it as YAMLMapping }
+                ?.map { it as? YAMLMapping }
+                ?.filterNotNull()
                 ?.map { ArgoParameterPsi(it, this) } ?: emptySequence()
         }
 

@@ -9,18 +9,24 @@ interface ArgoPsi<T : PsiElement> {
     val parentElement: ArgoPsi<*>?
     val children: Sequence<ArgoPsi<*>>
 
-    fun findChildrenForPsiElement(psiElement: PsiElement): ArgoPsi<*>? {
-        return if (this.psiElement == psiElement) {
-            this
-        } else {
-            children
-                .map { it.findChildrenForPsiElement(psiElement) }
-                .filterNotNull()
-                .uniqueOrNull()
+    fun findChildrenForPsiElement(psiElement: PsiElement?): ArgoPsi<*>? {
+        return when {
+            psiElement == null -> {
+                null
+            }
+            this.psiElement == psiElement -> {
+                this
+            }
+            else -> {
+                children
+                    .map { it.findChildrenForPsiElement(psiElement) }
+                    .filterNotNull()
+                    .uniqueOrNull()
+            }
         }
     }
 
-    fun <T: ArgoPsi<*>> findParentOfType(klass: KClass<T>): T? {
+    fun <T : ArgoPsi<*>> findParentOfType(klass: KClass<T>): T? {
         return if (klass.isInstance(this)) {
             klass.cast(this)
         } else {

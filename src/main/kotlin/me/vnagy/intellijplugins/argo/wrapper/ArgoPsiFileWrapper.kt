@@ -13,7 +13,7 @@ class ArgoPsiFileWrapper(override val psiElement: YAMLFile) : ArgoPsi<YAMLFile> 
     val apiVersion: String?
         get() = getTopLevelPropertyString("apiVersion")
 
-    override val parentElement: ArgoPsi<*>?
+    override val parentElement: Nothing?
         get() = null
 
     override val children: Sequence<ArgoPsi<*>>

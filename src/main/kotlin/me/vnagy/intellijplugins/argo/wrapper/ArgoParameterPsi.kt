@@ -5,7 +5,7 @@ import org.jetbrains.yaml.psi.YAMLScalar
 
 class ArgoParameterPsi(
     override val psiElement: YAMLMapping,
-    override val parentElement: ArgoPsi<*>
+    override val parentElement: ArgoParametersPsi
 ) : ArgoPsi<YAMLMapping>, HasNameArgoElement {
 
     override val children: Sequence<ArgoPsi<*>>
