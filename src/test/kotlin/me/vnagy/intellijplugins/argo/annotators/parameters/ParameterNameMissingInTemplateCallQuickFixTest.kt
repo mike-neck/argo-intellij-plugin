@@ -21,7 +21,7 @@ class ParameterNameMissingInTemplateCallQuickFixTest : BasePlatformTestCase() {
 
     override fun setUp() {
         super.setUp()
-        psiFile = myFixture.configureByFile("arguments/empty-parameters-in-template-call.yml")
+        psiFile = myFixture.configureByFile("arguments/steps/empty-parameters-in-template-call.yml")
         parametersElement = ArgoPsiFileWrapper(psiFile as YAMLFile)
             .spec
             ?.getTemplateByName("steps-with-reference")

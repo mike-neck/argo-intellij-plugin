@@ -18,8 +18,8 @@ class ParameterNameMissingInTemplateCallAnnotatorTest  : BasePlatformTestCase() 
         return CallsiteTemplateNameReferenceTest::class.java.getResource("/psi-files").toURI().path
     }
 
-    fun testShouldReportErrorOnMissingParameterInWorkflow() {
-        val psiYamlFile = myFixture.configureByFile("arguments/empty-parameters-in-template-call.yml")
+    fun testShouldReportErrorOnMissingParameterInStepWorkflow() {
+        val psiYamlFile = myFixture.configureByFile("arguments/steps/empty-parameters-in-template-call.yml")
         val argoPsiWrapper = ArgoPsiFileWrapper(psiYamlFile as YAMLFile)
         val annotator: AnnotationHolder = mock(defaultAnswer = RETURNS_DEEP_STUBS)
         val annotationBuilder: AnnotationBuilder = mock()
@@ -44,8 +44,108 @@ class ParameterNameMissingInTemplateCallAnnotatorTest  : BasePlatformTestCase() 
         )
         verify(annotationBuilder).create()
     }
+
+    fun testShouldReportErrorOnMissingParameterInDagWorkflow() {
+        val psiYamlFile = myFixture.configureByFile("arguments/dag/empty-parameters-in-template-call.yml")
+        val argoPsiWrapper = ArgoPsiFileWrapper(psiYamlFile as YAMLFile)
+        val annotator: AnnotationHolder = mock(defaultAnswer = RETURNS_DEEP_STUBS)
+        val annotationBuilder: AnnotationBuilder = mock()
+
+        whenever(annotator.newAnnotation(any(), any())).thenReturn(annotationBuilder)
+
+        val parametersPsiElement = argoPsiWrapper
+            .spec
+            ?.getTemplateByName("dag-with-reference")
+            ?.dag
+            ?.getTaskByName("echo-hello-world")
+            ?.arguments
+            ?.parameters
+            ?.psiElement
+            ?.key!!
+
+        testObj.annotate(parametersPsiElement, annotator)
+
+        verify(annotator).newAnnotation(
+            HighlightSeverity.ERROR,
+            "The parameter(s) [name] are missing from the template."
+        )
+        verify(annotationBuilder).create()
+    }
+
+    fun testShouldReportErrorOnMissingParameterInWorkflowOnTheTemplateWhenTheWorkflowDoesNotHaveTheParametersTag() {
+        val psiYamlFile = myFixture.configureByFile("arguments/steps/empty-parameters-in-template-call-without-arguments.yml")
+        val argoPsiWrapper = ArgoPsiFileWrapper(psiYamlFile as YAMLFile)
+        val annotator: AnnotationHolder = mock(defaultAnswer = RETURNS_DEEP_STUBS)
+        val annotationBuilder: AnnotationBuilder = mock()
+
+        whenever(annotator.newAnnotation(any(), any())).thenReturn(annotationBuilder)
+
+        val templatePsiElement = argoPsiWrapper
+            .spec
+            ?.getTemplateByName("steps-with-reference")
+            ?.steps
+            ?.getStepByName("echo-hello-world")
+            ?.templatePsiElement!!
+
+        testObj.annotate(templatePsiElement, annotator)
+
+        verify(annotator).newAnnotation(
+            HighlightSeverity.ERROR,
+            "The parameter(s) [name] are missing from the template."
+        )
+        verify(annotationBuilder).create()
+    }
+
+    fun testShouldReportErrorOnMissingParameterInDagWorkflowOnTheTemplateWhenTheWorkflowDoesNotHaveTheParametersTag() {
+        val psiYamlFile = myFixture.configureByFile("arguments/dag/empty-parameters-in-template-call-without-arguments.yml")
+        val argoPsiWrapper = ArgoPsiFileWrapper(psiYamlFile as YAMLFile)
+        val annotator: AnnotationHolder = mock(defaultAnswer = RETURNS_DEEP_STUBS)
+        val annotationBuilder: AnnotationBuilder = mock()
+
+        whenever(annotator.newAnnotation(any(), any())).thenReturn(annotationBuilder)
+
+        val templatePsiElement = argoPsiWrapper
+            .spec
+            ?.getTemplateByName("dag-with-reference")
+            ?.dag
+            ?.getTaskByName("echo-hello-world")
+            ?.templatePsiElement!!
+
+        testObj.annotate(templatePsiElement, annotator)
+
+        verify(annotator).newAnnotation(
+            HighlightSeverity.ERROR,
+            "The parameter(s) [name] are missing from the template."
+        )
+        verify(annotationBuilder).create()
+    }
+
+    fun testShouldNotReportErrorOnMissingParameterInWorkflowOnTheTemplateWhenTheWorkflowDoesHaveTheParametersTag() {
+        val psiYamlFile = myFixture.configureByFile("arguments/steps/empty-parameters-in-template-call.yml")
+        val argoPsiWrapper = ArgoPsiFileWrapper(psiYamlFile as YAMLFile)
+        val annotator: AnnotationHolder = mock(defaultAnswer = RETURNS_DEEP_STUBS)
+        val annotationBuilder: AnnotationBuilder = mock()
+
+        whenever(annotator.newAnnotation(any(), any())).thenReturn(annotationBuilder)
+
+        val templatePsiElement = argoPsiWrapper
+            .spec
+            ?.getTemplateByName("steps-with-reference")
+            ?.steps
+            ?.getStepByName("echo-hello-world")
+            ?.templatePsiElement!!
+
+        testObj.annotate(templatePsiElement, annotator)
+
+        verify(annotator, never()).newAnnotation(
+            HighlightSeverity.ERROR,
+            "The parameter(s) [name] are missing from the template."
+        )
+        verify(annotationBuilder, never()).create()
+    }
+
     fun testShouldNotReportErrorOnMissingParameterInOtherParameterDefinition() {
-        val psiYamlFile = myFixture.configureByFile("arguments/empty-parameters-in-template-call.yml")
+        val psiYamlFile = myFixture.configureByFile("arguments/steps/empty-parameters-in-template-call.yml")
         val argoPsiWrapper = ArgoPsiFileWrapper(psiYamlFile as YAMLFile)
         val annotator: AnnotationHolder = mock(defaultAnswer = RETURNS_DEEP_STUBS)
         val parameterPsiElement = argoPsiWrapper
@@ -87,7 +187,7 @@ class ParameterNameMissingInTemplateCallAnnotatorTest  : BasePlatformTestCase() 
 
     // TODO #7
     fun _testShouldAddParameterNameQuickFix() {
-        val psiYamlFile = myFixture.configureByFile("arguments/empty-parameters-in-template-call.yml")
+        val psiYamlFile = myFixture.configureByFile("arguments/steps/empty-parameters-in-template-call.yml")
         val argoPsiWrapper = ArgoPsiFileWrapper(psiYamlFile as YAMLFile)
         val annotator: AnnotationHolder = mock(defaultAnswer = RETURNS_DEEP_STUBS)
         val annotationBuilder: AnnotationBuilder = mock()
