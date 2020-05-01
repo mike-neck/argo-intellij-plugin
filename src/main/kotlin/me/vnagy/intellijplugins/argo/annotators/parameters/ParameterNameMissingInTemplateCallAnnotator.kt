@@ -4,10 +4,7 @@ import com.intellij.lang.annotation.AnnotationHolder
 import com.intellij.lang.annotation.Annotator
 import com.intellij.lang.annotation.HighlightSeverity
 import com.intellij.psi.PsiElement
-import me.vnagy.intellijplugins.argo.wrapper.ArgoParametersPsi
-import me.vnagy.intellijplugins.argo.wrapper.ArgoPsiFileWrapper
-import me.vnagy.intellijplugins.argo.wrapper.ArgoPsiSpec
-import me.vnagy.intellijplugins.argo.wrapper.ArgoPsiStepSpecification
+import me.vnagy.intellijplugins.argo.wrapper.*
 import org.jetbrains.yaml.psi.YAMLFile
 
 class ParameterNameMissingInTemplateCallAnnotator : Annotator {
@@ -18,7 +15,21 @@ class ParameterNameMissingInTemplateCallAnnotator : Annotator {
             val argoPsiFileWrapper = ArgoPsiFileWrapper(containingFile)
             when (val argoElement = argoPsiFileWrapper.findChildrenForPsiElement(element)?.parentElement) {
                 is ArgoParametersPsi -> annotateParametersElement(argoElement, element, holder)
+                is HasArgumentArgoElement -> annotateTemplateElementWithMissingParameter(argoElement, holder)
             }
+        }
+    }
+
+    private fun annotateTemplateElementWithMissingParameter(
+        stepSpecification: HasArgumentArgoElement<*>,
+        holder: AnnotationHolder
+    ) {
+        val parametersElement = stepSpecification
+            .arguments
+            ?.parameters
+            ?.keyPsiElement
+        if (parametersElement == null) {
+            createAnnotation(stepSpecification, holder)
         }
     }
 
@@ -26,12 +37,35 @@ class ParameterNameMissingInTemplateCallAnnotator : Annotator {
         if (element != parametersElement.keyPsiElement) {
             return
         }
+        createAnnotation(parametersElement, holder)
+    }
 
-        val templateCallDefinition = parametersElement.findParentOfType(ArgoPsiStepSpecification::class)
+    private fun createAnnotation(
+        parametersElement: ArgoPsi<*>,
+        holder: AnnotationHolder
+    ) {
+        val missingParameterNames = getMissingParameterNames(parametersElement)
+        if (missingParameterNames.isNotEmpty()) {
+            val annotation = holder.newAnnotation(
+                HighlightSeverity.ERROR,
+                "The parameter(s) ${missingParameterNames.joinToString(
+                    ",",
+                    "[",
+                    "]"
+                )} are missing from the template."
+            )
+
+            annotation.create()
+    //                annotation.registerFix(ParameterNameMissingInTemplateCallQuickFix(parametersElement, missingParameterNames))
+        }
+    }
+
+    private fun getMissingParameterNames(argoElement: ArgoPsi<*>): List<String> {
+        val templateCallDefinition = argoElement.findParentOfType(HasTemplateArgoElement::class)
         val templateName = templateCallDefinition?.template
         if (templateName != null) {
 
-            val templateDefinition = parametersElement
+            val templateDefinition = argoElement
                 .findParentOfType(ArgoPsiSpec::class)
                 ?.getTemplateByName(templateName)
 
@@ -48,26 +82,13 @@ class ParameterNameMissingInTemplateCallAnnotator : Annotator {
                 ?.map { it.name }
                 ?.toList() ?: emptyList()
 
-            val missingParameterNames = parametersInTemplateWithoutValue
+            return parametersInTemplateWithoutValue
                 .map { it.name }
                 .filterNotNull()
                 .filterNot { parameterNamesAtCallSize.contains(it) }
                 .toList()
-
-            if (missingParameterNames.isNotEmpty()) {
-                val annotation = holder.newAnnotation(
-                    HighlightSeverity.ERROR,
-                    "The parameter(s) ${missingParameterNames.joinToString(
-                        ",",
-                        "[",
-                        "]"
-                    )} are missing from the template."
-                )
-
-                annotation.create()
-//                annotation.registerFix(ParameterNameMissingInTemplateCallQuickFix(parametersElement, missingParameterNames))
-            }
         }
+        return emptyList()
     }
 
 }

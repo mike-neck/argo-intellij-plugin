@@ -8,13 +8,15 @@ class ArgoPsiDagTaskSpecification(
     override val parentElement: ArgoPsiDagTask
 ) : ArgoPsi<YAMLSequenceItem>,
     HasNameArgoElement,
+    HasArgumentArgoElement<YAMLSequenceItem>,
     HasTemplateArgoElement<YAMLSequenceItem> {
 
     override val children: Sequence<ArgoPsi<*>>
         get() = sequenceOf(
             sequenceOf(
                 namePsiElement?.let { GenericArgoPsiWrapper(it, this) },
-                templatePsiElement?.let { GenericArgoPsiWrapper(it, this) }
+                templatePsiElement?.let { GenericArgoPsiWrapper(it, this) },
+                arguments
             ).filterNotNull(),
             dependencies.asSequence()
         ).flatten()
