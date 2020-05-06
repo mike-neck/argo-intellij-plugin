@@ -1,11 +1,32 @@
 <idea-plugin>
     <id>me.vnagy.intellijplugins.argo</id>
     <name>Argo Workflow Editor</name>
-    <vendor email="vilmos.nagy@outlook.com">Vilmos Nagy</vendor>
+    <vendor
+            url="https://gitlab.com/vilmosnagy/argo-intellij-plugin/"
+            email="vilmos.nagy@outlook.com">
+        Vilmos Nagy
+    </vendor>
 
     <description><![CDATA[Argo Workflow Editor
     A simple plugin which helps editing the <a href="https://github.com/argoproj/argo">Argo</a> workflow yamls.
     ]]></description>
+
+    <version>0.0.1</version>
+    <change-notes>
+        <![CDATA[Argo Workflow Editor
+        <ul>
+            <li>
+                <strong>0.0.1</strong>
+                <p>
+                    <ul>
+                        <li>Initial release of the plugin</li>
+                    </ul>
+                </p>
+            </li>
+        </ul>
+        ]]>
+    </change-notes>
+    <idea-version since-build="201" until-build="210."/>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
          on how to target different products -->
