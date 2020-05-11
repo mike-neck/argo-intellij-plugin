@@ -27,7 +27,7 @@ class ArgoPsiDagTaskSpecification(
     val dependencies: List<ArgoPsiDagDependency>
         get() = yamlChildren["dependencies"]
             ?.children
-            ?.get(0)
+            ?.getOrNull(0)
             ?.children
             ?.filterIsInstance(YAMLSequenceItem::class.java)
             ?.map { ArgoPsiDagDependency(it, this) }
