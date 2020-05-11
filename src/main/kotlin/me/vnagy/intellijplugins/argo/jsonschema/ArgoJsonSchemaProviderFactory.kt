@@ -1,5 +1,6 @@
 package me.vnagy.intellijplugins.argo.jsonschema;
 
+import com.intellij.openapi.application.runReadAction
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VfsUtil
 import com.intellij.openapi.vfs.VirtualFile
@@ -27,12 +28,14 @@ class ArgoWorkflowSchemaFileProvider(private val project: Project) : JsonSchemaF
     override fun getName() = "Argo Workflow Schema"
 
     override fun isAvailable(file: VirtualFile): Boolean {
-        val psiFile = psiManager.findFile(file)
-        if (psiFile is YAMLFile) {
-            val argoWrapper = ArgoPsiFileWrapper(psiFile)
-            return argoWrapper.apiVersion == "argoproj.io/v1alpha1" && argoWrapper.kind == "Workflow"
+        return runReadAction {
+            val psiFile = psiManager.findFile(file)
+            if (psiFile is YAMLFile) {
+                val argoWrapper = ArgoPsiFileWrapper(psiFile)
+                return@runReadAction argoWrapper.apiVersion == "argoproj.io/v1alpha1" && argoWrapper.kind == "Workflow"
+            }
+            return@runReadAction false
         }
-        return false
     }
 
     override fun getSchemaFile(): VirtualFile? {
@@ -56,12 +59,15 @@ class ArgoWorkflowTemplateSchemaFileProvider(private val project: Project) : Jso
     override fun getName() = "Argo WorkflowTemplate Schema"
 
     override fun isAvailable(file: VirtualFile): Boolean {
-        val psiFile = psiManager.findFile(file)
-        if (psiFile is YAMLFile) {
-            val argoWrapper = ArgoPsiFileWrapper(psiFile)
-            return argoWrapper.apiVersion == "argoproj.io/v1alpha1" && argoWrapper.kind == "WorkflowTemplate"
+        return runReadAction {
+            val psiFile = psiManager.findFile(file)
+            if (psiFile is YAMLFile) {
+                val argoWrapper = ArgoPsiFileWrapper(psiFile)
+                return@runReadAction argoWrapper.apiVersion == "argoproj.io/v1alpha1" && argoWrapper.kind == "WorkflowTemplate"
+            } else {
+                return@runReadAction false
+            }
         }
-        return false
     }
 
     override fun getSchemaFile(): VirtualFile? {

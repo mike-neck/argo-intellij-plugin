@@ -1,4 +1,4 @@
-package me.vnagy.intellijplugins.argo.completioncontributor.parameters
+package me.vnagy.intellijplugins.argo.completioncontributor.dependencies
 
 import com.intellij.patterns.ElementPattern
 import com.intellij.patterns.ElementPatternCondition
@@ -6,13 +6,17 @@ import com.intellij.patterns.InitialPatternCondition
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.parentOfType
 import com.intellij.util.ProcessingContext
+import me.vnagy.intellijplugins.argo.completioncontributor.DEPENDENCIES_ELEMENT
 import me.vnagy.intellijplugins.argo.completioncontributor.PARAMETERS_ELEMENT
 import me.vnagy.intellijplugins.argo.wrapper.ArgoParameterPsi
+import me.vnagy.intellijplugins.argo.wrapper.ArgoPsiDagDependency
 import me.vnagy.intellijplugins.argo.wrapper.ArgoPsiFileWrapper
 import org.jetbrains.yaml.psi.YAMLFile
+import org.jetbrains.yaml.psi.YAMLKeyValue
+import org.jetbrains.yaml.psi.YAMLSequenceItem
 import org.jetbrains.yaml.psi.impl.YAMLBlockMappingImpl
 
-class ParameterNameElementPattern :
+class DagDependencyElementPattern :
     InitialPatternCondition<PsiElement>(PsiElement::class.java),
     ElementPattern<PsiElement> {
 
@@ -21,9 +25,9 @@ class ParameterNameElementPattern :
             val containingFile = o.containingFile
             if (containingFile is YAMLFile) {
                 val argoPsiWrapper = ArgoPsiFileWrapper(containingFile)
-                val parameterParent = argoPsiWrapper.findChildrenForPsiElement(o.parentOfType<YAMLBlockMappingImpl>())
-                if (parameterParent is ArgoParameterPsi && parameterParent.namePsiElement == o.parent) {
-                    context.put(PARAMETERS_ELEMENT, parameterParent)
+                val dependenciesParent = argoPsiWrapper.findChildrenForPsiElement(o.parentOfType<YAMLSequenceItem>())
+                if (dependenciesParent is ArgoPsiDagDependency && dependenciesParent.psiElement == o.parent.parent) {
+                    context.put(DEPENDENCIES_ELEMENT, dependenciesParent)
                     return true
                 }
             }

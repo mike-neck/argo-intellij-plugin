@@ -6,6 +6,7 @@ import com.intellij.codeInsight.completion.CompletionResultSet
 import com.intellij.codeInsight.lookup.AutoCompletionPolicy
 import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.util.ProcessingContext
+import me.vnagy.intellijplugins.argo.completioncontributor.PARAMETERS_ELEMENT
 import me.vnagy.intellijplugins.argo.wrapper.ArgoPsiSpec
 import me.vnagy.intellijplugins.argo.wrapper.ArgoPsiStepSpecification
 import me.vnagy.intellijplugins.argo.wrapper.HasTemplateArgoElement
@@ -41,5 +42,4 @@ class ParameterNameAutoCompletionProvider : CompletionProvider<CompletionParamet
             }
         }
     }
-
 }
