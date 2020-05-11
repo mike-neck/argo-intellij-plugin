@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata: {generateName: no-such-template}
+spec:
+  arguments:
+    parameters:
+      - {name: current-date, value: '20200219'}
+  entrypoint: no-such-template
+  volumes: []
+  templates:
+    - name: dag-with-reference
+      dag:
+        tasks:
+          - name: echo-hello
+            template: echo-hello-world
+          - name: dependent-on-hello
+            template: echo-hello-world
+            dependencies:
+              -
+    - name: echo-hello-world
+      script:
+        image: alpine
+        command: ["sh", "-e"]
+        source: |
+          echo "hello world"

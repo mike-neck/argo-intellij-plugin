@@ -38,6 +38,7 @@
         <psi.referenceContributor language="yaml" implementation="me.vnagy.intellijplugins.argo.references.callsitedependson.CallsiteDependsOnReferenceContributor" />
 
         <completion.contributor language="yaml" implementationClass="me.vnagy.intellijplugins.argo.completioncontributor.parameters.ParameterNameAutoCompletionContributor" />
+        <completion.contributor language="yaml" implementationClass="me.vnagy.intellijplugins.argo.completioncontributor.dependencies.DagDependenciesAutoCompletionContributor" />
 
         <annotator language="yaml" implementationClass="me.vnagy.intellijplugins.argo.annotators.parameters.ParameterNameMissingInTemplateCallAnnotator" />
     </extensions>
