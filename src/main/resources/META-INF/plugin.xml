@@ -26,7 +26,7 @@
         </ul>
         ]]>
     </change-notes>
-    <idea-version since-build="201" until-build="210."/>
+    <idea-version since-build="201.2037" until-build="210."/>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
          on how to target different products -->
@@ -41,6 +41,7 @@
         <completion.contributor language="yaml" implementationClass="me.vnagy.intellijplugins.argo.completioncontributor.dependencies.DagDependenciesAutoCompletionContributor" />
 
         <annotator language="yaml" implementationClass="me.vnagy.intellijplugins.argo.annotators.parameters.ParameterNameMissingInTemplateCallAnnotator" />
+        <annotator language="yaml" implementationClass="me.vnagy.intellijplugins.argo.annotators.callsitedependson.CallsiteDependsOnTaskMissingFromDagTaskAnnotator" />
     </extensions>
 
     <extensions defaultExtensionNs="JavaScript">
