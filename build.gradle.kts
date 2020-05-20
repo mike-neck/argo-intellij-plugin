@@ -32,4 +32,8 @@ tasks {
     compileTestKotlin {
         kotlinOptions.jvmTarget = "1.8"
     }
+    publishPlugin {
+        token = System.getenv("INTELLIJ_PUBLISH_TOKEN")
+        channels = arrayOf(System.getenv("INTELLIJ_PLUGIN_CHANNEL"))
+    }
 }

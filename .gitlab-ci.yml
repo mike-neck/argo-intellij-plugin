@@ -1,9 +1,35 @@
+stages:
+  - build
+  - deploy
+
 build:
   image: gradle:6.3-jdk
   script: ./gradlew build --info --stacktrace
+  stage: build
   variables:
     NO_FS_ROOTS_ACCESS_CHECK: "yep"
   artifacts:
     name: plugin
     paths:
       - build/distributions/argo-intellij-plugin-*.zip
+
+.deploy: &deploy
+  image: gradle:6.3-jdk
+  script: ./gradlew publishPlugin -x test
+  stage: deploy
+  variables:
+    NO_FS_ROOTS_ACCESS_CHECK: "yep"
+
+deploy_snapshot:
+  <<: *deploy
+#  rules:
+#    - if: '$CI_COMMIT_REF_NAME == "master" && $CI_COMMIT_TAG == ""'
+  variables:
+    INTELLIJ_PLUGIN_CHANNEL: snapshot
+
+deploy_release:
+  <<: *deploy
+  rules:
+    - if: '$CI_COMMIT_TAG != ""'
+  variables:
+    INTELLIJ_PLUGIN_CHANNEL: snapshot
