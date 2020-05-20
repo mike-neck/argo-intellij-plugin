@@ -66,7 +66,7 @@ class ParameterNameMissingInTemplateCallAnnotator : Annotator {
         if (templateName != null) {
 
             val templateDefinition = argoElement
-                .findParentOfType(ArgoPsiSpec::class)
+                .findParentOfType(ArgoPsiWorkflowSpec::class)
                 ?.getTemplateByName(templateName)
 
             val parametersInTemplateWithoutValue = templateDefinition

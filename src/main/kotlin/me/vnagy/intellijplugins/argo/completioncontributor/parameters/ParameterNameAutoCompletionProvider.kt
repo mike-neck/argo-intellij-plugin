@@ -7,7 +7,7 @@ import com.intellij.codeInsight.lookup.AutoCompletionPolicy
 import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.util.ProcessingContext
 import me.vnagy.intellijplugins.argo.completioncontributor.PARAMETERS_ELEMENT
-import me.vnagy.intellijplugins.argo.wrapper.ArgoPsiSpec
+import me.vnagy.intellijplugins.argo.wrapper.ArgoPsiWorkflowSpec
 import me.vnagy.intellijplugins.argo.wrapper.ArgoPsiStepSpecification
 import me.vnagy.intellijplugins.argo.wrapper.HasTemplateArgoElement
 
@@ -26,7 +26,7 @@ class ParameterNameAutoCompletionProvider : CompletionProvider<CompletionParamet
 
             if (templateName != null) {
                 val parameterElements = hasArgumentElement
-                    .findParentOfType(ArgoPsiSpec::class)
+                    .findParentOfType(ArgoPsiWorkflowSpec::class)
                     ?.getTemplateByName(templateName)
                     ?.inputs
                     ?.parameters

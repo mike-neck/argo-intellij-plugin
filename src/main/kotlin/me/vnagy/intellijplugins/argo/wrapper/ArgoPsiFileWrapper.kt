@@ -25,8 +25,13 @@ class ArgoPsiFileWrapper(override val psiElement: YAMLFile) : ArgoPsi<YAMLFile> 
                 .documents[0]
                 .topLevelValue["spec"]
                 ?.value
-
-            return specElement?.let { ArgoPsiSpec(specElement, this) }
+            if (this.kind == "Workflow" || this.kind == "WorkflowTemplate") {
+                return specElement?.let { ArgoPsiWorkflowSpec(specElement, this) }
+            } else if (this.kind == "CronWorkflow") {
+                return specElement?.let { ArgoPsiCronWorkflowSpec(specElement, this) }
+            } else {
+                return null
+            }
         }
 
     private fun getTopLevelPropertyString(key: String): String? {

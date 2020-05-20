@@ -30,6 +30,17 @@ class ArgoPsiFileWrapperTest : BasePlatformTestCase() {
         assertEquals("unzip-archive-into-dir", unzipTemplate.name)
     }
 
+    fun testShouldReturnCorrectTemplateDefinitionsFromCronWorkflowFile() {
+        val psiYamlFile = myFixture.configureByFile("basic-cronworkflow.yml")
+        val testObj = ArgoPsiFileWrapper(psiYamlFile as YAMLFile)
+        val templates = testObj.spec?.templates ?: emptyList()
+
+        assertEquals(1, templates.size)
+
+        val unzipTemplate = templates[0]
+        assertEquals("unzip-archive-into-dir", unzipTemplate.name)
+    }
+
     fun testShouldFindWrapperElementFromPsiElement() {
         val psiYamlFile = myFixture.configureByFile("basic-workflow.yml")
         val testObj = ArgoPsiFileWrapper(psiYamlFile as YAMLFile)
