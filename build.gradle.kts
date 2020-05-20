@@ -1,11 +1,11 @@
 plugins {
     id("org.jetbrains.intellij") version "0.4.16"
+    id("net.researchgate.release") version "2.8.1"
     java
     kotlin("jvm") version "1.3.61"
 }
 
 group = "me.vnagy.intellijplugins"
-version = "0.0.1"
 
 repositories {
     mavenCentral()
