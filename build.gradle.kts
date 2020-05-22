@@ -52,7 +52,7 @@ tasks {
         } else {
             pluginVersion = "$version-${details.gitHash}"
         }
-        changeNotes(file("change-notes.html"))
+        changeNotes(file("change-notes.html").readText())
         version(pluginVersion)
     }
 }
