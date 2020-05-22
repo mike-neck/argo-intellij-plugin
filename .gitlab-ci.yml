@@ -22,8 +22,8 @@ build:
 
 deploy_snapshot:
   <<: *deploy
-  rules:
-    - if: '$CI_COMMIT_REF_NAME == "master" && $CI_COMMIT_TAG == ""'
+#  rules:
+#    - if: '$CI_COMMIT_REF_NAME == "master" && $CI_COMMIT_TAG == ""'
   variables:
     INTELLIJ_PLUGIN_CHANNEL: snapshot
 
