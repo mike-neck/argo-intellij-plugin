@@ -13,32 +13,8 @@
 
     <version>0.0.2</version>
     <change-notes>
-        <![CDATA[Argo Workflow Editor
-        <ul>
-            <li>
-                <strong>0.0.2</strong>
-                <p>
-                <ul>
-                    <li><a href="https://gitlab.com/vilmosnagy/argo-intellij-plugin/-/merge_requests/10">!10</a> -
-                        Basic support for the CronWorkflows</li>
-                    <li><a href="https://gitlab.com/vilmosnagy/argo-intellij-plugin/-/merge_requests/9">!9</a> -
-                        Verification that the `dagTask.dependencies` references an existing dag task</li>
-                    <li><a href="https://gitlab.com/vilmosnagy/argo-intellij-plugin/-/merge_requests/8">!8</a> -
-                        Provide autocompletion for the `dagTask.dependencies` fields</li>
-                    <li><a href="https://gitlab.com/vilmosnagy/argo-intellij-plugin/-/merge_requests/6">!6</a> -
-                        Missing parameter annotator enhanced</li>
-                    <li><a href="https://gitlab.com/vilmosnagy/argo-intellij-plugin/-/merge_requests/4">!4</a> -
-                        Autocompletion for the `arguments.parameters.name` fields</li>
-                </ul>
-                </p>
-                <strong>0.0.1</strong>
-                <p>
-                    <ul>
-                        <li>Initial release of the plugin</li>
-                    </ul>
-                </p>
-            </li>
-        </ul>
+        <![CDATA[
+        Imported automatically from change-notes.html
         ]]>
     </change-notes>
     <idea-version since-build="201.2037" until-build="210."/>
