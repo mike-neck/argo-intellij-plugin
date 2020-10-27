@@ -11,7 +11,7 @@
     A simple plugin which helps editing the <a href="https://github.com/argoproj/argo">Argo</a> workflow yamls.
     ]]></description>
 
-    <version>0.0.4</version>
+    <version>imported from the build.gradle.kts</version>
     <change-notes>
         <![CDATA[
         Imported automatically from change-notes.html
