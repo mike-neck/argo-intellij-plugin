@@ -4,27 +4,26 @@ import com.intellij.lang.annotation.AnnotationBuilder
 import com.intellij.lang.annotation.AnnotationHolder
 import com.intellij.lang.annotation.HighlightSeverity
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.whenever
-import me.vnagy.intellijplugins.argo.annotators.parameters.ParameterNameMissingInTemplateCallAnnotator
 import me.vnagy.intellijplugins.argo.wrapper.ArgoPsiFileWrapper
 import org.jetbrains.yaml.psi.YAMLFile
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito
+import org.mockito.Mockito.mock
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
 
 class CallsiteDependsOnTaskMissingFromDagTaskAnnotatorTest : BasePlatformTestCase() {
 
     private val testObj = CallsiteDependsOnTaskMissingFromDagTaskAnnotator()
 
     override fun getTestDataPath(): String {
-        return CallsiteDependsOnTaskMissingFromDagTaskAnnotatorTest::class.java.getResource("/psi-files").toURI().path
+        return CallsiteDependsOnTaskMissingFromDagTaskAnnotatorTest::class.java.getResource("/psi-files")?.toURI()?.path?: error("Can't find resource")
     }
 
     fun testShouldReportErrorOnDependsOnTextWhenItRefersToANonExistingTask() {
         val psiYamlFile = myFixture.configureByFile("dependencies/dag/non-existing-dag-task-dependency.yml")
         val argoPsiWrapper = ArgoPsiFileWrapper(psiYamlFile as YAMLFile)
-        val annotator: AnnotationHolder = mock(defaultAnswer = Mockito.RETURNS_DEEP_STUBS)
+        val annotator: AnnotationHolder = mock(Mockito.RETURNS_DEEP_STUBS)
         val annotationBuilder: AnnotationBuilder = mock()
 
         whenever(annotator.newAnnotation(any(), any())).thenReturn(annotationBuilder)

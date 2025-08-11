@@ -1,58 +1,48 @@
-import com.palantir.gradle.gitversion.VersionDetails
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
-    id("org.jetbrains.intellij") version "0.4.16"
-    id("net.researchgate.release") version "2.8.1"
-    id("com.palantir.git-version") version "0.12.3"
-    java
-    kotlin("jvm") version "1.3.61"
+    id("org.jetbrains.intellij.platform") version "2.7.1"
+//    id("net.researchgate.release") version "2.8.1"
+//    id("com.palantir.git-version") version "0.12.3"
+    id("java")
+    kotlin("jvm") version "2.1.20"
 }
-
-val version: String by project
 
 group = "me.vnagy.intellijplugins"
 
 repositories {
     mavenCentral()
+    intellijPlatform {
+        defaultRepositories()
+    }
 }
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation(kotlin("reflect"))
-    testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0")
+    testImplementation("junit:junit:4.13.1")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:5.4.0")
+
+    intellijPlatform {
+        intellijIdeaUltimate("2025.2")
+        bundledPlugin("com.intellij.kubernetes")
+        bundledPlugin("org.jetbrains.plugins.yaml")
+        bundledPlugin("com.intellij.modules.json")
+
+        testFramework(org.jetbrains.intellij.platform.gradle.TestFrameworkType.Platform)
+    }
 }
 
-// See https://github.com/JetBrains/gradle-intellij-plugin/
-intellij {
-    version = "2020.2"
-    setPlugins("yaml")
+kotlin {
+    jvmToolchain(21)
 }
-configure<JavaPluginConvention> {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-}
-
-fun getVersionDetails(): VersionDetails = (extra["versionDetails"] as groovy.lang.Closure<*>)() as VersionDetails
 
 tasks {
-    compileKotlin {
-        kotlinOptions.jvmTarget = "1.8"
+    withType<JavaCompile> {
+        sourceCompatibility = "21"
+        targetCompatibility = "21"
     }
-    compileTestKotlin {
-        kotlinOptions.jvmTarget = "1.8"
-    }
-    publishPlugin {
-        token(System.getenv("INTELLIJ_PUBLISH_TOKEN"))
-        channels(System.getenv("INTELLIJ_PLUGIN_CHANNEL"))
-    }
-    patchPluginXml {
-        val details = getVersionDetails()
-        val pluginVersion: String
-        if (details.isCleanTag) {
-            pluginVersion = version
-        } else {
-            pluginVersion = "$version-${details.gitHash}"
-        }
-        changeNotes(file("change-notes.html").readText())
-        version(pluginVersion)
+    withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+        compilerOptions.jvmTarget.set(JvmTarget.JVM_21)
     }
 }

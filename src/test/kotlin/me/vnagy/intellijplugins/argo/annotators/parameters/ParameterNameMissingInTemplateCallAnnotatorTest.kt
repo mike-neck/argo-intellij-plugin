@@ -4,24 +4,28 @@ import com.intellij.lang.annotation.AnnotationBuilder
 import com.intellij.lang.annotation.AnnotationHolder
 import com.intellij.lang.annotation.HighlightSeverity
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
-import com.nhaarman.mockitokotlin2.*
 import me.vnagy.intellijplugins.argo.references.callsitetemplate.CallsiteTemplateNameReferenceTest
 import me.vnagy.intellijplugins.argo.wrapper.ArgoPsiFileWrapper
 import org.jetbrains.yaml.psi.YAMLFile
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.RETURNS_DEEP_STUBS
+import org.mockito.Mockito.mock
+import org.mockito.kotlin.never
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
 
 class ParameterNameMissingInTemplateCallAnnotatorTest  : BasePlatformTestCase() {
 
     private val testObj = ParameterNameMissingInTemplateCallAnnotator()
 
     override fun getTestDataPath(): String {
-        return CallsiteTemplateNameReferenceTest::class.java.getResource("/psi-files").toURI().path
+        return CallsiteTemplateNameReferenceTest::class.java.getResource("/psi-files")?.toURI()?.path ?: error("Can't find resource")
     }
 
     fun testShouldReportErrorOnMissingParameterInStepWorkflow() {
         val psiYamlFile = myFixture.configureByFile("arguments/steps/empty-parameters-in-template-call.yml")
         val argoPsiWrapper = ArgoPsiFileWrapper(psiYamlFile as YAMLFile)
-        val annotator: AnnotationHolder = mock(defaultAnswer = RETURNS_DEEP_STUBS)
+        val annotator: AnnotationHolder = mock(RETURNS_DEEP_STUBS)
         val annotationBuilder: AnnotationBuilder = mock()
 
         whenever(annotator.newAnnotation(any(), any())).thenReturn(annotationBuilder)
@@ -48,7 +52,7 @@ class ParameterNameMissingInTemplateCallAnnotatorTest  : BasePlatformTestCase() 
     fun testShouldReportErrorOnMissingParameterInDagWorkflow() {
         val psiYamlFile = myFixture.configureByFile("arguments/dag/empty-parameters-in-template-call.yml")
         val argoPsiWrapper = ArgoPsiFileWrapper(psiYamlFile as YAMLFile)
-        val annotator: AnnotationHolder = mock(defaultAnswer = RETURNS_DEEP_STUBS)
+        val annotator: AnnotationHolder = mock(RETURNS_DEEP_STUBS)
         val annotationBuilder: AnnotationBuilder = mock()
 
         whenever(annotator.newAnnotation(any(), any())).thenReturn(annotationBuilder)
@@ -75,7 +79,7 @@ class ParameterNameMissingInTemplateCallAnnotatorTest  : BasePlatformTestCase() 
     fun testShouldReportErrorOnMissingParameterInWorkflowOnTheTemplateWhenTheWorkflowDoesNotHaveTheParametersTag() {
         val psiYamlFile = myFixture.configureByFile("arguments/steps/empty-parameters-in-template-call-without-arguments.yml")
         val argoPsiWrapper = ArgoPsiFileWrapper(psiYamlFile as YAMLFile)
-        val annotator: AnnotationHolder = mock(defaultAnswer = RETURNS_DEEP_STUBS)
+        val annotator: AnnotationHolder = mock(RETURNS_DEEP_STUBS)
         val annotationBuilder: AnnotationBuilder = mock()
 
         whenever(annotator.newAnnotation(any(), any())).thenReturn(annotationBuilder)
@@ -99,7 +103,7 @@ class ParameterNameMissingInTemplateCallAnnotatorTest  : BasePlatformTestCase() 
     fun testShouldReportErrorOnMissingParameterInDagWorkflowOnTheTemplateWhenTheWorkflowDoesNotHaveTheParametersTag() {
         val psiYamlFile = myFixture.configureByFile("arguments/dag/empty-parameters-in-template-call-without-arguments.yml")
         val argoPsiWrapper = ArgoPsiFileWrapper(psiYamlFile as YAMLFile)
-        val annotator: AnnotationHolder = mock(defaultAnswer = RETURNS_DEEP_STUBS)
+        val annotator: AnnotationHolder = mock(RETURNS_DEEP_STUBS)
         val annotationBuilder: AnnotationBuilder = mock()
 
         whenever(annotator.newAnnotation(any(), any())).thenReturn(annotationBuilder)
@@ -123,7 +127,7 @@ class ParameterNameMissingInTemplateCallAnnotatorTest  : BasePlatformTestCase() 
     fun testShouldNotReportErrorOnMissingParameterInWorkflowOnTheTemplateWhenTheWorkflowDoesHaveTheParametersTag() {
         val psiYamlFile = myFixture.configureByFile("arguments/steps/empty-parameters-in-template-call.yml")
         val argoPsiWrapper = ArgoPsiFileWrapper(psiYamlFile as YAMLFile)
-        val annotator: AnnotationHolder = mock(defaultAnswer = RETURNS_DEEP_STUBS)
+        val annotator: AnnotationHolder = mock(RETURNS_DEEP_STUBS)
         val annotationBuilder: AnnotationBuilder = mock()
 
         whenever(annotator.newAnnotation(any(), any())).thenReturn(annotationBuilder)
@@ -147,7 +151,7 @@ class ParameterNameMissingInTemplateCallAnnotatorTest  : BasePlatformTestCase() 
     fun testShouldNotReportErrorOnMissingParameterInOtherParameterDefinition() {
         val psiYamlFile = myFixture.configureByFile("arguments/steps/empty-parameters-in-template-call.yml")
         val argoPsiWrapper = ArgoPsiFileWrapper(psiYamlFile as YAMLFile)
-        val annotator: AnnotationHolder = mock(defaultAnswer = RETURNS_DEEP_STUBS)
+        val annotator: AnnotationHolder = mock(RETURNS_DEEP_STUBS)
         val parameterPsiElement = argoPsiWrapper
             .spec
             ?.getTemplateByName("steps-with-reference")
@@ -169,7 +173,7 @@ class ParameterNameMissingInTemplateCallAnnotatorTest  : BasePlatformTestCase() 
     fun testShouldNotReportErrorWhenTheParameterHasValueDefinedInTemplate() {
         val psiYamlFile = myFixture.configureByFile("arguments/parameter-defined-in-the-template.yml")
         val argoPsiWrapper = ArgoPsiFileWrapper(psiYamlFile as YAMLFile)
-        val annotator: AnnotationHolder = mock(defaultAnswer = RETURNS_DEEP_STUBS)
+        val annotator: AnnotationHolder = mock(RETURNS_DEEP_STUBS)
         val parametersPsiElement = argoPsiWrapper
             .spec
             ?.getTemplateByName("steps-with-reference")
@@ -186,10 +190,11 @@ class ParameterNameMissingInTemplateCallAnnotatorTest  : BasePlatformTestCase() 
     }
 
     // TODO #7
+    @Suppress("unused", "TestFunctionName")
     fun _testShouldAddParameterNameQuickFix() {
         val psiYamlFile = myFixture.configureByFile("arguments/steps/empty-parameters-in-template-call.yml")
         val argoPsiWrapper = ArgoPsiFileWrapper(psiYamlFile as YAMLFile)
-        val annotator: AnnotationHolder = mock(defaultAnswer = RETURNS_DEEP_STUBS)
+        val annotator: AnnotationHolder = mock(RETURNS_DEEP_STUBS)
         val annotationBuilder: AnnotationBuilder = mock()
 
         whenever(annotator.newAnnotation(any(), any())).thenReturn(annotationBuilder)
