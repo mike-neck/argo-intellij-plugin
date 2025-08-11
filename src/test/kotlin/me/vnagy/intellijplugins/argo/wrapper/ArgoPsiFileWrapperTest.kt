@@ -2,14 +2,14 @@ package me.vnagy.intellijplugins.argo.wrapper
 
 import com.intellij.psi.PsiElement
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
-import junit.framework.TestCase
+import me.vnagy.intellijplugins.argo.psiFiles
 import org.jetbrains.yaml.psi.YAMLFile
 import org.jetbrains.yaml.psi.YAMLKeyValue
 
 class ArgoPsiFileWrapperTest : BasePlatformTestCase() {
 
     override fun getTestDataPath(): String {
-        return ArgoPsiFileWrapperTest::class.java.getResource("/psi-files").toURI().path
+        return psiFiles()
     }
 
     fun testShouldReturnApiAndKindCorrectly() {

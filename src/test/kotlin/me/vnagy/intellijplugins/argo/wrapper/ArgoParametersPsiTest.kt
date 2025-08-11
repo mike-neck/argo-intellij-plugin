@@ -1,12 +1,13 @@
 package me.vnagy.intellijplugins.argo.wrapper
 
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import me.vnagy.intellijplugins.argo.psiFiles
 import org.jetbrains.yaml.psi.YAMLFile
 
 class ArgoParametersPsiTest : BasePlatformTestCase() {
 
     override fun getTestDataPath(): String {
-        return ArgoPsiFileWrapperTest::class.java.getResource("/psi-files").toURI().path
+        return psiFiles()
     }
 
     fun testShouldParseParameterNameCorrectly() {

@@ -1,16 +1,15 @@
 package me.vnagy.intellijplugins.argo.completioncontributor.dependencies
 
 import com.intellij.refactoring.suggested.endOffset
-import com.intellij.refactoring.suggested.startOffset
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
-import me.vnagy.intellijplugins.argo.references.callsitetemplate.CallsiteTemplateNameReferenceTest
+import me.vnagy.intellijplugins.argo.psiFiles
 import me.vnagy.intellijplugins.argo.wrapper.ArgoPsiFileWrapper
 import org.jetbrains.yaml.psi.YAMLFile
 
 class DagDependencyAutoCompletionContributorTest : BasePlatformTestCase() {
 
     override fun getTestDataPath(): String {
-        return DagDependencyAutoCompletionContributorTest::class.java.getResource("/psi-files").toURI().path
+        return psiFiles()
     }
 
     fun testShouldCompleteOnlyAutoCompleteElementWhenSpaceIsAfterNameKey() {

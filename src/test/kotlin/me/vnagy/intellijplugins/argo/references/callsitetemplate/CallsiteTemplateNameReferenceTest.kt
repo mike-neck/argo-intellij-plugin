@@ -1,6 +1,7 @@
 package me.vnagy.intellijplugins.argo.references.callsitetemplate
 
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import me.vnagy.intellijplugins.argo.psiFiles
 import me.vnagy.intellijplugins.argo.wrapper.ArgoPsiFileWrapper
 import me.vnagy.intellijplugins.argo.wrapper.uniqueOrNull
 import org.jetbrains.yaml.psi.YAMLFile
@@ -8,7 +9,7 @@ import org.jetbrains.yaml.psi.YAMLFile
 class CallsiteTemplateNameReferenceTest : BasePlatformTestCase() {
 
     override fun getTestDataPath(): String {
-        return CallsiteTemplateNameReferenceTest::class.java.getResource("/psi-files").toURI().path
+        return psiFiles()
     }
 
     fun testShouldResolveDagTemplateNameReference() {

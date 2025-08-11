@@ -1,13 +1,14 @@
 package me.vnagy.intellijplugins.argo.references.callsitedependson
 
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import me.vnagy.intellijplugins.argo.psiFiles
 import me.vnagy.intellijplugins.argo.wrapper.ArgoPsiFileWrapper
 import org.jetbrains.yaml.psi.YAMLFile
 
 class CallsiteDependsOnReferenceTest : BasePlatformTestCase() {
 
     override fun getTestDataPath(): String {
-        return CallsiteDependsOnReferenceTest::class.java.getResource("/psi-files").toURI().path
+        return psiFiles()
     }
 
     fun testShouldResolveDagDependsOnReferences() {

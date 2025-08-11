@@ -4,6 +4,7 @@ import com.intellij.lang.annotation.AnnotationBuilder
 import com.intellij.lang.annotation.AnnotationHolder
 import com.intellij.lang.annotation.HighlightSeverity
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import me.vnagy.intellijplugins.argo.psiFiles
 import me.vnagy.intellijplugins.argo.wrapper.ArgoPsiFileWrapper
 import org.jetbrains.yaml.psi.YAMLFile
 import org.mockito.ArgumentMatchers.any
@@ -17,7 +18,7 @@ class CallsiteDependsOnTaskMissingFromDagTaskAnnotatorTest : BasePlatformTestCas
     private val testObj = CallsiteDependsOnTaskMissingFromDagTaskAnnotator()
 
     override fun getTestDataPath(): String {
-        return CallsiteDependsOnTaskMissingFromDagTaskAnnotatorTest::class.java.getResource("/psi-files")?.toURI()?.path?: error("Can't find resource")
+        return psiFiles()
     }
 
     fun testShouldReportErrorOnDependsOnTextWhenItRefersToANonExistingTask() {
