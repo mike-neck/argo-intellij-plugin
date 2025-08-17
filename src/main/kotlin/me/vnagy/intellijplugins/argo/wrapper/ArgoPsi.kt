@@ -10,19 +10,10 @@ interface ArgoPsi<T : PsiElement> {
     val children: Sequence<ArgoPsi<*>>
 
     fun findChildrenForPsiElement(psiElement: PsiElement?): ArgoPsi<*>? {
-        return when {
-            psiElement == null -> {
-                null
-            }
-            this.psiElement == psiElement -> {
-                this
-            }
-            else -> {
-                children
-                    .map { it.findChildrenForPsiElement(psiElement) }
-                    .filterNotNull()
-                    .uniqueOrNull()
-            }
+        return when(psiElement) {
+            null -> null
+            this.psiElement -> this
+            else -> findChildRecursive(psiElement, children.iterator())
         }
     }
 
@@ -32,5 +23,16 @@ interface ArgoPsi<T : PsiElement> {
         } else {
             parentElement?.findParentOfType(klass)
         }
+    }
+
+    companion object {
+        fun <T: Any> Iterator<T>.tryNext(): T? = if (!hasNext()) null
+        else try { next() } catch (_: NoSuchElementException) { null }
+
+        tailrec fun findChildRecursive(target: PsiElement, iterator: Iterator<ArgoPsi<*>>): ArgoPsi<*>? {
+            val next = iterator.tryNext() ?: return null
+            return if (next.psiElement == target) next else findChildRecursive(target, iterator)
+        }
+
     }
 }

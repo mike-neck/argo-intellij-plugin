@@ -18,6 +18,6 @@ class ArgoPsiStepSpecification(
             arguments
         ).filterNotNull()
 
-    override val yamlChildren: YAMLValue
-        get() = psiElement.children[0].children[0].children[0] as YAMLValue
+    override val yamlChildren: YAMLValue?
+        get() = psiElement.children.firstOrNull()?.children?.firstOrNull()?.children?.firstOrNull() as? YAMLValue
 }

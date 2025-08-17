@@ -28,6 +28,7 @@ dependencies {
         bundledPlugin("com.intellij.kubernetes")
         bundledPlugin("org.jetbrains.plugins.yaml")
         bundledPlugin("com.intellij.modules.json")
+        plugin("org.jetbrains.plugins.go-template:252.23892.201")
 
         testFramework(org.jetbrains.intellij.platform.gradle.TestFrameworkType.Platform)
     }
@@ -44,5 +45,17 @@ tasks {
     }
     withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
         compilerOptions.jvmTarget.set(JvmTarget.JVM_21)
+    }
+}
+
+intellijPlatform {
+    pluginConfiguration {
+        name = "Argo Workflow Editor"
+        version.set(provider { project.version.toString() })
+        description = "A plugin which helps to edit <a href=\"https://github.com/argoproj/argo\">Argo</a> workflow yaml files."
+        ideaVersion {
+            sinceBuild = "252"
+            untilBuild = "253.*"
+        }
     }
 }

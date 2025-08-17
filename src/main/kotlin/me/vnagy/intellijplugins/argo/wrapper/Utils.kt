@@ -1,36 +1,52 @@
 package me.vnagy.intellijplugins.argo.wrapper
 
-import me.vnagy.intellijplugins.argo.exceptions.NonUniqueResultException
+import com.intellij.openapi.diagnostic.logger
+import com.intellij.psi.PsiElement
 import org.jetbrains.yaml.psi.YAMLKeyValue
+import org.jetbrains.yaml.psi.YAMLMapping
+import org.jetbrains.yaml.psi.YAMLPsiElement
 import org.jetbrains.yaml.psi.YAMLValue
 
 operator fun YAMLValue?.get(key: String): YAMLKeyValue? {
-    return this?.children
-        ?.asSequence()
-        ?.map { it as? YAMLKeyValue }
-        ?.filterNotNull()
-        ?.filter { it.keyText == key }
-        ?.uniqueOrNull()
+    if (this !is YAMLMapping) {
+        return null
+    }
+    return this.children
+        .asSequence()
+        .mapNotNull { it as? YAMLKeyValue }
+        .filter { it.keyText == key }
+        .uniqueOrNull()
+}
+
+inline fun <reified P: YAMLPsiElement> YAMLPsiElement?.parent(): P? =
+    when (this) {
+        null -> null
+        else -> this.parent as? P
+    }
+
+inline fun <reified T: PsiElement> YAMLKeyValue?.value(): T? {
+    return this?.value as? T
 }
 
 operator fun <T> Array<T>?.get(index: Int): T? {
-    if (this != null && this.size > index) {
-         return get(index)
+    return if (this != null && this.size > index) {
+        get(index)
     } else {
-        return null
+        null
     }
 }
 
-fun <T> Sequence<T>.uniqueOrNull(): T? {
-    if (count() > 1) {
-        throw NonUniqueResultException("")
+inline fun <reified T: Any> Sequence<T>.uniqueOrNull(): T? {
+    val count = count()
+    if (count > 1) {
+        logger<T>().warn("Sequence contains $count ${T::class.simpleName}")
     }
     return firstOrNull()
 }
 
-fun <T> Collection<T>.uniqueOrNull(): T? {
-    if (count() > 1) {
-        throw NonUniqueResultException("")
+inline fun <reified T: Any> Collection<T>.uniqueOrNull(): T? {
+    if (size > 1) {
+        logger<T>().warn("Collection contains $size ${T::class.simpleName}")
     }
     return firstOrNull()
 }

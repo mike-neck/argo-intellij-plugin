@@ -2,6 +2,8 @@ package me.vnagy.intellijplugins.argo.wrapper
 
 import org.jetbrains.yaml.psi.YAMLKeyValue
 import org.jetbrains.yaml.psi.YAMLPsiElement
+import org.jetbrains.yaml.psi.YAMLSequence
+import org.jetbrains.yaml.psi.YAMLSequenceItem
 
 class ArgoPsiWorkflowSpec(
     override val psiElement: YAMLPsiElement,
@@ -22,9 +24,10 @@ class ArgoPsiWorkflowSpec(
                 .filter { "templates" == it.keyText }
                 .uniqueOrNull()
             return templatesKeyValue
-                ?.children[0]
                 ?.children
-                ?.map { it as YAMLPsiElement }
+                ?.firstNotNullOf { it as? YAMLSequence }
+                ?.children
+                ?.mapNotNull { it as? YAMLSequenceItem }
                 ?.map { ArgoPsiTemplateSpec(it, this) }
                 ?.toList() ?: listOf()
         }

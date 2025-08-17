@@ -21,8 +21,8 @@ class ArgoPsiDagTaskSpecification(
             dependencies.asSequence()
         ).flatten()
 
-    override val yamlChildren
-        get() = psiElement.children[0] as YAMLValue
+    override val yamlChildren: YAMLValue?
+        get() = psiElement.children.firstOrNull() as? YAMLValue
 
     val dependencies: List<ArgoPsiDagDependency>
         get() = yamlChildren["dependencies"]

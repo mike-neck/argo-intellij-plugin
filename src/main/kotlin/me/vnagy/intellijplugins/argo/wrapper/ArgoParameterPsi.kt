@@ -2,6 +2,7 @@ package me.vnagy.intellijplugins.argo.wrapper
 
 import org.jetbrains.yaml.psi.YAMLMapping
 import org.jetbrains.yaml.psi.YAMLScalar
+import org.jetbrains.yaml.psi.YAMLValue
 
 class ArgoParameterPsi(
     override val psiElement: YAMLMapping,
@@ -14,7 +15,7 @@ class ArgoParameterPsi(
     val value: String?
         get() = ((psiElement["value"]?.value) as YAMLScalar?)?.textValue
 
-    override val yamlChildren
+    override val yamlChildren: YAMLValue
         get() = psiElement
 
 }

@@ -7,22 +7,11 @@
         Vilmos Nagy
     </vendor>
 
-    <description><![CDATA[Argo Workflow Editor
-    A simple plugin which helps editing the <a href="https://github.com/argoproj/argo">Argo</a> workflow yamls.
-    ]]></description>
-
-    <version>imported from the build.gradle.kts</version>
-    <change-notes>
-        <![CDATA[
-        Imported automatically from change-notes.html
-        ]]>
-    </change-notes>
-    <idea-version since-build="201.2037" until-build="210."/>
-
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
          on how to target different products -->
     <depends>com.intellij.modules.platform</depends>
     <depends>org.jetbrains.plugins.yaml</depends>
+    <depends optional="true" config-file="helm.xml">org.jetbrains.plugins.go-template</depends>
 
     <extensions defaultExtensionNs="com.intellij">
         <psi.referenceContributor language="yaml" implementation="me.vnagy.intellijplugins.argo.references.callsitetemplate.CallsiteTemplateNameReferenceContributor" />

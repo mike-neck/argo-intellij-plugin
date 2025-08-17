@@ -7,8 +7,11 @@ import org.jetbrains.yaml.psi.YAMLValue
 interface HasArgumentArgoElement<T : PsiElement> : ArgoPsi<T> {
 
     val arguments: ArgoArgumentsPsiWrapper?
-        get() = (yamlChildren["arguments"]?.value as? YAMLMapping?)
+        get() = (yamlChildren["arguments"].value<YAMLMapping>())
             ?.let { ArgoArgumentsPsiWrapper(it, this) }
 
-    val yamlChildren: YAMLValue
+    val yamlChildren: YAMLValue?
 }
+
+inline fun <reified T : PsiElement, E : PsiElement> HasArgumentArgoElement<E>.yamlChildValue(key: String): T? =
+    this.yamlChildren[key].value<T>()

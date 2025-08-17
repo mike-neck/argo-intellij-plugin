@@ -2,6 +2,7 @@ package me.vnagy.intellijplugins.argo.wrapper
 
 import org.jetbrains.yaml.psi.YAMLKeyValue
 import org.jetbrains.yaml.psi.YAMLPsiElement
+import org.jetbrains.yaml.psi.YAMLSequenceItem
 
 class ArgoPsiCronWorkflowSpec(
     override val psiElement: YAMLPsiElement,
@@ -32,7 +33,7 @@ class ArgoPsiCronWorkflowSpec(
             return templatesKeyValue
                 ?.children[0]
                 ?.children
-                ?.map { it as YAMLPsiElement }
+                ?.mapNotNull { it as? YAMLSequenceItem }
                 ?.map { ArgoPsiTemplateSpec(it, this) }
                 ?.toList() ?: listOf()
         }

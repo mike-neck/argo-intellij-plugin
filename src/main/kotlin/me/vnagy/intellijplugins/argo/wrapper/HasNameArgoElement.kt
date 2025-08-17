@@ -11,5 +11,5 @@ interface HasNameArgoElement {
     val namePsiElement: YAMLScalar?
         get() = (yamlChildren["name"]?.value as? YAMLScalar)
 
-    val yamlChildren: YAMLValue
+    val yamlChildren: YAMLValue?
 }

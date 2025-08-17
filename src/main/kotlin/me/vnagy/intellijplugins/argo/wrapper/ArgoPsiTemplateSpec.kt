@@ -1,12 +1,9 @@
 package me.vnagy.intellijplugins.argo.wrapper
 
-import org.jetbrains.yaml.psi.YAMLMapping
-import org.jetbrains.yaml.psi.YAMLPsiElement
-import org.jetbrains.yaml.psi.YAMLSequence
-import org.jetbrains.yaml.psi.YAMLValue
+import org.jetbrains.yaml.psi.*
 
 class ArgoPsiTemplateSpec(
-    override val psiElement: YAMLPsiElement,
+    override val psiElement: YAMLSequenceItem, // YAMLSequenceItem
     override val parentElement: ArgoPsiSpec
 ) : ArgoPsi<YAMLPsiElement>, HasNameArgoElement {
 
@@ -19,14 +16,14 @@ class ArgoPsiTemplateSpec(
         ).filterNotNull()
 
     val inputs: ArgoInputsWrapper?
-        get() = (yamlChildren["inputs"]?.value as YAMLMapping?)?.let { ArgoInputsWrapper(it, this) }
+        get() = (yamlChildren["inputs"]?.value as? YAMLMapping)?.let { ArgoInputsWrapper(it, this) }
 
     val dag: ArgoPsiDagTask?
-        get() = (yamlChildren["dag"]?.value as YAMLMapping?)?.let { ArgoPsiDagTask(it, this) }
+        get() = (yamlChildren["dag"]?.value as? YAMLMapping)?.let { ArgoPsiDagTask(it, this) }
 
     val steps: ArgoPsiSteps?
-        get() = (yamlChildren["steps"]?.value as YAMLSequence?)?.let { ArgoPsiSteps(it, this) }
+        get() = (yamlChildren["steps"]?.value as? YAMLSequence)?.let { ArgoPsiSteps(it, this) }
 
-    override val yamlChildren
-        get() = psiElement.children[0] as YAMLValue
+    override val yamlChildren: YAMLValue?
+        get() = psiElement.children.firstOrNull() as? YAMLValue
 }
