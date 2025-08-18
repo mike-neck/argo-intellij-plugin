@@ -20,6 +20,8 @@
         <completion.contributor language="yaml" implementationClass="me.vnagy.intellijplugins.argo.completioncontributor.parameters.ParameterNameAutoCompletionContributor" />
         <completion.contributor language="yaml" implementationClass="me.vnagy.intellijplugins.argo.completioncontributor.dependencies.DagDependenciesAutoCompletionContributor" />
 
+        <usageToPsiElementProvider implementation="org.mikeneck.intellij.plugins.argo.workflows.TemplateUsagesToPsiElementProvider"/>
+
         <annotator language="yaml" implementationClass="me.vnagy.intellijplugins.argo.annotators.parameters.ParameterNameMissingInTemplateCallAnnotator" />
         <annotator language="yaml" implementationClass="me.vnagy.intellijplugins.argo.annotators.callsitedependson.CallsiteDependsOnTaskMissingFromDagTaskAnnotator" />
     </extensions>
