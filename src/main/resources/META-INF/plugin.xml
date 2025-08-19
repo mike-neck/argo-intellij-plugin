@@ -21,6 +21,7 @@
         <completion.contributor language="yaml" implementationClass="me.vnagy.intellijplugins.argo.completioncontributor.dependencies.DagDependenciesAutoCompletionContributor" />
 
         <usageToPsiElementProvider implementation="org.mikeneck.intellij.plugins.argo.workflows.TemplateUsagesToPsiElementProvider"/>
+        <usageTargetProvider implementation="org.mikeneck.intellij.plugins.argo.workflows.TemplateUsageTargetProvider"/>
 
         <annotator language="yaml" implementationClass="me.vnagy.intellijplugins.argo.annotators.parameters.ParameterNameMissingInTemplateCallAnnotator" />
         <annotator language="yaml" implementationClass="me.vnagy.intellijplugins.argo.annotators.callsitedependson.CallsiteDependsOnTaskMissingFromDagTaskAnnotator" />
