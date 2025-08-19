@@ -37,7 +37,7 @@ class TemplateUsageTargetProvider : UsageTargetProvider {
     }
 }
 
-val PsiElement.isYamlKey: Boolean
+val PsiElement.isYamlKeyValue: Boolean
     get() {
         if (this is YAMLKeyValue) {
             return true
@@ -46,7 +46,7 @@ val PsiElement.isYamlKey: Boolean
     }
 
 fun PsiElement.asArgoWorkflowTemplateNameKeyValue(): YAMLKeyValue? {
-    if (this !is YAMLScalar && !(this.isYamlKey) && this !is YAMLKeyValue) {
+    if (this !is YAMLScalar && !(this.isYamlKeyValue) && this !is YAMLKeyValue) {
         return null
     }
     var element = this
