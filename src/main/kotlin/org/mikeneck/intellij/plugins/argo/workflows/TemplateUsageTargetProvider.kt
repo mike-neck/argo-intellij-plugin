@@ -1,13 +1,12 @@
 package org.mikeneck.intellij.plugins.argo.workflows
 
 import com.intellij.find.findUsages.PsiElement2UsageTargetAdapter
-import com.intellij.kubernetes.findKeyValue
+import com.intellij.kubernetes.get
 import com.intellij.openapi.editor.Editor
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.usages.UsageTarget
 import com.intellij.usages.UsageTargetProvider
-import me.vnagy.intellijplugins.argo.references.callsitetemplate.CallsiteTemplateNameReference.Companion.getTemplateStep
 import me.vnagy.intellijplugins.argo.wrapper.parent
 import org.jetbrains.yaml.YAMLLanguage
 import org.jetbrains.yaml.psi.*
@@ -39,21 +38,23 @@ class TemplateUsageTargetProvider : UsageTargetProvider {
         val argoWorkflowTemplates = nameElement.fromTemplateNameToTemplates() ?: return null
         val list = mutableListOf<UsageTarget>()
         for (template in argoWorkflowTemplates) {
-            val steps: YAMLSequence = template.steps ?: continue
-            // TODO val matchingSteps = steps filter { it.template == template.name }
-            // list addAll << matchingSteps.map { PsiElement2UsageTargetAdapter(it, true) }
-            val templateName = steps.findKeyValue("template") ?: continue
-            if (nameElement.valueText == templateName.valueText) {
-                list.add(PsiElement2UsageTargetAdapter())
+            val steps = template.steps ?: continue
+            val templateName = (template["name"] as? YAMLScalar)?.textValue ?: continue
+            val singleSteps = steps.findSingleStepCallingLocalTemplate(templateName)
+            singleSteps.forEach { step ->
+                list.add(PsiElement2UsageTargetAdapter(step, true))
             }
         }
+        return list.toTypedArray()
     }
 }
 
-typealias ArgoWorkflowTemplateElement = YAMLMapping
 typealias ArgoWorkflowTemplateNameElement = YAMLKeyValue
 typealias ArgoWorkflowTemplatesElement = YAMLKeyValue
 typealias ArgoWorkflowTemplateElementCollection = Iterable<ArgoWorkflowTemplateElement>
+typealias ArgoWorkflowTemplateElement = YAMLMapping
+typealias ArgoWorkflowTemplateStepElement = Collection<Collection<ArgoWorkflowTemplateSingleStepElement>>
+typealias ArgoWorkflowTemplateSingleStepElement = YAMLMapping
 
 val PsiElement.isYamlKeyValue: Boolean
     get() {
@@ -93,3 +94,13 @@ operator fun ArgoWorkflowTemplatesElement.iterator(): Iterator<ArgoWorkflowTempl
 
 inline fun <reified  T: YAMLValue> YAMLKeyValue.value(): T? = this.value as? T
 
+val ArgoWorkflowTemplateElement.steps: ArgoWorkflowTemplateStepElement? get() {
+    val steps = this["steps"] as? YAMLSequence ?: return null
+    return steps.items
+        .mapNotNull { it.value as? YAMLSequence }
+        .map { it.items.mapNotNull { item -> item.value as? YAMLMapping } }
+}
+
+fun ArgoWorkflowTemplateStepElement.findSingleStepCallingLocalTemplate(templateName: String): Collection<YAMLMapping> {
+    return this.flatten().filter { (it["template"] as? YAMLScalar)?.textValue == templateName }
+}
