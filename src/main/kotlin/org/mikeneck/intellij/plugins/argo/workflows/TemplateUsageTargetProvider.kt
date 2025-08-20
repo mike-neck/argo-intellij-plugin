@@ -9,9 +9,7 @@ import com.intellij.usages.UsageTarget
 import com.intellij.usages.UsageTargetProvider
 import org.jetbrains.yaml.YAMLLanguage
 import org.jetbrains.yaml.psi.YAMLFile
-import org.jetbrains.yaml.psi.YAMLKeyValue
 import org.jetbrains.yaml.psi.YAMLScalar
-import org.jetbrains.yaml.psi.YAMLValue
 
 class TemplateUsageTargetProvider : UsageTargetProvider {
 
@@ -50,14 +48,3 @@ class TemplateUsageTargetProvider : UsageTargetProvider {
         return list.toTypedArray()
     }
 }
-
-
-val PsiElement.isYamlKeyValue: Boolean
-    get() {
-        if (this is YAMLKeyValue) {
-            return true
-        }
-        return this.parent is YAMLKeyValue
-    }
-
-inline fun <reified  T: YAMLValue> YAMLKeyValue.value(): T? = this.value as? T
