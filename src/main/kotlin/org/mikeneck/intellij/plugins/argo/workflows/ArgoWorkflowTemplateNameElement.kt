@@ -11,6 +11,14 @@ fun ArgoWorkflowTemplateNameElement?.fromTemplateNameToTemplates(): ArgoWorkflow
         .parent<YAMLSequenceItem>()
         .parent<YAMLSequence>()
         .parent<YAMLKeyValue>()
+        .ifHasKey("templates")
+}
+
+fun YAMLKeyValue?.ifHasKey(key: String): YAMLKeyValue? {
+    return when(this?.keyText) {
+        key -> this
+        else -> null
+    }
 }
 
 fun PsiElement.asArgoWorkflowTemplateNameElement(): ArgoWorkflowTemplateNameElement? {

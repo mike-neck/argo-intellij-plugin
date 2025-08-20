@@ -6,6 +6,9 @@ import com.intellij.psi.PsiElement
 import org.jetbrains.annotations.Nls
 import org.jetbrains.annotations.NonNls
 import org.jetbrains.yaml.YAMLWordsScanner
+import org.jetbrains.yaml.psi.YAMLKeyValue
+import org.jetbrains.yaml.psi.YAMLScalar
+import org.mikeneck.intellij.plugins.argo.workflows.fromTemplateNameToTemplates
 
 class TemplateFindUsagesProvider: FindUsagesProvider {
 
@@ -14,7 +17,19 @@ class TemplateFindUsagesProvider: FindUsagesProvider {
     }
 
     override fun canFindUsagesFor(psiElement: PsiElement): Boolean {
-        TODO("Not yet implemented")
+        val yamlKeyValue = when (psiElement) {
+            is YAMLKeyValue -> psiElement
+            is YAMLScalar -> psiElement.parent as? YAMLKeyValue
+            else -> null
+        } ?: return false
+        if (yamlKeyValue.keyText != "name") {
+            return false
+        }
+        return yamlKeyValue.fromTemplateNameToTemplates() != null
+
+        //TODO NOT inputs.{parameters,artifacts}.name usages in the same template
+        //TODO NOT steps.name.outputs.{parameters,artifacts}.name usages in steps in the same template
+        //TODO NOT outputs.{parameters,artifacts}.name usages in steps in the same template of the caller step
     }
 
     override fun getHelpId(psiElement: PsiElement): @NonNls String? {
