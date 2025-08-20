@@ -22,6 +22,7 @@
         <completion.contributor language="yaml" implementationClass="me.vnagy.intellijplugins.argo.completioncontributor.parameters.ParameterNameAutoCompletionContributor" />
         <completion.contributor language="yaml" implementationClass="me.vnagy.intellijplugins.argo.completioncontributor.dependencies.DagDependenciesAutoCompletionContributor" />
 
+        <lang.findUsagesProvider language="yaml" implementationClass="org.mikeneck.intellij.plugins.argo.workflows.gtdu.TemplateFindUsagesProvider"/>
         <usageToPsiElementProvider implementation="org.mikeneck.intellij.plugins.argo.workflows.TemplateUsagesToPsiElementProvider"/>
         <usageTargetProvider implementation="org.mikeneck.intellij.plugins.argo.workflows.TemplateUsageTargetProvider"/>
 
