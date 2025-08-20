@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NonNls
 import org.jetbrains.yaml.YAMLWordsScanner
 import org.jetbrains.yaml.psi.YAMLKeyValue
 import org.jetbrains.yaml.psi.YAMLScalar
+import org.mikeneck.intellij.plugins.argo.workflows.Messages
 import org.mikeneck.intellij.plugins.argo.workflows.fromTemplateNameToTemplates
 
 class TemplateFindUsagesProvider: FindUsagesProvider {
@@ -16,12 +17,14 @@ class TemplateFindUsagesProvider: FindUsagesProvider {
         return YAMLWordsScanner()
     }
 
+    fun PsiElement.asYAMLKeyValue(): YAMLKeyValue? = when (this) {
+        is YAMLKeyValue -> this
+        is YAMLScalar -> this.parent as? YAMLKeyValue
+        else -> this.parent as? YAMLKeyValue
+    }
+
     override fun canFindUsagesFor(psiElement: PsiElement): Boolean {
-        val yamlKeyValue = when (psiElement) {
-            is YAMLKeyValue -> psiElement
-            is YAMLScalar -> psiElement.parent as? YAMLKeyValue
-            else -> null
-        } ?: return false
+        val yamlKeyValue = psiElement.asYAMLKeyValue() ?: return false
         if (yamlKeyValue.keyText != "name") {
             return false
         }
@@ -32,22 +35,27 @@ class TemplateFindUsagesProvider: FindUsagesProvider {
         //TODO NOT outputs.{parameters,artifacts}.name usages in steps in the same template of the caller step
     }
 
-    override fun getHelpId(psiElement: PsiElement): @NonNls String? {
-        TODO("Not yet implemented")
-    }
+    override fun getHelpId(psiElement: PsiElement): @NonNls String = "reference.dialogs.findUsages.other"
 
     override fun getType(element: PsiElement): @Nls String {
-        TODO("Not yet implemented")
+        return Messages.message("find.usages.type.template")
     }
 
     override fun getDescriptiveName(element: PsiElement): @Nls String {
-        TODO("Not yet implemented")
+        val keyValue = element.asYAMLKeyValue() ?: return Messages.message("find.usages.unknown.element")
+        return keyValue.keyText
     }
 
     override fun getNodeText(
         element: PsiElement,
         useFullName: Boolean
     ): @Nls String {
-        TODO("Not yet implemented")
+        if(!useFullName) return getDescriptiveName(element)
+        else {
+            val keyValue = element.asYAMLKeyValue() ?: return Messages.message("find.usages.unknown.element")
+            val key = keyValue.keyText
+            val value = keyValue.valueText
+            return "$key: $value"
+        }
     }
 }
