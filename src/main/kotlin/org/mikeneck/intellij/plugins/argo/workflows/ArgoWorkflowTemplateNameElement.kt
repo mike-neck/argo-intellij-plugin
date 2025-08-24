@@ -2,7 +2,10 @@ package org.mikeneck.intellij.plugins.argo.workflows
 
 import com.intellij.psi.PsiElement
 import me.vnagy.intellijplugins.argo.wrapper.parent
-import org.jetbrains.yaml.psi.*
+import org.jetbrains.yaml.psi.YAMLKeyValue
+import org.jetbrains.yaml.psi.YAMLMapping
+import org.jetbrains.yaml.psi.YAMLSequence
+import org.jetbrains.yaml.psi.YAMLSequenceItem
 
 typealias ArgoWorkflowTemplateNameElement = YAMLKeyValue
 
@@ -21,17 +24,12 @@ fun YAMLKeyValue?.ifHasKey(key: String): YAMLKeyValue? {
     }
 }
 
+fun YAMLKeyValue?.hasKey(key: String): Boolean = this?.keyText == key
+
 fun PsiElement.asArgoWorkflowTemplateNameElement(): ArgoWorkflowTemplateNameElement? {
-    if (this !is YAMLScalar && !(this.isYamlKeyValue) && this !is YAMLKeyValue) {
-        return null
-    }
-    var element = this
-    while (element !is ArgoWorkflowTemplateNameElement) {
-        element = element.parent ?: return null
-    }
-    if (element.keyText != "name") {
-        return null
-    }
-    val templates = element.fromTemplateNameToTemplates() ?: return null
-    return if (templates.keyText == "templates") element else null
+    val element = this.asYAMLKeyValue() ?: return null
+    val templates = element
+        .ifHasKey("name")
+        .fromTemplateNameToTemplates() ?: return null
+    return if (templates.hasKey("templates")) element else null
 }

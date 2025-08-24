@@ -6,10 +6,9 @@ import com.intellij.psi.PsiElement
 import org.jetbrains.annotations.Nls
 import org.jetbrains.annotations.NonNls
 import org.jetbrains.yaml.YAMLWordsScanner
-import org.jetbrains.yaml.psi.YAMLKeyValue
-import org.jetbrains.yaml.psi.YAMLScalar
 import org.mikeneck.intellij.plugins.argo.workflows.Messages
-import org.mikeneck.intellij.plugins.argo.workflows.fromTemplateNameToTemplates
+import org.mikeneck.intellij.plugins.argo.workflows.asArgoWorkflowTemplateNameElement
+import org.mikeneck.intellij.plugins.argo.workflows.asYAMLKeyValue
 
 class TemplateFindUsagesProvider: FindUsagesProvider {
 
@@ -17,18 +16,8 @@ class TemplateFindUsagesProvider: FindUsagesProvider {
         return YAMLWordsScanner()
     }
 
-    fun PsiElement.asYAMLKeyValue(): YAMLKeyValue? = when (this) {
-        is YAMLKeyValue -> this
-        is YAMLScalar -> this.parent as? YAMLKeyValue
-        else -> this.parent as? YAMLKeyValue
-    }
-
     override fun canFindUsagesFor(psiElement: PsiElement): Boolean {
-        val yamlKeyValue = psiElement.asYAMLKeyValue() ?: return false
-        if (yamlKeyValue.keyText != "name") {
-            return false
-        }
-        return yamlKeyValue.fromTemplateNameToTemplates() != null
+        return psiElement.asArgoWorkflowTemplateNameElement() != null
 
         //TODO NOT inputs.{parameters,artifacts}.name usages in the same template
         //TODO NOT steps.name.outputs.{parameters,artifacts}.name usages in steps in the same template
