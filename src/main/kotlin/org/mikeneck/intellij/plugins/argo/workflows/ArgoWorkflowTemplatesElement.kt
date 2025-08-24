@@ -1,7 +1,9 @@
 package org.mikeneck.intellij.plugins.argo.workflows
 
+import com.intellij.kubernetes.get
 import org.jetbrains.yaml.psi.YAMLDocument
 import org.jetbrains.yaml.psi.YAMLKeyValue
+import org.jetbrains.yaml.psi.YAMLMapping
 import org.jetbrains.yaml.psi.YAMLSequence
 
 typealias ArgoWorkflowTemplatesElement = YAMLKeyValue
@@ -12,4 +14,4 @@ fun ArgoWorkflowTemplatesElement.templates(): ArgoWorkflowTemplateElementCollect
 
 operator fun ArgoWorkflowTemplatesElement.iterator(): Iterator<ArgoWorkflowTemplateElement> = this.templates().iterator()
 
-val YAMLDocument.steps: Iterable<ArgoWorkflowTemplatesElement> get() = this.resource
+val YAMLDocument.templates: Iterable<ArgoWorkflowTemplatesElement> get() = this.resource?.get("spec")?.value<YAMLMapping>()?.get("templates")?.children?.mapNotNull { it as? ArgoWorkflowTemplatesElement } ?: emptyList()
