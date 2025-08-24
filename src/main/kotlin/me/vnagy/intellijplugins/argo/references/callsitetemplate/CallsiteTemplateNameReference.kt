@@ -2,13 +2,10 @@ package me.vnagy.intellijplugins.argo.references.callsitetemplate
 
 import com.intellij.psi.PsiElement
 import me.vnagy.intellijplugins.argo.references.ArgoCallsitePsiReferenceBase
-import me.vnagy.intellijplugins.argo.references.callsitetemplate.CallsiteTemplateNameReferenceProvider.Companion.logger
 import me.vnagy.intellijplugins.argo.wrapper.parent
 import org.jetbrains.yaml.psi.*
 
 class CallsiteTemplateNameReference(element: PsiElement) : ArgoCallsitePsiReferenceBase(element) {
-
-    val log = logger<CallsiteTemplateNameReference>()
 
     override fun resolve(): PsiElement? {
         val templateName = elementOfCallTemplateName()?.textValue ?: return null

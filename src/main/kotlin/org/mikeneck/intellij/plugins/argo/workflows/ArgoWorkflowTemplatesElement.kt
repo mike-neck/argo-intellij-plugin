@@ -1,5 +1,6 @@
 package org.mikeneck.intellij.plugins.argo.workflows
 
+import org.jetbrains.yaml.psi.YAMLDocument
 import org.jetbrains.yaml.psi.YAMLKeyValue
 import org.jetbrains.yaml.psi.YAMLSequence
 
@@ -10,3 +11,5 @@ fun ArgoWorkflowTemplatesElement.templates(): ArgoWorkflowTemplateElementCollect
 }
 
 operator fun ArgoWorkflowTemplatesElement.iterator(): Iterator<ArgoWorkflowTemplateElement> = this.templates().iterator()
+
+val YAMLDocument.steps: Iterable<ArgoWorkflowTemplatesElement> get() = this.resource
