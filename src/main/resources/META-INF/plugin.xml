@@ -11,10 +11,11 @@
          on how to target different products -->
     <depends>com.intellij.modules.platform</depends>
     <depends>org.jetbrains.plugins.yaml</depends>
+    <depends>com.intellij.kubernetes</depends>
     <depends optional="true" config-file="helm.xml">org.jetbrains.plugins.go-template</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <psi.referenceContributor language="yaml" implementation="me.vnagy.intellijplugins.argo.references.callsitetemplate.CallsiteTemplateNameReferenceContributor" />
+<!--        <psi.referenceContributor language="yaml" implementation="me.vnagy.intellijplugins.argo.references.callsitetemplate.CallsiteTemplateNameReferenceContributor" />-->
         <psi.referenceContributor language="yaml" implementation="me.vnagy.intellijplugins.argo.references.callsitedependson.CallsiteDependsOnReferenceContributor" />
 
         <psi.referenceContributor language="yaml" implementation="org.mikeneck.intellij.plugins.argo.workflows.gtdu.SingleStepTemplateReferenceContributor" />

@@ -2,7 +2,13 @@ package org.mikeneck.intellij.plugins.argo.workflows
 
 import com.intellij.kubernetes.get
 import com.intellij.psi.PsiElement
+import me.vnagy.intellijplugins.argo.wrapper.parent
 import org.jetbrains.yaml.psi.*
+
+fun YAMLValue?.parentNamed(key: String): YAMLKeyValue? = when (this) {
+    null -> null
+    else -> this.parent<YAMLKeyValue>().inCase { name == key }
+}
 
 fun PsiElement.asYAMLKeyValue(): YAMLKeyValue? = when (this) {
     is YAMLKeyValue -> this
@@ -19,19 +25,19 @@ fun <T: Any> T?.inCase(condition: T.() -> Boolean): T? = if (this != null && con
 fun YAMLMapping?.ifHasKeyValue(key: String, value: String): YAMLMapping? =
     this.inCase { this[key].value<YAMLScalar>().haValue(value) }
 
+inline fun <reified T: YAMLValue> YAMLMapping?.getValue(key: String): T? = if (this == null) null else this[key] as? T
+
 fun YAMLScalar?.haValue(text: String): Boolean = if (this == null) false else this.textValue == text
 
-fun Iterable<YAMLDocument>.ofWorkflowTemplate(): Iterable<YAMLDocument> {
+inline fun <reified T: YAMLValue> YAMLSequence?.getItems(): Iterable<T> = this?.items?.mapNotNull { it.value as? T } ?: emptyList()
+
+fun Iterable<YAMLDocument>.ofWorkflowOrWorkflowTemplate(): Iterable<YAMLDocument> {
     return this.filter { document ->
-        document.resource.of(ArgoWorkflowType.WorkflowTemplate) != null
+        document.resource.asWorkflowOrWorkflowTemplate != null
     }
 }
 
-val YAMLDocument.resource: YAMLMapping? get() = this.topLevelValue as? YAMLMapping
-
-fun YAMLMapping?.of(type: ArgoWorkflowType): YAMLMapping? = this
-    .ifHasKeyValue("apiVersion", "argoproj.io/v1alpha1")
-    .ifHasKeyValue("kind", type.name)
+val YAMLDocument.resource: ArgoWorkflowElement? get() = this.topLevelValue as? ArgoWorkflowElement
 
 enum class ArgoWorkflowType {
     Workflow,

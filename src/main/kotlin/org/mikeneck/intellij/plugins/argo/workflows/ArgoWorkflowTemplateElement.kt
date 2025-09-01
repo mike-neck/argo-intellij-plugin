@@ -3,10 +3,16 @@ package org.mikeneck.intellij.plugins.argo.workflows
 import com.intellij.kubernetes.get
 import me.vnagy.intellijplugins.argo.wrapper.parent
 import org.jetbrains.yaml.psi.YAMLMapping
+import org.jetbrains.yaml.psi.YAMLScalar
 import org.jetbrains.yaml.psi.YAMLSequence
 import org.jetbrains.yaml.psi.YAMLSequenceItem
 
 typealias ArgoWorkflowTemplateElement = YAMLMapping
+
+val ArgoWorkflowTemplateElement?.resourceRoot: ArgoWorkflowElement? get() =
+    this.parentNamed("spec")
+        .parent<YAMLMapping>()
+        .asWorkflowOrWorkflowTemplate
 
 val ArgoWorkflowTemplateElement.steps: ArgoWorkflowTemplateStepElement? get() {
     val steps = this["steps"] as? YAMLSequence ?: return null
@@ -21,3 +27,7 @@ val ArgoWorkflowTemplateElement?.collection: ArgoWorkflowTemplateElementCollecti
         ?: return null
     return sequence.items.mapNotNull { it.value as? ArgoWorkflowTemplateElement }
 }
+
+val ArgoWorkflowTemplateElement?.templateName: String? get() = this?.getValue<YAMLScalar>("name")?.textValue
+
+val ArgoWorkflowTemplateElement?.templateNameElement: YAMLScalar? get() = this?.getValue<YAMLScalar>("name")
