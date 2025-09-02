@@ -71,7 +71,7 @@ class SingleStepTemplateReferenceContributor: PsiReferenceContributor() {
             if (templateCollection.isEmpty()) return "templateCollection[${msg}]" to EMPTY
             return templateCollection
                 .map {
-                    logger<LocalTemplateCandidatePsiReference>().info("new LocalTemplateCandidatePsiReference ${element.javaClass.simpleName} -> ${localTemplateName.valueText}")
+                    logger<LocalTemplateCandidatePsiReference>().info("new LocalTemplateCandidatePsiReference ${element.javaClass.simpleName} -> ${localTemplateName.valueText}(${localTemplateName.value?.javaClass?.simpleName ?: "<null>"})")
                     LocalTemplateCandidatePsiReference(localTemplateName, workflowOrWorkflowTemplate, it)
                 }
                 .toTypedArray<PsiReference>()
@@ -87,7 +87,7 @@ data class LocalTemplateCandidatePsiReference(
 ): PsiReferenceBase<YAMLPsiElement>(localTemplateName.value ?: localTemplateName) {
     override fun resolve(): PsiElement? {
         if (workflowOrWorkflowTemplate.workflowName != workflowOrWorkflowTemplateFromRoot.workflowName) return null
-        return workflowOrWorkflowTemplateFromRoot
+        val template = workflowOrWorkflowTemplateFromRoot
             .spec
             .templates
             .find { when(val name = it.templateName) {
@@ -95,6 +95,8 @@ data class LocalTemplateCandidatePsiReference(
                     else -> name == localTemplateName.valueText
                 }
             }
+        logger<LocalTemplateCandidatePsiReference>().info("resolve ${localTemplateName.valueText} -> ${template?.javaClass?.simpleName}[${template.getValue<YAMLScalar>("name")?.textValue}]")
+        return template.templateNameElement
     }
 }
 
