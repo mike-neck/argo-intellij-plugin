@@ -1,17 +1,11 @@
 package org.mikeneck.intellij.plugins.argo.workflows.gtdu
 
 import com.intellij.kubernetes.get
-import com.intellij.model.Symbol
-import com.intellij.model.psi.PsiSymbolDeclaration
-import com.intellij.model.psi.PsiSymbolReference
-import com.intellij.model.psi.PsiSymbolService
 import com.intellij.openapi.diagnostic.logger
-import com.intellij.openapi.util.TextRange
 import com.intellij.psi.*
 import com.intellij.psi.util.endOffset
 import com.intellij.psi.util.startOffset
 import com.intellij.util.ProcessingContext
-import org.jetbrains.annotations.Unmodifiable
 import org.jetbrains.yaml.psi.YAMLFile
 import org.jetbrains.yaml.psi.YAMLKeyValue
 import org.jetbrains.yaml.psi.YAMLPsiElement
@@ -98,54 +92,4 @@ data class LocalTemplateCandidatePsiReference(
         logger<LocalTemplateCandidatePsiReference>().info("resolve ${localTemplateName.valueText} -> ${template?.javaClass?.simpleName}[${template.getValue<YAMLScalar>("name")?.textValue ?: "<null>"}]")
         return template.templateNameElement ?: template
     }
-}
-
-@Suppress("UnstableApiUsage", "JavaDefaultMethodsNotOverriddenByDelegation")
-data class LocalTemplatePsiReference(
-    val templateName: String,
-    val element: ArgoWorkflowStepLocalTemplateNameElement,
-    val template: ArgoWorkflowTemplateElement
-): PsiReferenceBase<ArgoWorkflowTemplateElement>(template), NavigatablePsiElement by template {
-    override fun getTextRangeInParent(): TextRange {
-        return super.getTextRangeInParent()
-    }
-
-    override fun getOwnDeclarations(): @Unmodifiable Collection<PsiSymbolDeclaration> {
-        return when(val nameElement = template.templateNameElement) {
-            null -> emptyList()
-            is YAMLScalar -> listOf(object : PsiSymbolDeclaration {
-                override fun getDeclaringElement(): PsiElement = nameElement
-
-                override fun getRangeInDeclaringElement(): TextRange {
-                    return nameElement.textRange ?: TextRange.from(nameElement.startOffset, nameElement.textLength)
-                }
-
-                override fun getSymbol(): Symbol {
-                    val psiSymbolService = PsiSymbolService.getInstance()
-                    return psiSymbolService.asSymbol(nameElement)
-                }
-            })
-        }
-    }
-
-    override fun getOwnReferences(): @Unmodifiable Collection<PsiSymbolReference> {
-        return template.ownReferences
-    }
-
-    override fun navigate(requestFocus: Boolean) {
-        when(val nameElement = template.templateNameElement) {
-            null -> template.navigate(requestFocus)
-            else -> nameElement.navigate(requestFocus)
-        }
-    }
-
-    override fun canNavigate(): Boolean {
-        return template.templateNameElement?.canNavigate() ?: false
-    }
-
-    override fun canNavigateToSource(): Boolean {
-        return template.isValid && element.isValid && template.templateName != null
-    }
-
-    override fun resolve(): PsiElement = template
 }
