@@ -1,5 +1,6 @@
 package org.mikeneck.intellij.plugins.argo.workflows.gtdu
 
+import com.intellij.kubernetes.get
 import com.intellij.model.Symbol
 import com.intellij.model.psi.PsiSymbolDeclaration
 import com.intellij.model.psi.PsiSymbolReference
@@ -20,7 +21,6 @@ import org.mikeneck.intellij.plugins.argo.workflows.*
 class SingleStepTemplateReferenceContributor: PsiReferenceContributor() {
 
     override fun registerReferenceProviders(registrar: PsiReferenceRegistrar) {
-        logger<SingleStepTemplateReferenceContributor>().info("new single-step-template-reference-contributor registration: ${registrar.javaClass.simpleName}")
         registrar.registerReferenceProvider(
             psiElement<YAMLScalar>(),
             object : PsiReferenceProvider() {
@@ -33,7 +33,7 @@ class SingleStepTemplateReferenceContributor: PsiReferenceContributor() {
                 }).let {
                     if (it.first != null) {
                         val list = mutableListOf<String>()
-                        logger<SingleStepTemplateReferenceContributor>().info(" empty by - ${it.first}; [${list.debugPsiStructureUpToRoot(element)}]")
+                        logger<SingleStepTemplateReferenceContributor>().debug("Unbound element by - ${it.first}; [${list.debugPsiStructureUpToRoot(element)}]")
                     }
                     return@let it.second
                 }
@@ -63,15 +63,15 @@ class SingleStepTemplateReferenceContributor: PsiReferenceContributor() {
             val msg = "reference provider: ${element.javaClass.simpleName}(${element.containingFile.virtualFile?.name}:${element.startOffset}-${element.endOffset})"
             val localTemplateName = element.asArgoWorkflowStepLocalTemplateNameElement ?: return "localTemplateName[${msg}]" to EMPTY
             val singleStep = localTemplateName.upToStep ?: return "singleStep[${msg}]" to EMPTY
-            val template = singleStep.upToTemplate ?: return "template[${msg}]" to EMPTY
-            val workflowOrWorkflowTemplate = template.upToWorkflowOrWorkflowTemplate ?: return "workflowOrWorkflowTemplate(<- ${template.javaClass.simpleName}@${System.identityHashCode(template)})[${msg}]" to EMPTY
+            val currentTemplate = singleStep.upToTemplate ?: return "template[${msg}]" to EMPTY
+            val workflowOrWorkflowTemplate = currentTemplate.upToWorkflowOrWorkflowTemplate ?: return "workflowOrWorkflowTemplate(<- ${currentTemplate.javaClass.simpleName}@${System.identityHashCode(currentTemplate)})[${msg}]" to EMPTY
 
             val currentFile = localTemplateName.containingFile as? YAMLFile ?: return "currentFile[${msg}]" to EMPTY
             val templateCollection = currentFile.documents.ofWorkflowOrWorkflowTemplate().mapNotNull { it.resource }
             if (templateCollection.isEmpty()) return "templateCollection[${msg}]" to EMPTY
             return templateCollection
                 .map {
-                    logger<LocalTemplateCandidatePsiReference>().info("new LocalTemplateCandidatePsiReference ${element.javaClass.simpleName} -> ${localTemplateName.valueText}(${localTemplateName.value?.javaClass?.simpleName ?: "<null>"})")
+                    logger<LocalTemplateCandidatePsiReference>().info("new LocalTemplateCandidatePsiReference ${localTemplateName.valueText}:${element.textValue.lines().firstOrNull() ?: "<empty>"} ->  ${it["name"] ?: "<null>"}")
                     LocalTemplateCandidatePsiReference(localTemplateName, workflowOrWorkflowTemplate, it)
                 }
                 .toTypedArray<PsiReference>()
@@ -95,8 +95,8 @@ data class LocalTemplateCandidatePsiReference(
                     else -> name == localTemplateName.valueText
                 }
             }
-        logger<LocalTemplateCandidatePsiReference>().info("resolve ${localTemplateName.valueText} -> ${template?.javaClass?.simpleName}[${template.getValue<YAMLScalar>("name")?.textValue}]")
-        return template.templateNameElement
+        logger<LocalTemplateCandidatePsiReference>().info("resolve ${localTemplateName.valueText} -> ${template?.javaClass?.simpleName}[${template.getValue<YAMLScalar>("name")?.textValue ?: "<null>"}]")
+        return template.templateNameElement ?: template
     }
 }
 
