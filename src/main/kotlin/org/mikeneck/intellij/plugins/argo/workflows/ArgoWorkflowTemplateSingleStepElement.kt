@@ -2,6 +2,7 @@ package org.mikeneck.intellij.plugins.argo.workflows
 
 import me.vnagy.intellijplugins.argo.wrapper.parent
 import org.jetbrains.yaml.psi.YAMLMapping
+import org.jetbrains.yaml.psi.YAMLScalar
 import org.jetbrains.yaml.psi.YAMLSequence
 import org.jetbrains.yaml.psi.YAMLSequenceItem
 
@@ -29,4 +30,8 @@ val ArgoWorkflowTemplateSingleStepElement?.upToTemplate: ArgoWorkflowTemplateEle
     return rawSteps
         .parentNamed("steps")
         .parent<YAMLMapping>()
+}
+
+val ArgoWorkflowTemplateSingleStepElement?.stepNameElement: YAMLScalar? get() {
+    return this?.getKeyValueByKey("name")?.value as? YAMLScalar
 }

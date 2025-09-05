@@ -17,6 +17,15 @@ fun ArgoWorkflowTemplateNameElement?.fromTemplateNameToTemplates(): ArgoWorkflow
         .ifHasKey("templates")
 }
 
+val ArgoWorkflowTemplateNameElement?.template: ArgoWorkflowTemplateElement? get() = this.parent<ArgoWorkflowTemplateElement>()
+
+val ArgoWorkflowTemplateNameElement?.templateCollection: ArgoWorkflowTemplateElementCollection get() {
+    val seq = this.parent<YAMLMapping>()
+        .parent<YAMLSequenceItem>()
+        .parent<YAMLSequence>()
+    return seq.getItems<ArgoWorkflowTemplateElement>()
+}
+
 fun YAMLKeyValue?.ifHasKey(key: String): YAMLKeyValue? {
     return when(this?.keyText) {
         key -> this

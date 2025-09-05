@@ -9,3 +9,8 @@ typealias ArgoWorkflowTemplateStepElement = Collection<Collection<ArgoWorkflowTe
 fun ArgoWorkflowTemplateStepElement.findSingleStepCallingLocalTemplate(templateName: String): Collection<YAMLMapping> {
     return this.flatten().filter { (it["template"] as? YAMLScalar)?.textValue == templateName }
 }
+
+val ArgoWorkflowTemplateStepElement?.all: Collection<ArgoWorkflowTemplateSingleStepElement> get() = when (this) {
+    null -> emptyList()
+    else -> this.flatten()
+}
